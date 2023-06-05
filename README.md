@@ -20,9 +20,9 @@
 
 - [Known Issues](#known-issues)
 
--[MVP](#mvp)
+- [MVP](#mvp)
 
--[Stretch Goals](#stretch-goals)
+- [Stretch Goals](#stretch-goals)
 
 ## Description <a id="description"></a> 
 
@@ -31,7 +31,6 @@
 ## Technologies Used <a id="technologies-used"></a>
 
 TBD
-
 
 ## Project Setup <a id="project-setup"></a>
 
