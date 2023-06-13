@@ -1,7 +1,9 @@
 import TrelloCard  from "../utility/TrelloCard"
+import ParseBoard from "@/utility/ParseBoard";
 
 export default async function Home() {
-  const res = await fetch("https://api.trello.com/1/cards/64823e0ae015b3e2013c7fe8/attachments?key=fe91479f8115fc056c49911580effd95&token=ATTA6cff2e9c9ca4b4b103bb93ed6180651b0cb9a138113d3e73da4fc9f2bf646d7c9B79F36B",   { cache : 'no-store'}
+
+  const res = await fetch("",   { cache : 'no-store'}
   );
   const data = await res.json();
   console.log(data)
