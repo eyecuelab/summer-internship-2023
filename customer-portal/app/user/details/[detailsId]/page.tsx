@@ -1,9 +1,13 @@
-import React from 'react'
+async function Details () {
+  const res = await fetch (
+    'https://thisWouldBeOurAPI.test.com/posts/${params.id}',
+    { cache: 'no-store'}
+  );
+  const data = await res.json()
 
-const page = () => {
-  return(
-    <div>{detailsId}</div>
+  return (
+    <div>
+      {data.testBody}
+    </div>
   )
 }
-
-export default page
