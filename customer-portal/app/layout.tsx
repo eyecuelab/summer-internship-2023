@@ -1,4 +1,4 @@
-import ProvidersWrapper from './ProvidersWrapper'
+import ProvidersWrapper from '../components/ProvidersWrapper'
 
 export default function RootLayout({
   children,

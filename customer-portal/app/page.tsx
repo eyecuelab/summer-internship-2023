@@ -1,6 +1,6 @@
 import TrelloCard  from "../utility/TrelloCard"
 import ParseBoard from "@/utility/ParseBoard";
-import Login from './Login'
+import Login from '../components/Login'
 
 export default async function Home() {
 
