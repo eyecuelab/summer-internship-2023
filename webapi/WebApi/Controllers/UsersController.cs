@@ -28,7 +28,7 @@ namespace WebApi.Controllers
             if (ModelState.IsValid)  
             {  
                 Guid obj = Guid.NewGuid();  
-                user.Id = obj.ToString();  
+                user.UserId = obj.ToString();  
                 _dataAccessProvider.AddUser(user);  
                 return Ok();  
             }  

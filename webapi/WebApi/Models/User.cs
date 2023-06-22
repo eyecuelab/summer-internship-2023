@@ -9,7 +9,7 @@ namespace WebApi.Models
 {
     public class User
     {
-        public string Id { get; set; }
+        public string UserId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -18,5 +18,7 @@ namespace WebApi.Models
         public int EntityId { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
+        public ICollection<EntityUser> EntityUsers { get; set; }
+        public ICollection<ProjectUser> ProjectUsers { get; set; }
     }
 }
