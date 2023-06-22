@@ -14,6 +14,7 @@ export default async function Home() {
         <h1 key={index}>{title}</h1>
       ))}
       <h1>Hello world</h1>
+      <h2>Hello world test</h2>
     </main>
   )
 }
