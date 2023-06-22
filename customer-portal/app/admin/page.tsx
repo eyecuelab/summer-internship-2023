@@ -1,7 +1,6 @@
 import Login from "@/components/Login"
 import ShowTrello from "@/components/ShowTrello"
-import { authConfig } from "@/pages/api/auth/[...nextauth]";
-
+import { authConfig } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 
 export default async function Admin() {
