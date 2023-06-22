@@ -1,8 +1,14 @@
-export default function Login() {
+
+import Login from "@/components/Login"
+import Link from "next/link"
+import ShowTrello from "@/components/ShowTrello"
+
+export default function LoginPage() {
   return (
     <div>
-      <h1>Login Page</h1>
-      <h2>This totally fixes the navbar</h2>
+      <ShowTrello/>
+      <Login />
+      <Link href="http://localhost:3000/">Back to home screen</Link>
     </div>
   )
 }
