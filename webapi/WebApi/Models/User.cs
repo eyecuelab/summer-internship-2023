@@ -10,6 +10,7 @@ namespace WebApi.Models
     public class User
     {
         public string UserId { get; set; }
+        public string GoogleId { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

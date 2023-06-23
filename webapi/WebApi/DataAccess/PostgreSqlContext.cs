@@ -1,9 +1,11 @@
-using Microsoft.EntityFrameworkCore;  
-using WebApi.Models;  
+using Microsoft.EntityFrameworkCore;
+using WebApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebApi.DataAccess  
 {  
-    public class PostgreSqlContext: DbContext  
+    public class PostgreSqlContext: IdentityDbContext<IdentityUser> 
     {  
         public PostgreSqlContext(DbContextOptions<PostgreSqlContext> options) : base(options)  
         {  
@@ -11,7 +13,9 @@ namespace WebApi.DataAccess
 
         public DbSet<User> Users { get; set; }
         public DbSet<Entity> Entities { get; set; } 
-        public DbSet<Project> Projects { get; set; } 
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<EntityUser> EntityUsers { get; set; } 
+        public DbSet<ProjectUser> ProjectUsers { get; set; }  
 
         protected override void OnModelCreating(ModelBuilder builder)  
         {  

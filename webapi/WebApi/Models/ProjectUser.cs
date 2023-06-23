@@ -8,7 +8,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WebApi.Models
 {
     public class ProjectUser
-    {
+    {   
+        public int ProjectUserId { get; set; }   
         public int ProjectId { get; set; }
         public int UserId { get; set; }
         public Project project { get; set; }

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WebApi.Models
 {
     public class EntityUser
-    {
+    {   public int EntityUserId { get; set; }
         public int EntityId { get; set; }
         public int UserId { get; set; }
         public Entity entity { get; set; }
