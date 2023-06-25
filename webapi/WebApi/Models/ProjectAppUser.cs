@@ -7,12 +7,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models
 {
-    public class ProjectUser
+    public class ProjectAppUser
     {   
-        public int ProjectUserId { get; set; }   
+        public int ProjectAppUserId { get; set; }   
         public int ProjectId { get; set; }
-        public int UserId { get; set; }
+        public int AppUserId { get; set; }
         public Project project { get; set; }
-        public User user { get; set; }
+        public AppUser appUser { get; set; }
     }
 }

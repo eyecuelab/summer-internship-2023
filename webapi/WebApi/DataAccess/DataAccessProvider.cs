@@ -1,7 +1,7 @@
 using WebApi.Models;  
 using System.Collections.Generic;  
 using System.Linq;  
-  
+
 namespace WebApi.DataAccess  
 {  
     public class DataAccessProvider: IDataAccessProvider  
@@ -13,33 +13,33 @@ namespace WebApi.DataAccess
             _context = context;  
         }
 
-        public void AddUser(User user)  
+        public void AddUser(AppUser appUser)  
         {  
-            _context.Users.Add(user);  
+            _context.AppUsers.Add(appUser);  
             _context.SaveChanges();  
         }  
 
-        public void UpdateUser(User user)  
+        public void UpdateUser(AppUser appUser)  
         {  
-            _context.Users.Update(user);  
+            _context.AppUsers.Update(appUser);  
             _context.SaveChanges();  
         }  
 
         public void DeleteUser(string id)  
         {  
-            var e = _context.Users.FirstOrDefault(t => t.UserId == id);  
-            _context.Users.Remove(e);  
+            var e = _context.AppUsers.FirstOrDefault(t => t.AppUserId == id);  
+            _context.AppUsers.Remove(e);  
             _context.SaveChanges();  
         }  
 
-        public User GetUserSingleRecord(string id)  
+        public AppUser GetUserSingleRecord(string id)  
         {  
-            return _context.Users.FirstOrDefault(t => t.UserId == id);  
+            return _context.AppUsers.FirstOrDefault(t => t.AppUserId == id);  
         }  
 
-        public List<User> GetUserInfo()  
+        public List<AppUser> GetUserInfo()  
         {  
-            return _context.Users.ToList();  
+            return _context.AppUsers.ToList();  
         }
     }  
 }  

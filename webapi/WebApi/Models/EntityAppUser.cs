@@ -7,11 +7,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models
 {
-    public class EntityUser
-    {   public int EntityUserId { get; set; }
+    public class EntityAppUser
+    {   public int EntityAppUserId { get; set; }
         public int EntityId { get; set; }
-        public int UserId { get; set; }
+        public int AppUserId { get; set; }
         public Entity entity { get; set; }
-        public User user { get; set; }
+        public AppUser appUser { get; set; }
     }
 }

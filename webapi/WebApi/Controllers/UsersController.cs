@@ -24,36 +24,36 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<User> Get()
+        public IEnumerable<AppUser> Get()
         {
             return _dataAccessProvider.GetUserInfo();
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] User user)
+        public IActionResult Create([FromBody] AppUser appUser)
         {
             if (ModelState.IsValid)
             {
                 Guid obj = Guid.NewGuid();
-                user.UserId = obj.ToString();
-                _dataAccessProvider.AddUser(user);
+                appUser.AppUserId = obj.ToString();
+                _dataAccessProvider.AddUser(appUser);
                 return Ok();
             }
             return BadRequest();
         }
 
         [HttpGet("{Id}")]
-        public User Details(string Id)
+        public AppUser Details(string Id)
         {
             return _dataAccessProvider.GetUserSingleRecord(Id);
         }
 
         [HttpPut]
-        public IActionResult Edit([FromBody] User user)
+        public IActionResult Edit([FromBody] AppUser appUser)
         {
             if (ModelState.IsValid)
             {
-                _dataAccessProvider.UpdateUser(user);
+                _dataAccessProvider.UpdateUser(appUser);
                 return Ok();
             }
             return BadRequest();

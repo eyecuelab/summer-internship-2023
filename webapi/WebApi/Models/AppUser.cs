@@ -7,9 +7,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models
 {
-    public class User
+    public class AppUser
     {
-        public string UserId { get; set; }
+        public string AppUserId { get; set; }
         public string GoogleId { get; set; }
         [Required]
         public string Name { get; set; }
@@ -19,7 +19,7 @@ namespace WebApi.Models
         public int EntityId { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
-        public ICollection<EntityUser> EntityUsers { get; set; }
-        public ICollection<ProjectUser> ProjectUsers { get; set; }
+        public ICollection<EntityAppUser> EntityAppUsers { get; set; }
+        public ICollection<ProjectAppUser> ProjectAppUsers { get; set; }
     }
 }

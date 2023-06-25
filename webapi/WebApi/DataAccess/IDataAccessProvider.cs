@@ -6,10 +6,10 @@ namespace WebApi.DataAccess
     public interface IDataAccessProvider  
     {  
         // void SignInGoogle(string Id);
-        void AddUser(User user);  
-        void UpdateUser(User user);  
+        void AddUser(AppUser appUser);  
+        void UpdateUser(AppUser appUser);  
         void DeleteUser(string Id);  
-        User GetUserSingleRecord(string Id);  
-        List<User> GetUserInfo();  
+        AppUser GetUserSingleRecord(string Id);  
+        List<AppUser> GetUserInfo();  
     }  
 }  

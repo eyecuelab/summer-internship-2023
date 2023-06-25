@@ -11,11 +11,11 @@ namespace WebApi.DataAccess
         {  
         }  
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Entity> Entities { get; set; } 
         public DbSet<Project> Projects { get; set; }
-        public DbSet<EntityUser> EntityUsers { get; set; } 
-        public DbSet<ProjectUser> ProjectUsers { get; set; }  
+        public DbSet<EntityAppUser> EntityAppUsers { get; set; } 
+        public DbSet<ProjectAppUser> ProjectAppUsers { get; set; }  
 
         protected override void OnModelCreating(ModelBuilder builder)  
         {  
