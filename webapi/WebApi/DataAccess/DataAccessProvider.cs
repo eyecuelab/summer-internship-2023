@@ -28,7 +28,7 @@ namespace WebApi.DataAccess
         public void DeleteUser(string id)  
         {  
             var e = _context.Users.FirstOrDefault(t => t.UserId == id);  
-            _context.Users.Remove(e);  
+            _context.Users.Remove(e); 
             _context.SaveChanges();  
         }  
   
