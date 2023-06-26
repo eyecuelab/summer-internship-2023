@@ -9,5 +9,12 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]  
     public class ProjectsController : ControllerBase  
     {  
+        private readonly PostgreSqlContext _db;
+
+
+ public ProjectsController(PostgreSqlContext db)
+    {
+      _db = db;
+    }
     }
 }
