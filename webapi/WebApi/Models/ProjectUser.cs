@@ -9,6 +9,7 @@ namespace WebApi.Models
 {
     public class ProjectUser
     {
+        [Key]
         public int ProjectId { get; set; }
         public int UserId { get; set; }
         public Project project { get; set; }

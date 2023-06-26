@@ -9,6 +9,7 @@ namespace WebApi.Models
 {
     public class EntityUser
     {
+        [Key]
         public int EntityId { get; set; }
         public int UserId { get; set; }
         public Entity entity { get; set; }
