@@ -13,7 +13,7 @@ using System.Text;
 using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var services = builder.Services;
 ConfigurationManager configuration = builder.Configuration;
 
 DotNetEnv.Env.Load();
