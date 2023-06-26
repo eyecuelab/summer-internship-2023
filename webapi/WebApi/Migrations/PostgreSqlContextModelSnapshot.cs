@@ -287,33 +287,6 @@ namespace WebApi.Migrations
                 });
 
             modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
-            modelBuilder.Entity("WebApi.Models.ProjectUser", b =>
-                {
-                    b.Property<int>("ProjectId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectId"));
-
-                    b.Property<string>("ProjectId1")
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("text");
-
-                    b.HasKey("ProjectId");
-
-                    b.HasIndex("ProjectId1");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("ProjectUser");
-                });
-
-            modelBuilder.Entity("WebApi.Models.User", b =>
                 {
                     b.Property<int>("ProjectAppUserId")
                         .ValueGeneratedOnAdd()
@@ -451,43 +424,6 @@ namespace WebApi.Migrations
                     b.Navigation("EntityAppUsers");
 
                     b.Navigation("ProjectAppUsers");
-                });
-
-            modelBuilder.Entity("WebApi.Models.EntityUser", b =>
-                {
-                    b.HasOne("WebApi.Models.Entity", "entity")
-                        .WithMany()
-                        .HasForeignKey("EntityId1");
-
-                    b.HasOne("WebApi.Models.User", "user")
-                        .WithMany("EntityUsers")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("entity");
-
-                    b.Navigation("user");
-                });
-
-            modelBuilder.Entity("WebApi.Models.ProjectUser", b =>
-                {
-                    b.HasOne("WebApi.Models.Project", "project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId1");
-
-                    b.HasOne("WebApi.Models.User", "user")
-                        .WithMany("ProjectUsers")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("project");
-
-                    b.Navigation("user");
-                });
-
-            modelBuilder.Entity("WebApi.Models.User", b =>
-                {
-                    b.Navigation("EntityUsers");
-
-                    b.Navigation("ProjectUsers");
                 });
 #pragma warning restore 612, 618
         }
