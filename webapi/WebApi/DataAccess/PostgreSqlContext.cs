@@ -1,17 +1,21 @@
-using Microsoft.EntityFrameworkCore;  
-using WebApi.Models;  
+using Microsoft.EntityFrameworkCore;
+using WebApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace WebApi.DataAccess  
 {  
-    public class PostgreSqlContext: DbContext  
+    public class PostgreSqlContext: IdentityDbContext<IdentityUser> 
     {  
         public PostgreSqlContext(DbContextOptions<PostgreSqlContext> options) : base(options)  
         {  
         }  
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Entity> Entities { get; set; } 
-        public DbSet<Project> Projects { get; set; } 
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<EntityAppUser> EntityAppUsers { get; set; } 
+        public DbSet<ProjectAppUser> ProjectAppUsers { get; set; }  
 
         protected override void OnModelCreating(ModelBuilder builder)  
         {  

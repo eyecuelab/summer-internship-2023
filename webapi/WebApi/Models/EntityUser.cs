@@ -12,7 +12,7 @@ namespace WebApi.Models
         [Key]
         public int EntityId { get; set; }
         public int UserId { get; set; }
-        public Entity Entity { get; set; }
-        public User User { get; set; }
+        public Entity entity { get; set; }
+        public AppUser appUser { get; set; }
     }
 }

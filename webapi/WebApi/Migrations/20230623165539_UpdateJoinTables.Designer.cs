@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApi.DataAccess;
@@ -11,9 +12,11 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    partial class PostgreSqlContextModelSnapshot : ModelSnapshot
+    [Migration("20230623165539_UpdateJoinTables")]
+    partial class UpdateJoinTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,10 +88,6 @@ namespace WebApi.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -139,10 +138,6 @@ namespace WebApi.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -240,16 +235,13 @@ namespace WebApi.Migrations
                     b.ToTable("Entities");
                 });
 
-            modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
+            modelBuilder.Entity("WebApi.Models.EntityUser", b =>
                 {
-                    b.Property<int>("EntityAppUserId")
+                    b.Property<int>("EntityUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityAppUserId"));
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("integer");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityUserId"));
 
                     b.Property<int>("EntityId")
                         .HasColumnType("integer");
@@ -257,16 +249,19 @@ namespace WebApi.Migrations
                     b.Property<string>("EntityId1")
                         .HasColumnType("text");
 
-                    b.Property<string>("appUserId")
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("text");
 
-                    b.HasKey("EntityAppUserId");
+                    b.HasKey("EntityUserId");
 
                     b.HasIndex("EntityId1");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("UserId1");
 
-                    b.ToTable("EntityAppUsers");
+                    b.ToTable("EntityUsers");
                 });
 
             modelBuilder.Entity("WebApi.Models.Project", b =>
@@ -286,16 +281,13 @@ namespace WebApi.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
+            modelBuilder.Entity("WebApi.Models.ProjectUser", b =>
                 {
-                    b.Property<int>("ProjectAppUserId")
+                    b.Property<int>("ProjectUserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectAppUserId"));
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("integer");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectUserId"));
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
@@ -303,23 +295,28 @@ namespace WebApi.Migrations
                     b.Property<string>("ProjectId1")
                         .HasColumnType("text");
 
-                    b.Property<string>("appUserId")
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("text");
 
-                    b.HasKey("ProjectAppUserId");
+                    b.HasKey("ProjectUserId");
 
                     b.HasIndex("ProjectId1");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("UserId1");
 
-                    b.ToTable("ProjectAppUsers");
+                    b.ToTable("ProjectUsers");
                 });
 
-            modelBuilder.Entity("WebApi.Models.AppUser", b =>
+            modelBuilder.Entity("WebApi.Models.User", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
-                    b.Property<string>("AppUserId")
+                    b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("EntityId")
@@ -335,7 +332,9 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasDiscriminator().HasValue("AppUser");
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -389,41 +388,41 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
+            modelBuilder.Entity("WebApi.Models.EntityUser", b =>
                 {
                     b.HasOne("WebApi.Models.Entity", "entity")
                         .WithMany()
                         .HasForeignKey("EntityId1");
 
-                    b.HasOne("WebApi.Models.AppUser", "appUser")
-                        .WithMany("EntityAppUsers")
-                        .HasForeignKey("appUserId");
-
-                    b.Navigation("appUser");
+                    b.HasOne("WebApi.Models.User", "user")
+                        .WithMany("EntityUsers")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("entity");
+
+                    b.Navigation("user");
                 });
 
-            modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
+            modelBuilder.Entity("WebApi.Models.ProjectUser", b =>
                 {
                     b.HasOne("WebApi.Models.Project", "project")
                         .WithMany()
                         .HasForeignKey("ProjectId1");
 
-                    b.HasOne("WebApi.Models.AppUser", "appUser")
-                        .WithMany("ProjectAppUsers")
-                        .HasForeignKey("appUserId");
-
-                    b.Navigation("appUser");
+                    b.HasOne("WebApi.Models.User", "user")
+                        .WithMany("ProjectUsers")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("project");
+
+                    b.Navigation("user");
                 });
 
-            modelBuilder.Entity("WebApi.Models.AppUser", b =>
+            modelBuilder.Entity("WebApi.Models.User", b =>
                 {
-                    b.Navigation("EntityAppUsers");
+                    b.Navigation("EntityUsers");
 
-                    b.Navigation("ProjectAppUsers");
+                    b.Navigation("ProjectUsers");
                 });
 #pragma warning restore 612, 618
         }
