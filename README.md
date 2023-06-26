@@ -1,6 +1,4 @@
 # EyeCue Lab Summer 2023 Internship: Partner Dashboard (Name Pending)
-
-
 ## Authors 
 
 - [Brishna Bakshev](https://github.com/bbakshev)
