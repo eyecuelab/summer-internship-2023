@@ -12,6 +12,7 @@ ConfigurationManager configuration = builder.Configuration;
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
 
 var sqlConnectionString = configuration["PostgreSqlConnectionString"];  
 builder.Services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));  
