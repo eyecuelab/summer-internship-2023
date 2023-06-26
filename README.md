@@ -1,6 +1,5 @@
 # EyeCue Lab Summer 2023 Internship: Partner Dashboard (Name Pending)
 
-## This is the stephen branch
 
 ## Authors 
 
