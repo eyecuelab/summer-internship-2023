@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;  
 
 namespace WebApi.DataAccess  
-{  
-    public class DataAccessProvider: IDataAccessProvider  
+{
+    public class DataAccessProvider : IDataAccessProvider
     {  
         private readonly PostgreSqlContext _context;  
 
