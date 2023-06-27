@@ -1,7 +1,5 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { Container, Navbar, Text, Grid, Col, Button } from '@nextui-org/react'
-import { useRouter } from 'next/router'
 
 export default function Home() {
   return (
