@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;  
 
 namespace WebApi.DataAccess  
-{  
-    public class DataAccessProvider: IDataAccessProvider  
+{
+    public class DataAccessProvider : IDataAccessProvider
     {  
         private readonly PostgreSqlContext _context;  
 
@@ -40,6 +40,35 @@ namespace WebApi.DataAccess
         public List<AppUser> GetUserInfo()  
         {  
             return _context.AppUsers.ToList();  
+        }
+
+        public void AddProject(Project project)
+        {
+            _context.Projects.Add(project);
+            _context.SaveChanges();
+        }
+
+        public void UpdateProject(Project project)
+        {
+            _context.Projects.Update(project);
+            _context.SaveChanges();
+        }
+
+        public void DeleteProject(string projectId)
+        {
+            var project = _context.Projects.FirstOrDefault(p => p.ProjectId == projectId);
+            _context.Projects.Remove(project);
+            _context.SaveChanges();
+        }
+
+        public Project GetProjectSingleRecord(string projectId)
+        {
+            return _context.Projects.FirstOrDefault(p => p.ProjectId == projectId);
+        }
+
+        public List<Project> GetProjectInfo()
+        {
+            return _context.Projects.ToList();
         }
     }  
 }  
