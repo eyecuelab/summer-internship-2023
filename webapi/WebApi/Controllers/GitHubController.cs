@@ -33,10 +33,10 @@ namespace WebApi.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var repositories = await response.Content.ReadAsAsync<List<Repository>>();
+                 var json = await response.Content.ReadAsStringAsync();
 
                 // Do something with the repositories list, such as returning it in the response
-                return Ok(repositories);
+                return Ok(json);
             }
             else
             {
