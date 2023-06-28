@@ -19,6 +19,7 @@ namespace WebApi.Controllers
             _clientFactory = clientFactory;
         }
 
+        // GET ALL COMMITS FOR ONE REPO
         [HttpGet("{owner}/{repos}")]
         public async Task<IActionResult> GetRepositories(string owner, string repos)
         {
@@ -44,6 +45,8 @@ namespace WebApi.Controllers
                 // You can return an appropriate response or error message
                 return StatusCode((int)response.StatusCode);
             }
+
+            
         }
     }
 }
