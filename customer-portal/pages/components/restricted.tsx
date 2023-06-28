@@ -1,44 +1,65 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, PropsWithChildren } from "react";
 import { useSession, signOut, getSession, GetSessionParams } from "next-auth/react";
+import classNames from "classnames";
+import Sidebar from "./sidebar";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+interface ApiDataItem {
+  name: string;
+}
+
+export const Layout = ({ children }: LayoutProps) => {
+  const [collapsed, setSidebarCollapsed] = useState(false);
+
+  return (
+    <div
+      className={classNames({
+        "grid min-h-screen": true,
+        "grid-cols-sidebar": !collapsed,
+        "grid-cols-sidebar-collapsed": collapsed,
+        "transition-[grid-template-columns] duration-300 ease-in-out": true,
+      })}
+    >
+      <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} />
+      <div className="">{children}</div>
+    </div>
+  );
+};
 
 const Restricted = () => {
-  const { data: session, status } = useSession({required: true});
-  const [apiData, setApiData] = useState(null);
+  const { data: session, status } = useSession({ required: true });
+  const [apiData, setApiData] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "authenticated") {
-      console.log('User is authenticated, making API call...');
       fetch("insert your API URL here")
         .then(response => {
-          console.log('Received response from API:', response);
           if (!response.ok) {
             throw new Error('HTTP error, status = ' + response.status);
           }
-          return response.json(); 
+          return response.json();
         })
-        .then(json => {
-          console.log('Parsed JSON from API:', json);
-          const name = json.map((item: { name: any; }) => item.name).join(', ');
-          console.log('Name from API:', name);
+        .then((json: ApiDataItem[]) => {
+          const name = json.map(item => item.name).join(', ');
           setApiData(name);
         })
-        .catch(error => {
-          console.error('Error during fetch:', error);
-        });
+        .catch(error => console.error('Error during fetch:', error));
     }
   }, [status]);
 
-  if (status === "authenticated") {
-    return (
-      <div>
-        <p>Hi, {session?.user?.name}</p>
-        <p>Name from API: {apiData}</p>
-        <button onClick={() => signOut()}>Sign out</button>
-      </div>
-    );
-  } else {
-    return <div>loading...</div>;
-  }
+  return status === "authenticated" ? (
+    <Layout>
+      <p>Hi, {session?.user?.name}</p>
+      <p>Name from API: {apiData}</p>
+      <button onClick={() => signOut()}>Sign out</button>
+    </Layout>
+  ) : (
+    <div>loading...</div>
+  );
 };
 
 export default Restricted;
