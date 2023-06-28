@@ -55,3 +55,28 @@ TBD
 
 ## License
 Copyright (c) 2023 Brishna Bakshev, Stephen Zook, Justin Lee, Eliot Gronstal, and Erin Timlin _[MIT](https://choosealicense.com/licenses/mit/)_
+
+{
+    "Id": "4",
+    "UserName": "user4",
+    "NormalizedUserName": "USER4",
+    "Email": "user4@example.com",
+    "NormalizedEmail": "USER4@EXAMPLE.COM",
+    "EmailConfirmed": true,
+    "PasswordHash": "Password4!",
+    "SecurityStamp": "",
+    "FirstName": "User",
+    "LastName": "Four",
+    "EntityId": 4,
+    "IsAdmin": true
+  }
+
+  {
+    "UserName": "user4",
+    "Email": "user4@example.com",
+    "Password": "Password4!",
+    "FirstName": "User",
+    "LastName": "Four",
+    "EntityId": 4,
+    "IsAdmin": true
+}

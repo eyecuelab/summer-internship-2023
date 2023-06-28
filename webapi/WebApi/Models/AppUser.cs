@@ -10,18 +10,18 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WebApi.Models
 {
     public class AppUser : IdentityUser
-    {
-        public string AppUserId { get; set; }
-        public string GoogleId { get; set; }
+    {   
         [Required]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]
         public int EntityId { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
-        public ICollection<EntityAppUser> EntityAppUsers { get; set; }
-        public ICollection<ProjectAppUser> ProjectAppUsers { get; set; }
+        public List<EntityAppUser> EntityAppUsers { get; set; }
+        public List<ProjectAppUser> ProjectAppUsers { get; set; }
     }
 }

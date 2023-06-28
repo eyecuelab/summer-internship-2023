@@ -12,8 +12,8 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    [Migration("20230626164520_UpdateForAppUserWithIdentity")]
-    partial class UpdateForAppUserWithIdentity
+    [Migration("20230628054356_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -74,78 +74,6 @@ namespace WebApi.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -229,6 +157,147 @@ namespace WebApi.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("WebApi.Models.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("EntityId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d9bc56d0-9687-4cf1-b15b-60c8f523729a",
+                            Email = "user1@example.com",
+                            EmailConfirmed = true,
+                            EntityId = 1,
+                            FirstName = "User",
+                            IsAdmin = true,
+                            LastName = "One",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER1@EXAMPLE.COM",
+                            NormalizedUserName = "USER1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK+hxuiNfjLDqh65tvgqz+6g3fDNd1IrRyarEz/CqA9L3gJWNDEHnn8kn7pWqomdDg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user1"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a622a475-5e38-429e-a256-515c7da4e706",
+                            Email = "user2@example.com",
+                            EmailConfirmed = true,
+                            EntityId = 2,
+                            FirstName = "User",
+                            IsAdmin = true,
+                            LastName = "Two",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER2@EXAMPLE.COM",
+                            NormalizedUserName = "USER2",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGOC5L4Li+KUAXv4+N5KJkcACUjSMYczZzO3GaNaOxFedFVpGhdcxVEErLP3B6zExQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user2"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "fd381442-6b97-499e-aa72-359740237a4c",
+                            Email = "user3@example.com",
+                            EmailConfirmed = true,
+                            EntityId = 3,
+                            FirstName = "User",
+                            IsAdmin = false,
+                            LastName = "Three",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER3@EXAMPLE.COM",
+                            NormalizedUserName = "USER3",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGYcnp9Qp/AsUApJKb8oG2IMKsGqJ7/RAEti/n2Nb8LsmVfcYFYAZt5O88bLHT/O5A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user3"
+                        });
+                });
+
             modelBuilder.Entity("WebApi.Models.Entity", b =>
                 {
                     b.Property<string>("EntityId")
@@ -251,8 +320,8 @@ namespace WebApi.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityAppUserId"));
 
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("text");
 
                     b.Property<int>("EntityId")
                         .HasColumnType("integer");
@@ -260,14 +329,11 @@ namespace WebApi.Migrations
                     b.Property<string>("EntityId1")
                         .HasColumnType("text");
 
-                    b.Property<string>("appUserId")
-                        .HasColumnType("text");
-
                     b.HasKey("EntityAppUserId");
 
-                    b.HasIndex("EntityId1");
+                    b.HasIndex("AppUserId");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("EntityId1");
 
                     b.ToTable("EntityAppUsers");
                 });
@@ -318,29 +384,6 @@ namespace WebApi.Migrations
                     b.ToTable("ProjectAppUsers");
                 });
 
-            modelBuilder.Entity("WebApi.Models.AppUser", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("EntityId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("GoogleId")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasDiscriminator().HasValue("AppUser");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -352,7 +395,7 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WebApi.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -361,7 +404,7 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WebApi.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -376,7 +419,7 @@ namespace WebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WebApi.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -385,7 +428,7 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("WebApi.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -394,23 +437,23 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
                 {
-                    b.HasOne("WebApi.Models.Entity", "entity")
-                        .WithMany()
+                    b.HasOne("WebApi.Models.AppUser", "AppUser")
+                        .WithMany("EntityAppUsers")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("WebApi.Models.Entity", "Entity")
+                        .WithMany("EntityAppUsers")
                         .HasForeignKey("EntityId1");
 
-                    b.HasOne("WebApi.Models.AppUser", "appUser")
-                        .WithMany("EntityAppUsers")
-                        .HasForeignKey("appUserId");
+                    b.Navigation("AppUser");
 
-                    b.Navigation("appUser");
-
-                    b.Navigation("entity");
+                    b.Navigation("Entity");
                 });
 
             modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
                 {
                     b.HasOne("WebApi.Models.Project", "project")
-                        .WithMany()
+                        .WithMany("ProjectAppUsers")
                         .HasForeignKey("ProjectId1");
 
                     b.HasOne("WebApi.Models.AppUser", "appUser")
@@ -426,6 +469,16 @@ namespace WebApi.Migrations
                 {
                     b.Navigation("EntityAppUsers");
 
+                    b.Navigation("ProjectAppUsers");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Entity", b =>
+                {
+                    b.Navigation("EntityAppUsers");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Project", b =>
+                {
                     b.Navigation("ProjectAppUsers");
                 });
 #pragma warning restore 612, 618
