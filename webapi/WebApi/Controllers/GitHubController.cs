@@ -21,11 +21,12 @@ namespace WebApi.Controllers
             _clientFactory = clientFactory;
         }
 
-        [HttpGet("{owner}/{repos}")]
-        public async Task<IActionResult> GetRepositories(string owner, string repos)
+        // GET ALL COMMITS FOR ONE REPO
+        [HttpGet("commits/{owner}/{repos}")]
+        public async Task<IActionResult> GetListOfCommits(string owner, string repo)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,
-            $"https://api.github.com/repos/{owner}/{repos}/commits");
+            $"https://api.github.com/repos/{owner}/{repo}/commits");
             request.Headers.Add("Accept", "application/vnd.github.v3+json");
             request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
 
@@ -35,10 +36,67 @@ namespace WebApi.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var repositories = await response.Content.ReadAsAsync<List<Repository>>();
+                var json = await response.Content.ReadAsStringAsync();
 
                 // Do something with the repositories list, such as returning it in the response
-                return Ok(repositories);
+                return Ok(json);
+            }
+            else
+            {
+                // Handle the case when the API request was not successful
+                // You can return an appropriate response or error message
+                return StatusCode((int)response.StatusCode);
+            }
+
+
+
+        }
+
+        [HttpGet("release/{owner}/{repos}")]
+        public async Task<IActionResult> GetLatestRelease(string owner, string repo)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get,
+            $"https://api.github.com/repos/{owner}/{repo}/releases/latest");
+            request.Headers.Add("Accept", "application/vnd.github.v3+json");
+            request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+            var client = _clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+
+                // Do something with the repositories list, such as returning it in the response
+                return Ok(json);
+            }
+            else
+            {
+                // Handle the case when the API request was not successful
+                // You can return an appropriate response or error message
+                return StatusCode((int)response.StatusCode);
+            }
+        }
+
+        [HttpGet("members/{org}")]
+        public async Task<IActionResult> GetOrgMembers(string org)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get,
+            $"https://api.github.com/orgs/{org}/members");
+            request.Headers.Add("Accept", "application/vnd.github.v3+json");
+            request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+            var client = _clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+
+                // Do something with the repositories list, such as returning it in the response
+                return Ok(json);
             }
             else
             {
