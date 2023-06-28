@@ -2,23 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models
 {
-    public class User
-    {
-        public string UserId { get; set; }
+    public class AppUser : IdentityUser
+    {   
         [Required]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
         [Required]
         public string Email { get; set; }
         [Required]
         public int EntityId { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
-        public ICollection<EntityUser> EntityUsers { get; set; }
-        public ICollection<ProjectUser> ProjectUsers { get; set; }
+        public List<EntityAppUser> EntityAppUsers { get; set; }
+        public List<ProjectAppUser> ProjectAppUsers { get; set; }
     }
 }

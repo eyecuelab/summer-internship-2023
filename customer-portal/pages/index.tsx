@@ -23,7 +23,6 @@ export default function Home() {
           </Col>
         </Grid>
       </Grid.Container>
-    </Container>
-    
+    </Container>   
   )
 }
