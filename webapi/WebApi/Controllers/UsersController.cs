@@ -87,7 +87,7 @@ namespace WebApi.Controllers
             // Validate and decode the JWT token from the 'authorization' header.
             // Extract the email claim from the token. This will depend on the structure of your token.
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]); // Use your own JWT key here.
+            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]); // replace with own JWT key here.
             var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -106,7 +106,7 @@ namespace WebApi.Controllers
                 );
                 var email = principal.Claims.First(c => c.Type == ClaimTypes.Email).Value;
 
-                // Look for the user by email.
+                // Look up the user by email
                 var user = await _userManager.FindByEmailAsync(email);
 
                 if (user != null)
@@ -116,17 +116,22 @@ namespace WebApi.Controllers
                         new UserResponse
                         {
                             Status = "Success",
-                            Message = "User authenticated successfully!"
+                            Message = "User is successfully authenticated."
                         }
                     );
                 }
                 else
                 {
-                    // The user is not registered yet. You can create a new user record here.
-                    var newUser = new AppUser
+                    // If the user is not registered yet, create a new user here.
+                    AppUser newUser = new AppUser()
                     {
-                        Email = email,
-                        UserName = email, // Normally the email is used as the UserName.
+                        UserName = appUser.Email,
+                        Email = appUser.Email,
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        FirstName = appUser.FirstName,
+                        LastName = appUser.LastName,
+                        EntityId = appUser.EntityId,
+                        IsAdmin = true
                     };
                     var createResult = await _userManager.CreateAsync(newUser);
 
@@ -144,7 +149,7 @@ namespace WebApi.Controllers
                     {
                         return StatusCode(
                             StatusCodes.Status500InternalServerError,
-                            new UserResponse { Status = "Error", Message = "User creation failed!" }
+                            new UserResponse { Status = "Error", Message = "User creation failed. Please try again." }
                         );
                     }
                 }
@@ -158,87 +163,5 @@ namespace WebApi.Controllers
                 );
             }
         }
-
-        // [HttpPost]
-        // public IActionResult Create([FromBody] AppUser appUser)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         Guid obj = Guid.NewGuid();
-        //         appUser.AppUserId = obj.ToString();
-        //         _userDataAccessProvider.AddUser(appUser);
-        //         return Ok();
-        //     }
-        //     return BadRequest();
-        // }
-
-        // [HttpGet("{Id}")]
-        // public AppUser Details(string Id)
-        // {
-        //     return _userDataAccessProvider.GetUserSingleRecord(Id);
-        // }
-
-        // [HttpPut]
-        // public IActionResult Edit([FromBody] AppUser appUser)
-        // {
-        //     if (ModelState.IsValid)
-        //     {
-        //         _userDataAccessProvider.UpdateUser(appUser);
-        //         return Ok();
-        //     }
-        //     return BadRequest();
-        // }
-
-        // [HttpDelete("{Id}")]
-        // public IActionResult DeleteConfirmed(string Id)
-        // {
-        //     var data = _userDataAccessProvider.GetUserSingleRecord(Id);
-        //     if (data == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     _userDataAccessProvider.DeleteUser(Id);
-        //     return Ok();
-        // }
-
-        // [HttpGet("signin-google")]
-        // public IActionResult SignInGoogle()
-        // {
-        //     var authenticationProperties = _signInManager.ConfigureExternalAuthenticationProperties(
-        //         GoogleDefaults.AuthenticationScheme,
-        //         Url.Content("~/authentication/google-response")
-        //     );
-        //     return new ChallengeResult(
-        //         GoogleDefaults.AuthenticationScheme,
-        //         authenticationProperties
-        //     );
-        // }
-
-        // [HttpGet("authentication/google-response")]
-        // public async Task<IActionResult> GoogleResponse()
-        // {
-        //     var info = await _signInManager.GetExternalLoginInfoAsync();
-        //     if (info == null)
-        //     {
-        //         return RedirectToPage(
-        //             "/Account/Login",
-        //             new
-        //             {
-        //                 ReturnUrl = "/",
-        //                 errorMessage = "Error loading external login information."
-        //             }
-        //         );
-        //     }
-
-        //     var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-        //     var googleId = info.ProviderKey;
-
-        //     // Look up the user and role by GoogleId or email. Add them if they don't exist.
-        //     // Update the user with the new info if they do.
-
-        //     // Sign in the user.
-
-        //     return LocalRedirect("/");
-        // }
     }
 }
