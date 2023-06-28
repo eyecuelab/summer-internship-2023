@@ -3,32 +3,11 @@ import { useSession, signOut, getSession, GetSessionParams } from "next-auth/rea
 import classNames from "classnames";
 import Sidebar from "./sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-
-interface LayoutProps {
-  children: React.ReactNode;
-}
+import Layout from "./layout";
 
 interface ApiDataItem {
   name: string;
 }
-
-export const Layout = ({ children }: LayoutProps) => {
-  const [collapsed, setSidebarCollapsed] = useState(false);
-
-  return (
-    <div
-      className={classNames({
-        "grid min-h-screen": true,
-        "grid-cols-sidebar": !collapsed,
-        "grid-cols-sidebar-collapsed": collapsed,
-        "transition-[grid-template-columns] duration-300 ease-in-out": true,
-      })}
-    >
-      <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} />
-      <div className="">{children}</div>
-    </div>
-  );
-};
 
 const Restricted = () => {
   const { data: session, status } = useSession({ required: true });
@@ -52,10 +31,10 @@ const Restricted = () => {
   }, [status]);
 
   return status === "authenticated" ? (
-    <Layout>
-      <p>Hi, {session?.user?.name}</p>
-      <p>Name from API: {apiData}</p>
-      <button onClick={() => signOut()}>Sign out</button>
+    <Layout username={session?.user?.name}>
+      {/* <p>Hi, {session?.user?.name}</p> */}
+      <p>List of all Commit Messages will go here: {apiData}</p>
+      {/* <button onClick={() => signOut()}>Sign out</button> */}
     </Layout>
   ) : (
     <div>loading...</div>

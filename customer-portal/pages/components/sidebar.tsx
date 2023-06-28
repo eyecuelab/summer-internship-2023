@@ -54,7 +54,7 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
             "grid place-content-stretch p-4 ": true,
           })}
         >
-          <div className="flex gap-4 items-center h-11 overflow-hidden">
+          <div className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 rounded-full">
             <Image
               src={
                 "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -65,15 +65,15 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
               className="rounded-full"
             />
             {!collapsed && (
-              <div className="flex flex-col ">
-                <span className="text-slate-500 my-0">Lucia Schmitt</span>
+              <div className="flex flex-col">
+                <span className=" text-slate-500 my-0">Lucia Schmitt</span>
                 {/* <Link href="/" className="text-indigo-200 text-sm">
                   View Profile
                 </Link> */}
               </div>
             )}
           </div><br/>
-          <div className="flex gap-4 items-center h-11 overflow-hidden">
+          <div className="flex gap-4 items-center h-11 overflow-hidden  bg-gray-200 rounded-full">
             <Image
               src={
                 "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -92,7 +92,7 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
               </div>
             )}
           </div><br/>
-          <div className="flex gap-4 items-center h-11 overflow-hidden">
+          <div className="flex gap-4 items-center h-11 overflow-hidden  bg-gray-200 rounded-full">
             <Image
               src={
                 "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
