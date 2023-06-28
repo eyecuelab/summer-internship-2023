@@ -1,19 +1,8 @@
-using Microsoft.AspNetCore.Builder;  
-using Microsoft.AspNetCore.Hosting;  
-using Microsoft.EntityFrameworkCore;  
-using Microsoft.Extensions.Configuration;  
-using Microsoft.Extensions.DependencyInjection;  
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Identity;  
-using WebApi.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using WebApi.DataAccess;
 using WebApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
