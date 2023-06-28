@@ -19,10 +19,11 @@ export default function Home() {
           <Col css={{"width": "100%"}}>
             <Text weight={"bold"} size={65} css={{"textAlign": "center"}}>Partner Dashboard</Text>
             <Text weight={"bold"} size={30} css={{"textAlign": "center"}}>For your Current and Future Projects</Text>
-            <Button as={Link} href="/api/auth/signin" size="md" shadow color="gradient" auto ghost css={{"width": "100%", "marginTop": "10px"}}>Sign In to View Projects</Button>
+            <Button as={Link} href="/api/auth/signin" size="md" shadow color="primary" auto ghost css={{"width": "100%", "marginTop": "10px"}}>Sign In to View Projects</Button>
           </Col>
         </Grid>
       </Grid.Container>
     </Container>
+    
   )
 }
