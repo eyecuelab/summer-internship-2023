@@ -4,25 +4,16 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateJoinTables : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "Id",
-                table: "Users",
-                newName: "UserId");
-
-            migrationBuilder.AddColumn<string>(
-                name: "GoogleId",
-                table: "Users",
-                type: "text",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -42,9 +33,13 @@ namespace WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    EntityId = table.Column<int>(type: "integer", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "boolean", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: true),
@@ -63,55 +58,28 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntityUsers",
+                name: "Entities",
                 columns: table => new
                 {
-                    EntityUserId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    EntityId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    EntityId1 = table.Column<string>(type: "text", nullable: true),
-                    UserId1 = table.Column<string>(type: "text", nullable: true)
+                    EntityId = table.Column<string>(type: "text", nullable: false),
+                    CompanyName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityUsers", x => x.EntityUserId);
-                    table.ForeignKey(
-                        name: "FK_EntityUsers_Entities_EntityId1",
-                        column: x => x.EntityId1,
-                        principalTable: "Entities",
-                        principalColumn: "EntityId");
-                    table.ForeignKey(
-                        name: "FK_EntityUsers_Users_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                    table.PrimaryKey("PK_Entities", x => x.EntityId);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProjectUsers",
+                name: "Projects",
                 columns: table => new
                 {
-                    ProjectUserId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: false),
-                    ProjectId1 = table.Column<string>(type: "text", nullable: true),
-                    UserId1 = table.Column<string>(type: "text", nullable: true)
+                    ProjectId = table.Column<string>(type: "text", nullable: false),
+                    ProjectName = table.Column<string>(type: "text", nullable: false),
+                    EntityId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProjectUsers", x => x.ProjectUserId);
-                    table.ForeignKey(
-                        name: "FK_ProjectUsers_Projects_ProjectId1",
-                        column: x => x.ProjectId1,
-                        principalTable: "Projects",
-                        principalColumn: "ProjectId");
-                    table.ForeignKey(
-                        name: "FK_ProjectUsers_Users_UserId1",
-                        column: x => x.UserId1,
-                        principalTable: "Users",
-                        principalColumn: "UserId");
+                    table.PrimaryKey("PK_Projects", x => x.ProjectId);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,6 +188,67 @@ namespace WebApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EntityAppUsers",
+                columns: table => new
+                {
+                    EntityAppUserId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EntityId = table.Column<int>(type: "integer", nullable: false),
+                    AppUserId = table.Column<string>(type: "text", nullable: true),
+                    EntityId1 = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EntityAppUsers", x => x.EntityAppUserId);
+                    table.ForeignKey(
+                        name: "FK_EntityAppUsers_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_EntityAppUsers_Entities_EntityId1",
+                        column: x => x.EntityId1,
+                        principalTable: "Entities",
+                        principalColumn: "EntityId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProjectAppUsers",
+                columns: table => new
+                {
+                    ProjectAppUserId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    AppUserId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId1 = table.Column<string>(type: "text", nullable: true),
+                    appUserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectAppUsers", x => x.ProjectAppUserId);
+                    table.ForeignKey(
+                        name: "FK_ProjectAppUsers_AspNetUsers_appUserId",
+                        column: x => x.appUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_ProjectAppUsers_Projects_ProjectId1",
+                        column: x => x.ProjectId1,
+                        principalTable: "Projects",
+                        principalColumn: "ProjectId");
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "FirstName", "IsAdmin", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "1", 0, "d9bc56d0-9687-4cf1-b15b-60c8f523729a", "user1@example.com", true, 1, "User", true, "One", false, null, "USER1@EXAMPLE.COM", "USER1", "AQAAAAEAACcQAAAAEK+hxuiNfjLDqh65tvgqz+6g3fDNd1IrRyarEz/CqA9L3gJWNDEHnn8kn7pWqomdDg==", null, false, "", false, "user1" },
+                    { "2", 0, "a622a475-5e38-429e-a256-515c7da4e706", "user2@example.com", true, 2, "User", true, "Two", false, null, "USER2@EXAMPLE.COM", "USER2", "AQAAAAEAACcQAAAAEGOC5L4Li+KUAXv4+N5KJkcACUjSMYczZzO3GaNaOxFedFVpGhdcxVEErLP3B6zExQ==", null, false, "", false, "user2" },
+                    { "3", 0, "fd381442-6b97-499e-aa72-359740237a4c", "user3@example.com", true, 3, "User", false, "Three", false, null, "USER3@EXAMPLE.COM", "USER3", "AQAAAAEAACcQAAAAEGYcnp9Qp/AsUApJKb8oG2IMKsGqJ7/RAEti/n2Nb8LsmVfcYFYAZt5O88bLHT/O5A==", null, false, "", false, "user3" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -258,24 +287,24 @@ namespace WebApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityUsers_EntityId1",
-                table: "EntityUsers",
+                name: "IX_EntityAppUsers_AppUserId",
+                table: "EntityAppUsers",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityAppUsers_EntityId1",
+                table: "EntityAppUsers",
                 column: "EntityId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityUsers_UserId1",
-                table: "EntityUsers",
-                column: "UserId1");
+                name: "IX_ProjectAppUsers_appUserId",
+                table: "ProjectAppUsers",
+                column: "appUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectUsers_ProjectId1",
-                table: "ProjectUsers",
+                name: "IX_ProjectAppUsers_ProjectId1",
+                table: "ProjectAppUsers",
                 column: "ProjectId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ProjectUsers_UserId1",
-                table: "ProjectUsers",
-                column: "UserId1");
         }
 
         /// <inheritdoc />
@@ -297,25 +326,22 @@ namespace WebApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "EntityUsers");
+                name: "EntityAppUsers");
 
             migrationBuilder.DropTable(
-                name: "ProjectUsers");
+                name: "ProjectAppUsers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Entities");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropColumn(
-                name: "GoogleId",
-                table: "Users");
-
-            migrationBuilder.RenameColumn(
-                name: "UserId",
-                table: "Users",
-                newName: "Id");
+            migrationBuilder.DropTable(
+                name: "Projects");
         }
     }
 }
