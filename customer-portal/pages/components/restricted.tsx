@@ -48,7 +48,7 @@ export async function getServerSideProps(context: GetSessionParams | undefined) 
   if (!session) {
     return {
       redirect: {
-        destination: "/components/login",
+        destination: "/",
         permanent: false,
       },
     };
