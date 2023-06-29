@@ -1,7 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 import classNames from "classnames";
 import Sidebar from "./sidebar";
-import { Bars3Icon } from "@heroicons/react/24/outline";
 import { signOut } from "next-auth/react";
 
 interface LayoutProps {
