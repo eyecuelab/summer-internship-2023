@@ -59,6 +59,7 @@ Copyright (c) 2023 Brishna Bakshev, Stephen Zook, Justin Lee, Eliot Gronstal, an
 Create a user via postman with the follow json data:
 
   {
+    "GoogleId": "some-id-from-google4",
     "UserName": "user4",
     "Email": "user4@example.com",
     "Password": "Password4!",

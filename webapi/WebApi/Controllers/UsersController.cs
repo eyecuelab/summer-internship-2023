@@ -43,7 +43,7 @@ namespace WebApi.Controllers
             {
                 return BadRequest("User data cannot be null");
             }
-            var userExists = await _userManager.FindByNameAsync(appUser.Email);
+            var userExists = await _userManager.FindByIdAsync(appUser.GoogleId);
             if (userExists != null)
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
@@ -54,6 +54,7 @@ namespace WebApi.Controllers
 
             AppUser user = new AppUser()
             {
+                Id = appUser.GoogleId,
                 UserName = appUser.Email,
                 Email = appUser.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),

@@ -1,4 +1,5 @@
 import { DefaultSession } from "next-auth";
+import React from 'react';
 
 export function UserCard( { user } : { user: DefaultSession["user"]}) {
     
@@ -12,3 +13,5 @@ export function UserCard( { user } : { user: DefaultSession["user"]}) {
         </div>
     )
 }
+
+export default UserCard;

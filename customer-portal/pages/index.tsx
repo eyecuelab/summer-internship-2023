@@ -1,4 +1,4 @@
-import Link from "next/link";
+// import Link from "next/link";
 import { Container, Navbar, Text, Grid, Col, Image } from "@nextui-org/react";
 
 export default function Home() {
