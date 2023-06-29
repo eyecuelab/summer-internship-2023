@@ -50,7 +50,7 @@ namespace WebApi.Controllers
 
 
         }
-
+        // GET LATEST RELEASE FROM
         [HttpGet("release/{owner}/{repos}")]
         public async Task<IActionResult> GetLatestRelease(string owner, string repo)
         {
