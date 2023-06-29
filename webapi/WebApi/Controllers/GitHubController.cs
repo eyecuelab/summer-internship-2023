@@ -21,7 +21,7 @@ namespace WebApi.Controllers
         }
 
         // GET ALL COMMITS FOR ONE REPO
-        [HttpGet("commits/{owner}/{repos}")]
+        [HttpGet("commits/{owner}/{repo}")]
         public async Task<IActionResult> GetListOfCommits(string owner, string repo)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,
