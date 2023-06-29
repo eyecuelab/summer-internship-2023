@@ -8,10 +8,10 @@ export default function Login() {
     return (
       <>
         Signed in as {session.user?.email} <br />
-        Check out the <Link href="/components/restricted">
-          examples API route
-        </Link>{" "}
-        <br />
+        Hello {session.user?.name} <br />
+        {/* Your Profile Icon is: {session.user?.image && <img src={session.user?.image} width={50} />} <br /> */}
+
+        Check out the <a href="/components/restricted">examples API route</a> <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     );
