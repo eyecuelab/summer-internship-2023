@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using WebApi.DataAccess;
 using System.Text;
 using System.Security.Claims;
+using WebApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -22,18 +23,30 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<PostgreSqlContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-})
-.AddCookie()
-.AddGoogle(options =>
-{
-    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 });
+// Adding Jwt Bearer to Identity
+// .AddJwtBearer(options =>
+// {
+//   options.SaveToken = true;
+//   options.RequireHttpsMetadata = false;
+//   options.TokenValidationParameters = new TokenValidationParameters()
+//   {
+//     ValidateIssuer = true,
+//     ValidateAudience = true,
+//     ValidAudience = configuration["JWT:ValidAudience"],
+//     ValidIssuer = configuration["JWT:ValidIssuer"],
+//     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+//   };
+// });
 
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddSignInManager()
