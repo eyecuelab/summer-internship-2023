@@ -1,44 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, PropsWithChildren } from "react";
 import { useSession, signOut, getSession, GetSessionParams } from "next-auth/react";
+import classNames from "classnames";
+import Sidebar from "./sidebar";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+import Layout from "./layout";
+
+interface ApiDataItem {
+  name: string;
+}
 
 const Restricted = () => {
-  const { data: session, status } = useSession({required: true});
-  const [apiData, setApiData] = useState(null);
+  const { data: session, status } = useSession({ required: true });
+  const [apiData, setApiData] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === "authenticated") {
-      console.log('User is authenticated, making API call...');
       fetch("insert your API URL here")
         .then(response => {
-          console.log('Received response from API:', response);
           if (!response.ok) {
             throw new Error('HTTP error, status = ' + response.status);
           }
-          return response.json(); 
+          return response.json();
         })
-        .then(json => {
-          console.log('Parsed JSON from API:', json);
-          const name = json.map((item: { name: any; }) => item.name).join(', ');
-          console.log('Name from API:', name);
+        .then((json: ApiDataItem[]) => {
+          const name = json.map(item => item.name).join(', ');
           setApiData(name);
         })
-        .catch(error => {
-          console.error('Error during fetch:', error);
-        });
+        .catch(error => console.error('Error during fetch:', error));
     }
   }, [status]);
 
-  if (status === "authenticated") {
-    return (
-      <div>
-        <p>Hi, {session?.user?.name}</p>
-        <p>Name from API: {apiData}</p>
-        <button onClick={() => signOut()}>Sign out</button>
-      </div>
-    );
-  } else {
-    return <div>loading...</div>;
-  }
+  return status === "authenticated" ? (
+    <Layout username={session?.user?.name}>
+      {/* <p>Hi, {session?.user?.name}</p> */}
+      <p>List of all Commit Messages will go here: {apiData}</p>
+      {/* <button onClick={() => signOut()}>Sign out</button> */}
+    </Layout>
+  ) : (
+    <div>loading...</div>
+  );
 };
 
 export default Restricted;
@@ -48,7 +48,7 @@ export async function getServerSideProps(context: GetSessionParams | undefined) 
   if (!session) {
     return {
       redirect: {
-        destination: "/components/login",
+        destination: "/",
         permanent: false,
       },
     };
