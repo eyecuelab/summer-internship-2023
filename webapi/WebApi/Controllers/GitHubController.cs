@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
-using Moq;
 
 namespace WebApi.Controllers
 {
@@ -21,7 +20,7 @@ namespace WebApi.Controllers
         }
 
         // GET ALL COMMITS FOR ONE REPO
-        [HttpGet("commits/{owner}/{repos}")]
+        [HttpGet("commits/{owner}/{repo}")]
         public async Task<IActionResult> GetListOfCommits(string owner, string repo)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,
@@ -50,7 +49,7 @@ namespace WebApi.Controllers
 
 
         }
-
+        // GET LATEST RELEASE FROM A REPO
         [HttpGet("release/{owner}/{repos}")]
         public async Task<IActionResult> GetLatestRelease(string owner, string repo)
         {
