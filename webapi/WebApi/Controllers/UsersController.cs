@@ -30,7 +30,7 @@ namespace WebApi.Controllers
             SignInManager<AppUser> signInManager,
             UserManager<AppUser> userManager,
             IConfiguration configuration,
-            IDataAccessProvider dataAccessProvider
+            IDataAccessProvider dataAccessProvider,
             PostgreSqlContext context
         )
         {
