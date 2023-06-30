@@ -47,6 +47,10 @@ builder.Services.AddAuthentication(options =>
 //     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
 //   };
 // });
+builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+{
+  build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddSignInManager()
@@ -69,10 +73,13 @@ else
     app.UseHttpsRedirection();
 }
 
+app.UseCors("corspolicy");
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers()
+    .RequireCors("corspolicy");
 
 app.Run();
 
