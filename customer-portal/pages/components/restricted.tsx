@@ -32,9 +32,7 @@ const Restricted = () => {
 
   return status === "authenticated" ? (
     <Layout username={session?.user?.name}>
-      {/* <p>Hi, {session?.user?.name}</p> */}
       <p>List of all Commit Messages will go here: {apiData}</p>
-      {/* <button onClick={() => signOut()}>Sign out</button> */}
     </Layout>
   ) : (
     <div>loading...</div>
