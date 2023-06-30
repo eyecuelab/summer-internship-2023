@@ -7,24 +7,33 @@ import Layout from "./layout";
 
 interface ApiDataItem {
   name: string;
+  message: string;
+  date: string;
 }
 
 const Restricted = () => {
   const { data: session, status } = useSession({ required: true });
-  const [apiData, setApiData] = useState<string | null>(null);
+  const [apiData, setApiData] = useState<Array<ApiDataItem> | null>(null);
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetch("insert your API URL here")
+      fetch("/api/GitHub/commits/eyecuelab/summer-internship-2023") // Modify the URL to the new endpoint
         .then(response => {
           if (!response.ok) {
             throw new Error('HTTP error, status = ' + response.status);
           }
           return response.json();
         })
-        .then((json: ApiDataItem[]) => {
-          const name = json.map(item => item.name).join(', ');
-          setApiData(name);
+        .then((json: any[]) => { // Modify the type of 'json' to 'any[]'
+          const commitsData = json.map(item => {
+            return {
+              message: item.commit.message,
+              name: item.commit.author.name,
+              date: item.commit.author.date
+            };
+          });
+  
+          setApiData(commitsData);
         })
         .catch(error => console.error('Error during fetch:', error));
     }
@@ -32,11 +41,18 @@ const Restricted = () => {
 
   return status === "authenticated" ? (
     <Layout username={session?.user?.name}>
-      <p>List of all Commit Messages will go here: {apiData}</p>
+      {apiData?.map((data, index) => (
+        <div key={index}>
+          <h2>Commit {index + 1}</h2>
+          <p>Message: {data.message}</p>
+          <p>Name: {data.name}</p>
+          <p>Date: {data.date}</p>
+        </div>
+      ))}
     </Layout>
   ) : (
     <div>loading...</div>
-  );
+  );  
 };
 
 export default Restricted;
