@@ -5,6 +5,7 @@ namespace WebApi.DataAccess
 {
     public interface IDataAccessProvider
     {
+         void AddCommit(Commit commit);
         void AddProject(Project project);
         void UpdateProject(Project project);
         void DeleteProject(string projectId);

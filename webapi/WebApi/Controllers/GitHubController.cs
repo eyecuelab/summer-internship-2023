@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using WebApi.Models;
+using Newtonsoft.Json;
 
 namespace WebApi.Controllers
 {
@@ -14,10 +15,12 @@ namespace WebApi.Controllers
     public class GitHubController : ControllerBase
     {
         private readonly IHttpClientFactory _clientFactory;
+        private readonly IDataAccessProvider _dataAccessProvider;
 
-        public GitHubController(IHttpClientFactory clientFactory)
+        public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider)
         {
             _clientFactory = clientFactory;
+            _dataAccessProvider = dataAccessProvider;
         }
 
         // GET ALL COMMITS FOR ONE REPO
@@ -36,9 +39,14 @@ namespace WebApi.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
+                var commits = JsonConvert.DeserializeObject<List<Commit>>(json);
 
+                foreach (var commit in commits)
+                {
+                    _dataAccessProvider.AddCommit(commit);
+                }
                 // Do something with the repositories list, such as returning it in the response
-                return Ok(json);
+                return Ok(commits);
             }
             else
             {
