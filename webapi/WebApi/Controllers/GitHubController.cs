@@ -43,13 +43,7 @@ namespace WebApi.Controllers
 
                 foreach (var commit in commits)
                 {
-                    var newCommit = new Commit
-                    {
-                        Sha = commit.Sha,
-                        Message = commit.Message
-                    };
-
-                    _dataAccessProvider.AddCommit(newCommit);
+                    _dataAccessProvider.AddCommit(commit);
                 }
                 // Do something with the repositories list, such as returning it in the response
                 return Ok(commits);
