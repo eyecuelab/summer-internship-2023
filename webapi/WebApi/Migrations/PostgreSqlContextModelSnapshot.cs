@@ -280,7 +280,6 @@ namespace WebApi.Migrations
                             Id = "3",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "ab351440-d5a4-4feb-9e97-d94bb20e3c76",
-                            ConcurrencyStamp = "4a2f68d4-ddd8-4ad5-9989-c05ec5b45bd9",
                             Email = "user3@example.com",
                             EmailConfirmed = true,
                             EntityId = 3,
