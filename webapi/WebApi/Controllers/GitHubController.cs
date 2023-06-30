@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
+using WebApi.Models;
 using Newtonsoft.Json;
 
 namespace WebApi.Controllers
@@ -22,7 +23,7 @@ namespace WebApi.Controllers
             _dataAccessProvider = dataAccessProvider;
         }
 
-        // GET ALL COMMITS FOR ONE REPO
+        // GET ALL COMMITS FOR ONE REPO 
         [HttpGet("commits/{owner}/{repo}")]
         public async Task<IActionResult> GetListOfCommits(string owner, string repo)
         {
