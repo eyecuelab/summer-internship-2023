@@ -20,18 +20,21 @@ namespace WebApi.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IDataAccessProvider _dataAccessProvider;
 
         private readonly SignInManager<AppUser> _signInManager;
 
         public UsersController(
             SignInManager<AppUser> signInManager,
             UserManager<AppUser> userManager,
-            IConfiguration configuration
+            IConfiguration configuration,
+            IDataAccessProvider dataAccessProvider
         )
         {
             _userManager = userManager;
             _configuration = configuration;
             _signInManager = signInManager;
+            _dataAccessProvider = dataAccessProvider;
         }
 
         [AllowAnonymous]
@@ -78,6 +81,14 @@ namespace WebApi.Controllers
                 new UserResponse { Status = "Success", Message = "User created successfully!" }
             );
         }
+
+        [HttpGet("VerifyUser")]
+        public async Task<string> VerifyUser(string email, CancellationToken c = default)
+        {
+            var user = await _dataAccessProvider.VerifyUser(email, c);
+            return user;
+        }
+
 
         // [AllowAnonymous]
         // [HttpPost("google-auth")]
@@ -162,5 +173,7 @@ namespace WebApi.Controllers
         //         );
         //     }
         // }
+
+
     }
 }
