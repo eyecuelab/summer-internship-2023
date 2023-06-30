@@ -4,6 +4,7 @@ using WebApi.Models;
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -20,18 +22,20 @@ namespace WebApi.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
-
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly PostgreSqlContext _context;
 
         public UsersController(
             SignInManager<AppUser> signInManager,
             UserManager<AppUser> userManager,
-            IConfiguration configuration
+            IConfiguration configuration,
+            PostgreSqlContext context
         )
         {
             _userManager = userManager;
             _configuration = configuration;
             _signInManager = signInManager;
+            _context = context;
         }
 
         [AllowAnonymous]
@@ -77,6 +81,24 @@ namespace WebApi.Controllers
             return Ok(
                 new UserResponse { Status = "Success", Message = "User created successfully!" }
             );
+        }
+
+        [HttpGet]
+        public async Task<List<AppUser>> Get(string email, bool isAdmin)
+        {
+            IQueryable<AppUser> query = _context.AppUsers.AsQueryable();
+
+            if (email != null)
+            {
+                query = query.Where(entry => entry.Email == email);
+            }
+
+            if (isAdmin)
+            {
+                query = query.Where(entry => entry.IsAdmin == true);
+            }
+
+            return await query.ToListAsync();
         }
 
         // [AllowAnonymous]
