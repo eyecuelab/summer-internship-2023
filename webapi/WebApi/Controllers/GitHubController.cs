@@ -39,13 +39,10 @@ namespace WebApi.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var commits = JsonConvert.DeserializeObject<List<Commit>>(json);
+                var commits = JsonConvert.DeserializeObject<List<ListOfCommits>>(json);
+                // Pass the commits to the AddCommits method
 
-                foreach (var commit in commits)
-                {
-                    _dataAccessProvider.AddCommit(commit);
-                }
-                // Do something with the repositories list, such as returning it in the response
+
                 return Ok(commits);
             }
             else

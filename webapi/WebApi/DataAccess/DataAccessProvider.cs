@@ -13,13 +13,7 @@ namespace WebApi.DataAccess
         {
             _context = context;
         }
-
-         public void AddCommit(Commit commit)
-        {
-            _context.Commits.Add(commit);
-            _context.SaveChanges();
-        }
-
+        
         public void AddProject(Project project)
         {
             _context.Projects.Add(project);
@@ -82,11 +76,11 @@ namespace WebApi.DataAccess
         {
             var user = await _context.AppUsers.FirstOrDefaultAsync(x => Convert.ToString(x.Email) == email);
 
-            if (user == null) 
+            if (user == null)
                 return "Not Registered";
-            else if (user.IsAdmin == true) 
+            else if (user.IsAdmin == true)
                 return "Is Admin";
-            else 
+            else
                 return "Is User";
         }
     }

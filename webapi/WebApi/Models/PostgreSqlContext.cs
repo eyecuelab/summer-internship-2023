@@ -14,7 +14,7 @@ namespace WebApi.DataAccess
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Entity> Entities { get; set; }
         public DbSet<Project> Projects { get; set; }
-        public DbSet<Commit> Commits { get; set; }
+        public DbSet<ListOfCommits> ListOfCommits { get; set; }
         public DbSet<EntityAppUser> EntityAppUsers { get; set; }
         public DbSet<ProjectAppUser> ProjectAppUsers { get; set; }
 
