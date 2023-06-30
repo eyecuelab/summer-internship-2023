@@ -13,7 +13,20 @@ namespace WebApi.DataAccess
         {
             _context = context;
         }
-        
+
+        public void AddAuthor(Author author)
+        {
+            _context.Authors.Add(author);
+            _context.SaveChanges();
+        }
+
+        public void AddCommit(Commit commit)
+        {
+            _context.Commits.Add(commit);
+            _context.SaveChanges();
+        }
+
+
         public void AddProject(Project project)
         {
             _context.Projects.Add(project);
