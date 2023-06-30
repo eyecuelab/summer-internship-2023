@@ -17,5 +17,7 @@ namespace WebApi.DataAccess
         void DeleteEntity(string entityId);
         Entity GetEntitySingleRecord(string entityId);
         List<Entity> GetEntityInfo();
+
+        Task<string> VerifyUser(string email, CancellationToken c = default);
     }
 }

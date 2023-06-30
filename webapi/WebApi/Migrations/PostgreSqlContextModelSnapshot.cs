@@ -260,7 +260,6 @@ namespace WebApi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ac627e06-06c0-4d34-abb1-6114795b6cc0",
                             Email = "user2@example.com",
                             EmailConfirmed = true,
                             EntityId = 2,
@@ -269,7 +268,7 @@ namespace WebApi.Migrations
                             LastName = "Two",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@EXAMPLE.COM",
-                            NormalizedUserName = "USER2",
+                            NormalizedUserName = "USER2",        
                             PasswordHash = "AQAAAAEAACcQAAAAEC/3jCB4dKs+X9dliMYDuwFAcFZgy1HCTcwrhrxvtl1m939XnXGmi/dADoYBCqjRxw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
@@ -280,6 +279,7 @@ namespace WebApi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
+                            ConcurrencyStamp = "ab351440-d5a4-4feb-9e97-d94bb20e3c76",
                             ConcurrencyStamp = "4a2f68d4-ddd8-4ad5-9989-c05ec5b45bd9",
                             Email = "user3@example.com",
                             EmailConfirmed = true,
@@ -289,7 +289,6 @@ namespace WebApi.Migrations
                             LastName = "Three",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER3@EXAMPLE.COM",
-                            NormalizedUserName = "USER3",
                             PasswordHash = "AQAAAAEAACcQAAAAEP8JKYuCgH2XygdePi9u3qqekzeuft3wwc1AF4/Seci3zx7hKIXXPXLK6cWcVkS85Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",

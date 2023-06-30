@@ -22,6 +22,7 @@ namespace WebApi.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly IDataAccessProvider _dataAccessProvider;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly PostgreSqlContext _context;
 
@@ -29,12 +30,14 @@ namespace WebApi.Controllers
             SignInManager<AppUser> signInManager,
             UserManager<AppUser> userManager,
             IConfiguration configuration,
+            IDataAccessProvider dataAccessProvider
             PostgreSqlContext context
         )
         {
             _userManager = userManager;
             _configuration = configuration;
             _signInManager = signInManager;
+            _dataAccessProvider = dataAccessProvider;
             _context = context;
         }
 
@@ -81,6 +84,13 @@ namespace WebApi.Controllers
             return Ok(
                 new UserResponse { Status = "Success", Message = "User created successfully!" }
             );
+        }
+
+        [HttpGet("VerifyUser")]
+        public async Task<string> VerifyUser(string email, CancellationToken c = default)
+        {
+            var user = await _dataAccessProvider.VerifyUser(email, c);
+            return user;
         }
 
         [HttpGet]
@@ -184,5 +194,7 @@ namespace WebApi.Controllers
         //         );
         //     }
         // }
+
+
     }
 }
