@@ -2,7 +2,7 @@
 const nextConfig = {
   images: {
     domains: ['localhost', 'images.unsplash.com'],
-}
-}
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
