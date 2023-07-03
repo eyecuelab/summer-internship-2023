@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApi.DataAccess;
@@ -11,9 +12,11 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    partial class PostgreSqlContextModelSnapshot : ModelSnapshot
+    [Migration("20230630214935_keys")]
+    partial class keys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,7 +243,7 @@ namespace WebApi.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5b596d9d-c1c1-42f1-955f-9edfe6460295",
+                            ConcurrencyStamp = "c6a327fc-55f3-428b-bd7c-9d4c215b05f9",
                             Email = "user1@example.com",
                             EmailConfirmed = true,
                             EntityId = 1,
@@ -250,7 +253,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@EXAMPLE.COM",
                             NormalizedUserName = "USER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMdfAZcjnlf0iEMNn+Yp0arWZ0hMjG+J/pDPb5y0i5QhlijNnudTQR1di9wnbZx0oQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEHou3pi+OQnPrmE8/jIdlCU8oe58D0448wKqq0pIp3KpmALr99DChTFw3CoRtMXlHw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -260,7 +263,7 @@ namespace WebApi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "410817d9-8944-4090-a8bc-69cb1afb6eb9",
+                            ConcurrencyStamp = "fcf49200-4e62-4332-8dbf-4da1a2688625",
                             Email = "user2@example.com",
                             EmailConfirmed = true,
                             EntityId = 2,
@@ -270,7 +273,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@EXAMPLE.COM",
                             NormalizedUserName = "USER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAECufuksxEakHFdZslOpBeQmlbQWYV563DbX0DbTQaPDUAGM1/MMR4dtH7egeAW5zQQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN9w2Tt1Dm6hm6QvgqRpCrQhyh0d5sX3dBZwvqB14sJ3Fq1Jt0WYnix3hNlIaEgeyQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -280,7 +283,7 @@ namespace WebApi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "22b14c7b-c174-428b-8fc6-d84f160b275d",
+                            ConcurrencyStamp = "f0d8d898-1f7c-47bf-9efd-8b0b6f41c6d1",
                             Email = "user3@example.com",
                             EmailConfirmed = true,
                             EntityId = 3,
@@ -290,7 +293,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER3@EXAMPLE.COM",
                             NormalizedUserName = "USER3",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHFwljbOGmrcdml/3YK8B049jFzP0yv+pRXYzrs5afY+6cSg41f3TRfssLr4S4DOnw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOK/w5vfrvDTekSO6mn1zYlADGlKNotr/sdazSWltyKu62pjaBlKBNIE39x8OSbD+w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -322,11 +325,8 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Commit", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("sha")
+                        .HasColumnType("text");
 
                     b.Property<int?>("authorId")
                         .HasColumnType("integer");
@@ -340,10 +340,7 @@ namespace WebApi.Migrations
                     b.Property<string>("message")
                         .HasColumnType("text");
 
-                    b.Property<string>("sha")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
+                    b.HasKey("sha");
 
                     b.HasIndex("authorId");
 
@@ -416,10 +413,10 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.ListOfCommits", b =>
                 {
-                    b.Property<int?>("commitId")
-                        .HasColumnType("integer");
+                    b.Property<string>("commitsha")
+                        .HasColumnType("text");
 
-                    b.HasIndex("commitId");
+                    b.HasIndex("commitsha");
 
                     b.ToTable("ListOfCommits");
                 });
@@ -555,7 +552,7 @@ namespace WebApi.Migrations
                 {
                     b.HasOne("WebApi.Models.Commit", "commit")
                         .WithMany()
-                        .HasForeignKey("commitId");
+                        .HasForeignKey("commitsha");
 
                     b.Navigation("commit");
                 });

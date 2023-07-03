@@ -33,20 +33,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 });
-// Adding Jwt Bearer to Identity
-// .AddJwtBearer(options =>
-// {
-//   options.SaveToken = true;
-//   options.RequireHttpsMetadata = false;
-//   options.TokenValidationParameters = new TokenValidationParameters()
-//   {
-//     ValidateIssuer = true,
-//     ValidateAudience = true,
-//     ValidAudience = configuration["JWT:ValidAudience"],
-//     ValidIssuer = configuration["JWT:ValidIssuer"],
-//     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-//   };
-// });
+
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
   build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
