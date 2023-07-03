@@ -33,20 +33,6 @@ builder.Services.AddAuthentication(options =>
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 });
-// Adding Jwt Bearer to Identity
-// .AddJwtBearer(options =>
-// {
-//   options.SaveToken = true;
-//   options.RequireHttpsMetadata = false;
-//   options.TokenValidationParameters = new TokenValidationParameters()
-//   {
-//     ValidateIssuer = true,
-//     ValidateAudience = true,
-//     ValidAudience = configuration["JWT:ValidAudience"],
-//     ValidIssuer = configuration["JWT:ValidIssuer"],
-//     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-//   };
-// });
 
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddSignInManager()
@@ -69,10 +55,14 @@ else
     app.UseHttpsRedirection();
 }
 
+app.UseCors(policy => 
+    policy.WithOrigins("http://localhost:3000") // replace with your front-end application url
+    .AllowAnyHeader()
+    .AllowAnyMethod());
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
-
