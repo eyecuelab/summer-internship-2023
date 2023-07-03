@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApi.DataAccess;
@@ -11,9 +12,11 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    partial class PostgreSqlContextModelSnapshot : ModelSnapshot
+    [Migration("20230703203734_intial8")]
+    partial class intial8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,7 +243,7 @@ namespace WebApi.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a25498ea-10fc-4995-bc05-e28200d5047c",
+                            ConcurrencyStamp = "c5c0dd13-c8b4-4f70-b876-03e6334c7c8e",
                             Email = "user1@example.com",
                             EmailConfirmed = true,
                             EntityId = 1,
@@ -250,7 +253,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@EXAMPLE.COM",
                             NormalizedUserName = "USER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEN0MGDO9WC9720TkzeiLYY3JXhXqnVZ4Rt4t/WnhUwrqq2xg1ZC22EmbsZTVCUVFNg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENZ8n773d4EGvICP+dJ2h5iyuXlselTr2c1AM4JypKTwns4zTIi6jQ7cWiDcbZLS0g==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -260,7 +263,7 @@ namespace WebApi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fd30e54d-d0ec-4b3b-82b5-34f3f96440fd",
+                            ConcurrencyStamp = "2bc78aa7-07ef-4bcb-a525-40131cc58555",
                             Email = "user2@example.com",
                             EmailConfirmed = true,
                             EntityId = 2,
@@ -270,7 +273,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@EXAMPLE.COM",
                             NormalizedUserName = "USER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBsFzojASfIGBoft0p/ACELrtapFCra6fFulLJOrKW2PLvSpVAqVo1o29CB+6rRG+w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFR14rAuPnRnUlGyWV40q/e//YLJzHbY7OtYj9lmQGvO3CKTacajr2l+TgcdzNoG5A==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -280,7 +283,7 @@ namespace WebApi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2ad05a4a-e8bb-4c47-bc23-68c1c0230022",
+                            ConcurrencyStamp = "235767e2-3706-47ce-959f-93e633897905",
                             Email = "user3@example.com",
                             EmailConfirmed = true,
                             EntityId = 3,
@@ -290,7 +293,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER3@EXAMPLE.COM",
                             NormalizedUserName = "USER3",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA9YnfSfygm1LkWKKgNAZ8FlwNzY2PwGAOFKCWGTFucCl1QqEgfdlLYI2x8dgaozfA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM6uin5ewBe44MHx7ESCyPJ+STKi/PqSfAfv6PeSYpIKJ7N4INiDj0FczBg6R7WYTw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,

@@ -11,6 +11,7 @@ using WebApi.DataAccess;
 using System.Text;
 using System.Security.Claims;
 using WebApi.Models;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
