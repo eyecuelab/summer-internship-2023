@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text.Json;
 using WebApi.Models;
 using Newtonsoft.Json;
+using WebApi.Migrations;
 
 namespace WebApi.Controllers
 {
@@ -39,13 +40,15 @@ namespace WebApi.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var commits = JsonConvert.DeserializeObject<List<Commit>>(json);
+                var commits = JsonConvert.DeserializeObject<List<ListOfCommits>>(json);
 
                 foreach (var commit in commits)
                 {
-                    _dataAccessProvider.AddCommit(commit);
+                    // Extract author information from the commit
+                    var author = commit.commit.author; // Replace with the appropriate property from your JSON model
+                    // Add the author to the database
+                    _dataAccessProvider.AddAuthor(author);
                 }
-                // Do something with the repositories list, such as returning it in the response
                 return Ok(commits);
             }
             else
