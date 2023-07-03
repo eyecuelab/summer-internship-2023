@@ -45,9 +45,13 @@ namespace WebApi.Controllers
                 foreach (var commit in commits)
                 {
                     // Extract author information from the commit
-                    var author = commit.commit.author; // Replace with the appropriate property from your JSON model
+                    var author = commit.commit.author;
+                    var commitInfo = commit.commit;
+                     // Replace with the appropriate property from your JSON model
                     // Add the author to the database
                     _dataAccessProvider.AddAuthor(author);
+                    _dataAccessProvider.AddCommit(commitInfo);
+                    
                 }
                 return Ok(commits);
             }
