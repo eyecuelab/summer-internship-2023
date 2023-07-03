@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
-using WebApi.Models;
 using Newtonsoft.Json;
 using WebApi.Migrations;
 
