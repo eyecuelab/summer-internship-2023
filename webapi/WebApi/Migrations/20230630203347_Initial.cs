@@ -33,8 +33,6 @@ namespace WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
                     EntityId = table.Column<int>(type: "integer", nullable: false),
                     IsAdmin = table.Column<bool>(type: "boolean", nullable: false),
@@ -55,6 +53,18 @@ namespace WebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Commits",
+                columns: table => new
+                {
+                    Sha = table.Column<string>(type: "text", nullable: false),
+                    Message = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Commits", x => x.Sha);
                 });
 
             migrationBuilder.CreateTable(
@@ -241,12 +251,13 @@ namespace WebApi.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "FirstName", "IsAdmin", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "IsAdmin", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1", 0, "d9bc56d0-9687-4cf1-b15b-60c8f523729a", "user1@example.com", true, 1, "User", true, "One", false, null, "USER1@EXAMPLE.COM", "USER1", "AQAAAAEAACcQAAAAEK+hxuiNfjLDqh65tvgqz+6g3fDNd1IrRyarEz/CqA9L3gJWNDEHnn8kn7pWqomdDg==", null, false, "", false, "user1" },
-                    { "2", 0, "a622a475-5e38-429e-a256-515c7da4e706", "user2@example.com", true, 2, "User", true, "Two", false, null, "USER2@EXAMPLE.COM", "USER2", "AQAAAAEAACcQAAAAEGOC5L4Li+KUAXv4+N5KJkcACUjSMYczZzO3GaNaOxFedFVpGhdcxVEErLP3B6zExQ==", null, false, "", false, "user2" },
-                    { "3", 0, "fd381442-6b97-499e-aa72-359740237a4c", "user3@example.com", true, 3, "User", false, "Three", false, null, "USER3@EXAMPLE.COM", "USER3", "AQAAAAEAACcQAAAAEGYcnp9Qp/AsUApJKb8oG2IMKsGqJ7/RAEti/n2Nb8LsmVfcYFYAZt5O88bLHT/O5A==", null, false, "", false, "user3" }
+                    { "1", 0, "47c68900-7748-4a81-b7be-ed36d105e20f", "user1@example.com", true, 1, true, false, null, "USER1@EXAMPLE.COM", "USER1", "AQAAAAEAACcQAAAAEBlxQ3eYGE47YJ6WkfE7Gys1a72FZ5+Ls02AO596n+mi5uZL76AsM56BEUZwWV60AQ==", null, false, "", false, "user1" },
+                    { "2", 0, "507419f9-b352-4fb9-a053-f240fd7fd777", "user2@example.com", true, 1, true, false, null, "USER2@EXAMPLE.COM", "USER2", "AQAAAAEAACcQAAAAEIELL8vWFcZwyWwb6x4CWE5soJwsjvtOlbkoHoDzX7p7BVV1cx0/Y838uwA7krWvNg==", null, false, "", false, "user2" },
+                    { "3", 0, "8ad3f5d2-2e7f-4da3-bcf3-514a10e8d33d", "user3@example.com", true, 0, false, false, null, "USER3@EXAMPLE.COM", "USER3", "AQAAAAEAACcQAAAAELOdxK18OyKr+sZ8UJWWu6zvK00cWacJkQ5nhDOkTi23ZDENW4ffVxV1R8k1i4i8Eg==", null, false, "", false, "user3" },
+                    { "4", 0, "47a693c0-b61f-4a92-bd39-16f501a23ddd", "gronstal.larson@gmail.com", true, 0, true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAEDNKzjVJSaFeDkZwLLF2DHz8fqq59goQCW/eojv5XOuRBitQnu1MFqq35+eDR3GJ9A==", null, false, "", false, "Gronstal.Larson@gmail.com" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -324,6 +335,9 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Commits");
 
             migrationBuilder.DropTable(
                 name: "EntityAppUsers");
