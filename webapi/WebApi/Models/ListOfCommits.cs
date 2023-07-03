@@ -20,7 +20,7 @@ namespace WebApi.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string sha { get; set; }
+        public string commitSha { get; set; }
         public Author author { get; set; }
         public Committer committer { get; set; }
         public string message { get; set; }

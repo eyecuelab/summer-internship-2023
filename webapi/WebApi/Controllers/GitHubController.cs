@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
-using WebApi.Models;
 using Newtonsoft.Json;
 using WebApi.Migrations;
 
@@ -47,11 +46,12 @@ namespace WebApi.Controllers
                     // Extract author information from the commit
                     var author = commit.commit.author;
                     var commitInfo = commit.commit;
-                     // Replace with the appropriate property from your JSON model
-                    // Add the author to the database
+                    // Replace with the appropriate property from your JSON model
+                    var commitSha = commit.sha;
+                    commitInfo.commitSha = commitSha;
                     _dataAccessProvider.AddAuthor(author);
                     _dataAccessProvider.AddCommit(commitInfo);
-                    
+
                 }
                 return Ok(commits);
             }
