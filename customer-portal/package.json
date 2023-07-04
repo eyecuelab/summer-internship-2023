@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -39,6 +39,7 @@
     "tailwindcss": "3.3.2"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "prisma": "^4.16.2",
     "typescript": "5.1.3"
   }

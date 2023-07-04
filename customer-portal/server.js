@@ -1,6 +1,5 @@
 const express = require('express');
 const next = require('next');
-const fetch = require('node-fetch');
 const https = require('https');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -17,6 +16,7 @@ nextApp.prepare().then(() => {
   app.get('/api/GitHub/commits/:org/:repo', async (req, res) => {
     const url = `https://localhost:7243/api/GitHub/commits/${req.params.org}/${req.params.repo}`;
     try {
+        const { default: fetch } = await import('node-fetch');
       const apiRes = await fetch(url, { agent: httpsAgent });
       const apiResJson = await apiRes.json();
       res.json(apiResJson);
