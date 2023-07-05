@@ -50,7 +50,7 @@ namespace WebApi.Controllers
             {
                 return BadRequest("User data cannot be null");
             }
-            var userExists = await _userManager.FindByIdAsync(appUser.GoogleId);
+            var userExists = await _userManager.FindByEmailAsync(appUser.Email);
             if (userExists != null)
                 return StatusCode(
                     StatusCodes.Status500InternalServerError,
@@ -61,14 +61,12 @@ namespace WebApi.Controllers
 
             AppUser user = new AppUser()
             {
-                Id = appUser.GoogleId,
+                Id = appUser.Id,
                 UserName = appUser.Email,
                 Email = appUser.Email,
+                EntityId = 0,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                FirstName = appUser.FirstName,
-                LastName = appUser.LastName,
-                EntityId = appUser.EntityId,
-                IsAdmin = true
+                IsAdmin = false
             };
             var result = await _userManager.CreateAsync(user);
             if (!result.Succeeded)
@@ -94,7 +92,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<AppUser>> Get(string email, bool isAdmin)
+        public async Task<List<AppUser>> Get(string email, bool isAdmin, int entityId)
         {
             IQueryable<AppUser> query = _context.AppUsers.AsQueryable();
 
@@ -106,6 +104,10 @@ namespace WebApi.Controllers
             if (isAdmin)
             {
                 query = query.Where(entry => entry.IsAdmin == true);
+            }
+            if (entityId >= 0)
+            {
+                query = query.Where(entry => entry.EntityId == entityId);
             }
 
             return await query.ToListAsync();

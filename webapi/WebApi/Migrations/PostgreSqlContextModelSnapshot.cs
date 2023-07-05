@@ -177,19 +177,8 @@ namespace WebApi.Migrations
                     b.Property<int>("EntityId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("GoogleId")
-                        .HasColumnType("text");
-
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -244,13 +233,11 @@ namespace WebApi.Migrations
                             Email = "user1@example.com",
                             EmailConfirmed = true,
                             EntityId = 1,
-                            FirstName = "User",
                             IsAdmin = true,
-                            LastName = "One",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@EXAMPLE.COM",
                             NormalizedUserName = "USER1",
-                            PasswordHash = "AQAAAAEAACcQAAAAEN0MGDO9WC9720TkzeiLYY3JXhXqnVZ4Rt4t/WnhUwrqq2xg1ZC22EmbsZTVCUVFNg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELqGlH/DmzwFqCQAL4UU76vvi4BSIDyeqycQE+Jx22JXkXrK3dLMqDC+CuKVjD3NqQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -260,17 +247,15 @@ namespace WebApi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fd30e54d-d0ec-4b3b-82b5-34f3f96440fd",
+                            ConcurrencyStamp = "ac627e06-06c0-4d34-abb1-6114795b6cc0",
                             Email = "user2@example.com",
                             EmailConfirmed = true,
-                            EntityId = 2,
-                            FirstName = "User",
+                            EntityId = 1,
                             IsAdmin = true,
-                            LastName = "Two",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@EXAMPLE.COM",
                             NormalizedUserName = "USER2",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBsFzojASfIGBoft0p/ACELrtapFCra6fFulLJOrKW2PLvSpVAqVo1o29CB+6rRG+w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEC/3jCB4dKs+X9dliMYDuwFAcFZgy1HCTcwrhrxvtl1m939XnXGmi/dADoYBCqjRxw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -280,21 +265,37 @@ namespace WebApi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2ad05a4a-e8bb-4c47-bc23-68c1c0230022",
+                            ConcurrencyStamp = "4a2f68d4-ddd8-4ad5-9989-c05ec5b45bd9",
                             Email = "user3@example.com",
                             EmailConfirmed = true,
-                            EntityId = 3,
-                            FirstName = "User",
+                            EntityId = 0,
                             IsAdmin = false,
-                            LastName = "Three",
                             LockoutEnabled = false,
                             NormalizedEmail = "USER3@EXAMPLE.COM",
                             NormalizedUserName = "USER3",
-                            PasswordHash = "AQAAAAEAACcQAAAAEA9YnfSfygm1LkWKKgNAZ8FlwNzY2PwGAOFKCWGTFucCl1QqEgfdlLYI2x8dgaozfA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEP8JKYuCgH2XygdePi9u3qqekzeuft3wwc1AF4/Seci3zx7hKIXXPXLK6cWcVkS85Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "user3"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "47a693c0-b61f-4a92-bd39-16f501a23ddd",
+                            Email = "gronstal.larson@gmail.com",
+                            EmailConfirmed = true,
+                            EntityId = 0,
+                            IsAdmin = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GRONSTAL.LARSON@GMAIL.COM",
+                            NormalizedUserName = "GRONSTAL.LARSON@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDNKzjVJSaFeDkZwLLF2DHz8fqq59goQCW/eojv5XOuRBitQnu1MFqq35+eDR3GJ9A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Gronstal.Larson@gmail.com"
                         });
                 });
 
