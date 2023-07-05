@@ -1,6 +1,5 @@
 import React, { useState, useEffect, PropsWithChildren } from "react";
 import { useSession, signOut, getSession, GetSessionParams } from "next-auth/react";
-import classNames from "classnames";
 import Sidebar from "./sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import Layout from "./layout";
