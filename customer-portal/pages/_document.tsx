@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useReducer } from "react";
 import Document, {
   Html,
   Head,
@@ -7,6 +7,7 @@ import Document, {
   DocumentContext,
 } from "next/document";
 import { CssBaseline } from "@nextui-org/react";
+
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
