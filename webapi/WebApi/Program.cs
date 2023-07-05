@@ -61,6 +61,10 @@ else
     app.UseHttpsRedirection();
 }
 
+app.UseCors(policy => 
+    policy.WithOrigins("http://localhost:3000") // replace with your front-end application url
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 app.UseCors("corspolicy");
 
 app.UseAuthentication();
@@ -70,4 +74,3 @@ app.MapControllers()
     .RequireCors("corspolicy");
 
 app.Run();
-
