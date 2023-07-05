@@ -5,10 +5,7 @@ namespace WebApi.DataAccess
 {
     public interface IDataAccessProvider
     {
-<<<<<<< HEAD
-=======
         void AddAuthor(Author author);
->>>>>>> origin
         void AddCommit(Commit commit);
         void AddProject(Project project);
         void UpdateProject(Project project);

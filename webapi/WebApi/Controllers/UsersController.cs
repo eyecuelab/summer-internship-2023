@@ -66,7 +66,7 @@ namespace WebApi.Controllers
                 Email = appUser.Email,
                 EntityId = 0,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                IsAdmin = false
+                // IsAdmin = false
             };
             var result = await _userManager.CreateAsync(user);
             if (!result.Succeeded)
