@@ -11,6 +11,7 @@ using WebApi.DataAccess;
 using System.Text;
 using System.Security.Claims;
 using WebApi.Models;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -33,20 +34,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 });
-// Adding Jwt Bearer to Identity
-// .AddJwtBearer(options =>
-// {
-//   options.SaveToken = true;
-//   options.RequireHttpsMetadata = false;
-//   options.TokenValidationParameters = new TokenValidationParameters()
-//   {
-//     ValidateIssuer = true,
-//     ValidateAudience = true,
-//     ValidAudience = configuration["JWT:ValidAudience"],
-//     ValidIssuer = configuration["JWT:ValidIssuer"],
-//     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-//   };
-// });
+
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
   build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
@@ -73,6 +61,10 @@ else
     app.UseHttpsRedirection();
 }
 
+app.UseCors(policy => 
+    policy.WithOrigins("http://localhost:3000") // replace with your front-end application url
+    .AllowAnyHeader()
+    .AllowAnyMethod());
 app.UseCors("corspolicy");
 
 app.UseAuthentication();
@@ -82,4 +74,3 @@ app.MapControllers()
     .RequireCors("corspolicy");
 
 app.Run();
-

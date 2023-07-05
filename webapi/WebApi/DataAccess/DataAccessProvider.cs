@@ -1,6 +1,7 @@
 using WebApi.Models;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.DataAccess
 {
@@ -13,11 +14,18 @@ namespace WebApi.DataAccess
             _context = context;
         }
 
-         public void AddCommit(Commit commit)
+        public void AddAuthor(Author author)
+        {
+            _context.Authors.Add(author);
+            _context.SaveChanges();
+        }
+
+        public void AddCommit(Commit commit)
         {
             _context.Commits.Add(commit);
             _context.SaveChanges();
         }
+
 
         public void AddProject(Project project)
         {
@@ -75,6 +83,18 @@ namespace WebApi.DataAccess
         public List<Entity> GetEntityInfo()
         {
             return _context.Entities.ToList();
+        }
+
+        public async Task<string> VerifyUser(string email, CancellationToken c = default)
+        {
+            var user = await _context.AppUsers.FirstOrDefaultAsync(x => Convert.ToString(x.Email) == email);
+
+            if (user == null)
+                return "Not Registered";
+            else if (user.IsAdmin == true)
+                return "Is Admin";
+            else
+                return "Is User";
         }
     }
 }

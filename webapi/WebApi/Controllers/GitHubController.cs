@@ -5,8 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
-using WebApi.Models;
 using Newtonsoft.Json;
+using WebApi.Migrations;
 
 namespace WebApi.Controllers
 {
@@ -23,7 +23,7 @@ namespace WebApi.Controllers
             _dataAccessProvider = dataAccessProvider;
         }
 
-        // GET ALL COMMITS FOR ONE REPO
+        // GET ALL COMMITS FOR ONE REPO 
         [HttpGet("commits/{owner}/{repo}")]
         public async Task<IActionResult> GetListOfCommits(string owner, string repo)
         {
@@ -39,13 +39,20 @@ namespace WebApi.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                var commits = JsonConvert.DeserializeObject<List<Commit>>(json);
+                var commits = JsonConvert.DeserializeObject<List<ListOfCommits>>(json);
 
                 foreach (var commit in commits)
                 {
-                    _dataAccessProvider.AddCommit(commit);
+                    // Extract author information from the commit
+                    var author = commit.commit.author;
+                    var commitInfo = commit.commit;
+                    // Replace with the appropriate property from your JSON model
+                    var commitSha = commit.sha;
+                    commitInfo.commitSha = commitSha;
+                    _dataAccessProvider.AddAuthor(author);
+                    _dataAccessProvider.AddCommit(commitInfo);
+
                 }
-                // Do something with the repositories list, such as returning it in the response
                 return Ok(commits);
             }
             else
