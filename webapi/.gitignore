@@ -1,8 +1,11 @@
 obj
 bin
 appsettings.json
+
+appsettings.Development.json
 serviceaccountkey.json
 node_modules
 # Keep environment variables out of version control
 .env
 docker-compose.yml
+appsettings.Development.json

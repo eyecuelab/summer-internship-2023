@@ -5,6 +5,8 @@ namespace WebApi.DataAccess
 {
     public interface IDataAccessProvider
     {
+        void AddAuthor(Author author);
+        void AddCommit(Commit commit);
         void AddProject(Project project);
         void UpdateProject(Project project);
         void DeleteProject(string projectId);
@@ -16,5 +18,7 @@ namespace WebApi.DataAccess
         void DeleteEntity(string entityId);
         Entity GetEntitySingleRecord(string entityId);
         List<Entity> GetEntityInfo();
+
+        Task<string> VerifyUser(string email, CancellationToken c = default);
     }
 }

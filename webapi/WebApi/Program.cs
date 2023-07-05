@@ -11,6 +11,7 @@ using WebApi.DataAccess;
 using System.Text;
 using System.Security.Claims;
 using WebApi.Models;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
@@ -33,6 +34,11 @@ builder.Services.AddAuthentication(options =>
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 });
+
+builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+{
+  build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
 
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddSignInManager()
@@ -59,10 +65,12 @@ app.UseCors(policy =>
     policy.WithOrigins("http://localhost:3000") // replace with your front-end application url
     .AllowAnyHeader()
     .AllowAnyMethod());
+app.UseCors("corspolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers()
+    .RequireCors("corspolicy");
 
 app.Run();
