@@ -229,7 +229,11 @@ namespace WebApi.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
+<<<<<<< HEAD
                             ConcurrencyStamp = "b9bdacc4-71c5-4082-9b10-90e66798ee0e",
+=======
+                            ConcurrencyStamp = "a25498ea-10fc-4995-bc05-e28200d5047c",
+>>>>>>> origin
                             Email = "user1@example.com",
                             EmailConfirmed = true,
                             EntityId = 1,
@@ -237,7 +241,11 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER1@EXAMPLE.COM",
                             NormalizedUserName = "USER1",
+<<<<<<< HEAD
                             PasswordHash = "AQAAAAEAACcQAAAAEEt9W+uJYmFKJwKl0gxRStnGd+D7lovru4fhmBQuCs9gVO10n+2ILpUVCj5/Dpnp7Q==",
+=======
+                            PasswordHash = "AQAAAAEAACcQAAAAELqGlH/DmzwFqCQAL4UU76vvi4BSIDyeqycQE+Jx22JXkXrK3dLMqDC+CuKVjD3NqQ==",
+>>>>>>> origin
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -247,7 +255,11 @@ namespace WebApi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
+<<<<<<< HEAD
                             ConcurrencyStamp = "412fd186-557a-4ccf-bd8c-4915d11022c1",
+=======
+                            ConcurrencyStamp = "ac627e06-06c0-4d34-abb1-6114795b6cc0",
+>>>>>>> origin
                             Email = "user2@example.com",
                             EmailConfirmed = true,
                             EntityId = 1,
@@ -255,7 +267,11 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER2@EXAMPLE.COM",
                             NormalizedUserName = "USER2",
+<<<<<<< HEAD
                             PasswordHash = "AQAAAAEAACcQAAAAEPoG+Wn69mVv0kyWqF6DwmsyjketSVxbS+lNP2MURfKjtroGp8fdEvItfkQ9cwgC/w==",
+=======
+                            PasswordHash = "AQAAAAEAACcQAAAAEC/3jCB4dKs+X9dliMYDuwFAcFZgy1HCTcwrhrxvtl1m939XnXGmi/dADoYBCqjRxw==",
+>>>>>>> origin
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -265,7 +281,11 @@ namespace WebApi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
+<<<<<<< HEAD
                             ConcurrencyStamp = "85d11133-14c9-45ba-bfa3-f0efb577f302",
+=======
+                            ConcurrencyStamp = "4a2f68d4-ddd8-4ad5-9989-c05ec5b45bd9",
+>>>>>>> origin
                             Email = "user3@example.com",
                             EmailConfirmed = true,
                             EntityId = 0,
@@ -273,7 +293,11 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER3@EXAMPLE.COM",
                             NormalizedUserName = "USER3",
+<<<<<<< HEAD
                             PasswordHash = "AQAAAAEAACcQAAAAEL3Df9lksxUofJf7GlDkNg+Ucx4k7WSP2OyJW6ohBoXe7lbT0hgu+QOG6TxdzUiUHQ==",
+=======
+                            PasswordHash = "AQAAAAEAACcQAAAAEP8JKYuCgH2XygdePi9u3qqekzeuft3wwc1AF4/Seci3zx7hKIXXPXLK6cWcVkS85Q==",
+>>>>>>> origin
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,

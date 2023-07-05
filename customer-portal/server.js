@@ -1,5 +1,6 @@
 const express = require('express');
 <<<<<<< HEAD
+<<<<<<< HEAD
 const next = require('next');
 const fetch = require('node-fetch');
 const https = require('https');
@@ -37,6 +38,8 @@ nextApp.prepare().then(() => {
   });
 });
 =======
+=======
+>>>>>>> origin
 const axios = require('axios');
 const https = require('https');
 const cors = require('cors');
@@ -63,4 +66,7 @@ app.get('/api/commits', async (req, res) => {
 app.listen(4000, () => {
   console.log('Server running on port 4000');
 });
+<<<<<<< HEAD
+>>>>>>> origin
+=======
 >>>>>>> origin

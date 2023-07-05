@@ -1,6 +1,6 @@
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
+import axios from "axios";
 import GoogleProvider from "next-auth/providers/google";
-import { NextApiHandler } from "next";
 
 const authHandler: NextApiHandler = NextAuth({
   providers: [
