@@ -1,55 +1,54 @@
 {
     "version": "0.2.0",
     "configurations": [
-      {
-        "name": "Next.js: debug server-side",
-        "type": "node-terminal",
-        "request": "launch",
-        "command": "npm --prefix summer-internship-2023/customer-portal run dev",
-        "cwd": "C:/Users/szook/Desktop/EyeCue Lab Internship/MAIN-PROJECT-FILE/summer-internship-2023/customer-portal"
-      },
-      {
-        "name": "Next.js: debug client-side",
-        "type": "chrome",
-        "request": "launch",
-        "url": "http://localhost:3000"
-      },
-      {
-        "name": "Next.js: debug full stack",
-        "type": "node-terminal",
-        "request": "launch",
-        "command": "npm --prefix summer-internship-2023/customer-portal run dev",
-        "cwd": "C:/Users/szook/Desktop/EyeCue Lab Internship/MAIN-PROJECT-FILE/summer-internship-2023/customer-portal",
-        "serverReadyAction": {
-          "pattern": "started server on .+, url: (https?://.+)",
-          "uriFormat": "%s",
-          "action": "debugWithChrome"
-        }
-      },
-      {
-        "name": ".NET Core Launch (web)",
-        "type": "coreclr",
-        "request": "launch",
-        "preLaunchTask": "build",
-        "program": "${workspaceFolder}/webapi/WebApi/bin/Debug/net6.0/WebApi.dll",
-        "args": [],
-        "cwd": "${workspaceFolder}/webapi/WebApi",
-        "stopAtEntry": false,
-        "serverReadyAction": {
-          "action": "openExternally",
-          "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        {
+            "name": "Next.js: debug server-side",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "next dev"
+          },
+          {
+            "name": "Next.js: debug client-side",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:3000"
+          },
+          {
+            "name": "Next.js: debug full stack",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "next dev",
+            "cwd": "${workspaceFolder}/customer-portal",
+            "serverReadyAction": {
+              "pattern": "started server on .+, url: (https?://.+)",
+              "uriFormat": "%s",
+              "action": "debugWithChrome"
+            }
+          },
+        {
+            "name": ".NET Core Launch (web)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/webapi/WebApi/bin/Debug/net6.0/WebApi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/webapi/WebApi",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
         },
-        "env": {
-          "ASPNETCORE_ENVIRONMENT": "Development"
-        },
-        "sourceFileMap": {
-          "/Views": "${workspaceFolder}/Views"
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
         }
-      },
-      {
-        "name": ".NET Core Attach",
-        "type": "coreclr",
-        "request": "attach"
-      }
     ]
-  }
+}
