@@ -44,48 +44,66 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("register")]
-        public async Task<string> AppUserRegister([FromBody] AppUser appUser)
+        public async Task<IActionResult> AppUserRegister([FromBody] AppUser appUser)
         {
             if (appUser == null)
             {
-                // return BadRequest("User data cannot be null");
-                return "ok";
+                return BadRequest("User data cannot be null");
             }
-            var userExists = await _userManager.FindByEmailAsync(appUser.Email);
-            if (userExists != null)
+
+            var existingUser = await _userManager.FindByEmailAsync(appUser.Email);
+
+            if (existingUser != null)
             {
-                // return StatusCode(
-                //     StatusCodes.Status500InternalServerError,
-                //     new UserResponse { Status = "Error", Message = "User already exists!" }
-                return "ok";
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new UserResponse { Status = "Error", Message = "User already exists!" });
             }
-                return "ok";
+            else
+            {
+                var newAppUser = new AppUser()
+                {
+                    UserName = appUser.Email,
+                    Email = appUser.Email,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                };
+                var result = await _userManager.CreateAsync(newAppUser);
 
-
-
-            // var userId = Guid.NewGuid().ToString();
-
-            // AppUser user = new AppUser()
-            // {
-            //     Id = appUser.Id,
-            //     UserName = appUser.Email,
-            //     Email = appUser.Email,
-            //     EntityId = 0,
-            //     SecurityStamp = Guid.NewGuid().ToString(),
-            //     IsAdmin = false
-            // };
-            // var result = await _userManager.CreateAsync(user);
-            // if (!result.Succeeded)
-            //     // return StatusCode(
-            //     //     StatusCodes.Status500InternalServerError,
-            //     //     new UserResponse
-            //     //     {
-            //     //         Status = "Error",
-            //     //         Message = "User creation failed! Please check user details and try again."
-            //     //     }
-            //     // );
-            //     return "Ok";
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        new UserResponse { Status = "Error", Message = "User registration failed" });
+                }
+            }
         }
+
+
+        // var userId = Guid.NewGuid().ToString();
+
+        // AppUser user = new AppUser()
+        // {
+        //     Id = appUser.Id,
+        //     UserName = appUser.Email,
+        //     Email = appUser.Email,
+        //     EntityId = 0,
+        //     SecurityStamp = Guid.NewGuid().ToString(),
+        //     IsAdmin = false
+        // };
+        // var result = await _userManager.CreateAsync(user);
+        // if (!result.Succeeded)
+        //     // return StatusCode(
+        //     //     StatusCodes.Status500InternalServerError,
+        //     //     new UserResponse
+        //     //     {
+        //     //         Status = "Error",
+        //     //         Message = "User creation failed! Please check user details and try again."
+        //     //     }
+        //     // );
+        //     return "Ok";
+
 
         [HttpGet("VerifyUser")]
         public async Task<string> VerifyUser(string email, CancellationToken c = default)

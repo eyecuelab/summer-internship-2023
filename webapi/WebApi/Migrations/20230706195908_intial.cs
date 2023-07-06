@@ -4,12 +4,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class intial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,15 +54,33 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Commits",
+                name: "Authors",
                 columns: table => new
                 {
-                    Sha = table.Column<string>(type: "text", nullable: false),
-                    Message = table.Column<string>(type: "text", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "text", nullable: true),
+                    email = table.Column<string>(type: "text", nullable: true),
+                    date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Commits", x => x.Sha);
+                    table.PrimaryKey("PK_Authors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Committer",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "text", nullable: true),
+                    email = table.Column<string>(type: "text", nullable: true),
+                    date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Committer", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -199,6 +215,33 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Commits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    commitSha = table.Column<string>(type: "text", nullable: true),
+                    authorId = table.Column<int>(type: "integer", nullable: true),
+                    committerId = table.Column<int>(type: "integer", nullable: true),
+                    message = table.Column<string>(type: "text", nullable: true),
+                    comment_count = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Commits", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Commits_Authors_authorId",
+                        column: x => x.authorId,
+                        principalTable: "Authors",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Commits_Committer_committerId",
+                        column: x => x.committerId,
+                        principalTable: "Committer",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EntityAppUsers",
                 columns: table => new
                 {
@@ -249,15 +292,20 @@ namespace WebApi.Migrations
                         principalColumn: "ProjectId");
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "IsAdmin", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[,]
+            migrationBuilder.CreateTable(
+                name: "ListOfCommits",
+                columns: table => new
                 {
-                    { "1", 0, "47c68900-7748-4a81-b7be-ed36d105e20f", "user1@example.com", true, 1, true, false, null, "USER1@EXAMPLE.COM", "USER1", "AQAAAAEAACcQAAAAEBlxQ3eYGE47YJ6WkfE7Gys1a72FZ5+Ls02AO596n+mi5uZL76AsM56BEUZwWV60AQ==", null, false, "", false, "user1" },
-                    { "2", 0, "507419f9-b352-4fb9-a053-f240fd7fd777", "user2@example.com", true, 1, true, false, null, "USER2@EXAMPLE.COM", "USER2", "AQAAAAEAACcQAAAAEIELL8vWFcZwyWwb6x4CWE5soJwsjvtOlbkoHoDzX7p7BVV1cx0/Y838uwA7krWvNg==", null, false, "", false, "user2" },
-                    { "3", 0, "8ad3f5d2-2e7f-4da3-bcf3-514a10e8d33d", "user3@example.com", true, 0, false, false, null, "USER3@EXAMPLE.COM", "USER3", "AQAAAAEAACcQAAAAELOdxK18OyKr+sZ8UJWWu6zvK00cWacJkQ5nhDOkTi23ZDENW4ffVxV1R8k1i4i8Eg==", null, false, "", false, "user3" },
-                    { "4", 0, "47a693c0-b61f-4a92-bd39-16f501a23ddd", "gronstal.larson@gmail.com", true, 0, true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAEDNKzjVJSaFeDkZwLLF2DHz8fqq59goQCW/eojv5XOuRBitQnu1MFqq35+eDR3GJ9A==", null, false, "", false, "Gronstal.Larson@gmail.com" }
+                    sha = table.Column<string>(type: "text", nullable: true),
+                    commitId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.ForeignKey(
+                        name: "FK_ListOfCommits_Commits_commitId",
+                        column: x => x.commitId,
+                        principalTable: "Commits",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -298,6 +346,16 @@ namespace WebApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Commits_authorId",
+                table: "Commits",
+                column: "authorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Commits_committerId",
+                table: "Commits",
+                column: "committerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EntityAppUsers_AppUserId",
                 table: "EntityAppUsers",
                 column: "AppUserId");
@@ -306,6 +364,11 @@ namespace WebApi.Migrations
                 name: "IX_EntityAppUsers_EntityId1",
                 table: "EntityAppUsers",
                 column: "EntityId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ListOfCommits_commitId",
+                table: "ListOfCommits",
+                column: "commitId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectAppUsers_appUserId",
@@ -337,10 +400,10 @@ namespace WebApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Commits");
+                name: "EntityAppUsers");
 
             migrationBuilder.DropTable(
-                name: "EntityAppUsers");
+                name: "ListOfCommits");
 
             migrationBuilder.DropTable(
                 name: "ProjectAppUsers");
@@ -352,10 +415,19 @@ namespace WebApi.Migrations
                 name: "Entities");
 
             migrationBuilder.DropTable(
+                name: "Commits");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "Authors");
+
+            migrationBuilder.DropTable(
+                name: "Committer");
         }
     }
 }
