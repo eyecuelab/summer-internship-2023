@@ -33,9 +33,16 @@ TBD
 
 ## Project Setup <a id="project-setup"></a>
 
+
+0. Create .env file in the `customer-portal` directory `GOOGLE_CLIENT_ID = {Google ID here} GOOGLE_CLIENT_SECRET = {Google Client Secret here} NEXTAUTH_URL=http://localhost:3000/ JWT_SECRET={Your JWT Secret Here}` Create appsettings.Development.json in the `WebApi` root folder with the contents of `{"Logging": {"LogLevel": {"Default": "Information","Microsoft.AspNetCore": "Warning"}},"AllowedHosts": "*","PostgreSqlConnectionString": "Server=localhost;Port=5432;Database=test;User Id={postgres id here};Password={Password here};","Authentication": {"Google": {"ClientId": "YOUR CLIENT","ClientSecret": "YOUR SECRET"}}}`
+
+
 1. Clone this repo into your desktop. 
-2. Navigate to the project directory and run `$ npm install`.
-3. TBD
+2. Navigate to the project directory `customer-portal` and run `$ npm install`.
+3. Use `npm run dev` in order to run locally on `localhost:3000`.
+4. Navigate to webapi/WebApi and run `dotnet restore`. 
+5. Create migrations by running `dotnet ef migrations add initial` followed by `dotnet ef database update`. NOTE: Must have Postgress installed.
+6. Use `dotnet watch run` in order to run the backend API. This can be viewed through the swagger.ui in `localhost:7243`
 
 ## Scripts <a id="scripts"></a>
 
