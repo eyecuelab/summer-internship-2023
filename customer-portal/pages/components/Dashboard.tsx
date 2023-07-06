@@ -1,9 +1,18 @@
 import React, { useState, useEffect, PropsWithChildren } from "react";
-import { useSession, signOut, getSession, GetSessionParams } from "next-auth/react";
+import {
+    useSession,
+    signOut,
+    getSession,
+    GetSessionParams,
+} from "next-auth/react";
 import classNames from "classnames";
 import Sidebar from "./Sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Layout from "./layout";
+import Layout from "./Layout";
+import AdminDashboard from "./AdminDashboard";
+import { Session } from "next-auth";
+import axios from "axios";
+
 
 interface Commit {
   name: string;
@@ -22,7 +31,16 @@ interface CommitResponse {
   };
 }
 
-const Restricted = () => {
+async function register(session: Session | null) {
+	try {
+			await axios.post("https://localhost:7243/api/Users/register", session?.user);
+			console.log("session user:", session?.user);
+	} catch (error) {
+			console.error("Failed to transmit user data:", error);
+	}
+}
+
+const Dashboard = () => {
   const { data: session, status } = useSession({ required: true });
   const [apiData, setApiData] = useState<Commit[] | null>(null);
   let currentUser: any = session?.user?.email
@@ -74,6 +92,7 @@ const Restricted = () => {
     }
   }, [role]);
 
+	// return status === "authenticated" ? 
   return role === "Is User" ? (
     <Layout username={session?.user?.name}>
       <p>Commit Messages:</p>
@@ -95,7 +114,7 @@ const Restricted = () => {
   
 };
 
-export default Restricted;
+export default Dashboard;
 
 export async function getServerSideProps(context: GetSessionParams | undefined) {
   const session = await getSession(context);
