@@ -50,41 +50,60 @@ namespace WebApi.Controllers
             {
                 return BadRequest("User data cannot be null");
             }
-            var userExists = await _userManager.FindByIdAsync(appUser.GoogleId);
-            if (userExists != null)
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new UserResponse { Status = "Error", Message = "User already exists!" }
-                );
 
-            var userId = Guid.NewGuid().ToString();
+            var existingUser = await _userManager.FindByEmailAsync(appUser.Email);
 
-            AppUser user = new AppUser()
+            if (existingUser != null)
             {
-                Id = appUser.GoogleId,
-                UserName = appUser.Email,
-                Email = appUser.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                FirstName = appUser.FirstName,
-                LastName = appUser.LastName,
-                EntityId = appUser.EntityId,
-                IsAdmin = true
-            };
-            var result = await _userManager.CreateAsync(user);
-            if (!result.Succeeded)
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new UserResponse
-                    {
-                        Status = "Error",
-                        Message = "User creation failed! Please check user details and try again."
-                    }
-                );
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    new UserResponse { Status = "Error", Message = "User already exists!" });
+            }
+            else
+            {
+                var newAppUser = new AppUser()
+                {
+                    UserName = appUser.Email,
+                    Email = appUser.Email,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                };
+                var result = await _userManager.CreateAsync(newAppUser);
 
-            return Ok(
-                new UserResponse { Status = "Success", Message = "User created successfully!" }
-            );
+                if (result.Succeeded)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                        new UserResponse { Status = "Error", Message = "User registration failed" });
+                }
+            }
         }
+
+
+        // var userId = Guid.NewGuid().ToString();
+
+        // AppUser user = new AppUser()
+        // {
+        //     Id = appUser.Id,
+        //     UserName = appUser.Email,
+        //     Email = appUser.Email,
+        //     EntityId = 0,
+        //     SecurityStamp = Guid.NewGuid().ToString(),
+        //     IsAdmin = false
+        // };
+        // var result = await _userManager.CreateAsync(user);
+        // if (!result.Succeeded)
+        //     // return StatusCode(
+        //     //     StatusCodes.Status500InternalServerError,
+        //     //     new UserResponse
+        //     //     {
+        //     //         Status = "Error",
+        //     //         Message = "User creation failed! Please check user details and try again."
+        //     //     }
+        //     // );
+        //     return "Ok";
+
 
         [HttpGet("VerifyUser")]
         public async Task<string> VerifyUser(string email, CancellationToken c = default)
@@ -94,7 +113,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<AppUser>> Get(string email, bool isAdmin)
+        public async Task<List<AppUser>> Get(string email, bool isAdmin, int entityId)
         {
             IQueryable<AppUser> query = _context.AppUsers.AsQueryable();
 
@@ -107,94 +126,14 @@ namespace WebApi.Controllers
             {
                 query = query.Where(entry => entry.IsAdmin == true);
             }
+            if (entityId >= 0)
+            {
+                query = query.Where(entry => entry.EntityId == entityId);
+            }
 
             return await query.ToListAsync();
         }
-
-        // [AllowAnonymous]
-        // [HttpPost("google-auth")]
-        // public async Task<IActionResult> Authenticate([FromHeader] string authorization)
-        // {
-        //     // Validate and decode the JWT token from the 'authorization' header.
-        //     // Extract the email claim from the token. This will depend on the structure of your token.
-        //     var tokenHandler = new JwtSecurityTokenHandler();
-        //     var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]); // replace with own JWT key here.
-        //     var validationParameters = new TokenValidationParameters
-        //     {
-        //         ValidateIssuerSigningKey = true,
-        //         IssuerSigningKey = new SymmetricSecurityKey(key),
-        //         ValidateIssuer = false,
-        //         ValidateAudience = false,
-        //     };
-
-        //     SecurityToken validatedToken;
-        //     try
-        //     {
-        //         var principal = tokenHandler.ValidateToken(
-        //             authorization,
-        //             validationParameters,
-        //             out validatedToken
-        //         );
-        //         var email = principal.Claims.First(c => c.Type == ClaimTypes.Email).Value;
-
-        //         // Look up the user by email
-        //         var existingUser = await _userManager.FindByEmailAsync(email);
-
-        //         if (existingUser != null)
-        //         {
-        //             // The user has already registered. Return a message indicating success.
-        //             return Ok(
-        //                 new UserResponse
-        //                 {
-        //                     Status = "Success",
-        //                     Message = "User is successfully authenticated."
-        //                 }
-        //             );
-        //         }
-        //         else
-        //         {
-        //             // Need to pass user info in via token WIP: GET THAT INFO ELIOT (appUser is not able to be read at this scope)
-        //             AppUser newUser = new AppUser()
-        //             {
-        //                 UserName = appUser.Email,
-        //                 Email = appUser.Email,
-        //                 SecurityStamp = Guid.NewGuid().ToString(),
-        //                 FirstName = appUser.FirstName,
-        //                 LastName = appUser.LastName,
-        //                 EntityId = appUser.EntityId,
-        //                 IsAdmin = true
-        //             };
-        //             var createResult = await _userManager.CreateAsync(newUser);
-
-        //             if (createResult.Succeeded)
-        //             {
-        //                 return Ok(
-        //                     new UserResponse
-        //                     {
-        //                         Status = "Success",
-        //                         Message = "User created successfully!"
-        //                     }
-        //                 );
-        //             }
-        //             else
-        //             {
-        //                 return StatusCode(
-        //                     StatusCodes.Status500InternalServerError,
-        //                     new UserResponse { Status = "Error", Message = "User creation failed. Please try again." }
-        //                 );
-        //             }
-        //         }
-        //     }
-        //     catch (Exception)
-        //     {
-        //         // If validation fails, the token is not valid or does not contain the right claims.
-        //         return StatusCode(
-        //             StatusCodes.Status401Unauthorized,
-        //             new UserResponse { Status = "Error", Message = "Invalid token!" }
-        //         );
-        //     }
-        // }
-
-
     }
 }
+
+

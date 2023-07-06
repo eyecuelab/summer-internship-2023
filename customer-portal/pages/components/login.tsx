@@ -1,25 +1,16 @@
-import { useSession, signIn, signOut } from "next-auth/react";
-import { Session } from "next-auth";
-import Link from 'next/link'; // Import Session type from 'next-auth'
+// import { Session } from "next-auth";
+// import axios from "axios";
+// import {
+//   useSession,
+//   signOut,
+//   getSession,
+//   GetSessionParams,
+// } from "next-auth/react";
 
-export default function Login() {
-  const { data: session } = useSession();
-  if (session) {
-    return (
-      <>
-        Signed in as {session.user?.email} <br />
-        Hello {session.user?.name} <br />
-        {/* Your Profile Icon is: {session.user?.image && <img src={session.user?.image} width={50} />} <br /> */}
-
-        Check out the <a href="/components/restricted">examples API route</a> <br />
-        <button onClick={() => signOut()}>Sign out</button>
-      </>
-    );
-  }
-  return (
-    <>
-      Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
-    </>
-  );
-}
+// async function register(session: Session | null) {
+//   try {
+//       await axios.post("https://localhost:7243/api/users/register", session?.user);
+//   } catch (error) {
+//       console.error("Failed to transmit user data:", error);
+//   }
+// }

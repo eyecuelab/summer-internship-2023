@@ -7,9 +7,8 @@ namespace WebApi.DataAccess
 {
     public class PostgreSqlContext : IdentityDbContext<AppUser>
     {
-        public PostgreSqlContext(DbContextOptions<PostgreSqlContext> options) : base(options)
-        {
-        }
+        public PostgreSqlContext(DbContextOptions<PostgreSqlContext> options)
+            : base(options) { }
 
         public DbSet<AppUser> AppUsers { get; set; }
         public DbSet<Entity> Entities { get; set; }
@@ -21,62 +20,70 @@ namespace WebApi.DataAccess
         public DbSet<EntityAppUser> EntityAppUsers { get; set; }
         public DbSet<ProjectAppUser> ProjectAppUsers { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-            {
-                var hasher = new PasswordHasher<AppUser>();
+        // protected override void OnModelCreating(ModelBuilder builder)
+        // {
+        //     base.OnModelCreating(builder);
+        //     {
+        //         var hasher = new PasswordHasher<AppUser>();
 
-                builder.Entity<AppUser>().HasData(
-                    new AppUser
-                    {
-                        Id = "1",
-                        UserName = "user1",
-                        NormalizedUserName = "USER1",
-                        Email = "user1@example.com",
-                        NormalizedEmail = "USER1@EXAMPLE.COM",
-                        EmailConfirmed = true,
-                        PasswordHash = hasher.HashPassword(null, "Password1!"),
-                        SecurityStamp = string.Empty,
-                        FirstName = "User",
-                        LastName = "One",
-                        EntityId = 1,
-                        IsAdmin = true
-                    },
-                new AppUser
-                {
-                    Id = "2",
-                    UserName = "user2",
-                    NormalizedUserName = "USER2",
-                    Email = "user2@example.com",
-                    NormalizedEmail = "USER2@EXAMPLE.COM",
-                    EmailConfirmed = true,
-                    PasswordHash = hasher.HashPassword(null, "Password2!"),
-                    SecurityStamp = string.Empty,
-                    FirstName = "User",
-                    LastName = "Two",
-                    EntityId = 2,
-                    IsAdmin = true
-                },
-                new AppUser
-                {
-                    Id = "3",
-                    UserName = "user3",
-                    NormalizedUserName = "USER3",
-                    Email = "user3@example.com",
-                    NormalizedEmail = "USER3@EXAMPLE.COM",
-                    EmailConfirmed = true,
-                    PasswordHash = hasher.HashPassword(null, "Password3!"),
-                    SecurityStamp = string.Empty,
-                    FirstName = "User",
-                    LastName = "Three",
-                    EntityId = 3,
-                    IsAdmin = false
-                }
-
-                );
-            }
-        }
+        //         builder
+        //             .Entity<AppUser>()
+        //             .HasData(
+        //                 new AppUser
+        //                 {
+        //                     Id = "1",
+        //                     UserName = "user1",
+        //                     NormalizedUserName = "USER1",
+        //                     Email = "user1@example.com",
+        //                     NormalizedEmail = "USER1@EXAMPLE.COM",
+        //                     EmailConfirmed = true,
+        //                     PasswordHash = hasher.HashPassword(null, "Password1!"),
+        //                     SecurityStamp = string.Empty,
+        //                     EntityId = 1,
+        //                     IsAdmin = true
+        //                 },
+        //                 new AppUser
+        //                 {
+        //                     Id = "2",
+        //                     UserName = "user2",
+        //                     NormalizedUserName = "USER2",
+        //                     Email = "user2@example.com",
+        //                     NormalizedEmail = "USER2@EXAMPLE.COM",
+        //                     EmailConfirmed = true,
+        //                     PasswordHash = hasher.HashPassword(null, "Password2!"),
+        //                     SecurityStamp = string.Empty,
+        //                     EntityId = 1,
+        //                     IsAdmin = true
+        //                 },
+        //                 new AppUser
+        //                 {
+        //                     Id = "3",
+        //                     UserName = "user3",
+        //                     NormalizedUserName = "USER3",
+        //                     Email = "user3@example.com",
+        //                     NormalizedEmail = "USER3@EXAMPLE.COM",
+        //                     EmailConfirmed = true,
+        //                     PasswordHash = hasher.HashPassword(null, "Password3!"),
+        //                     SecurityStamp = string.Empty,
+        //                     EntityId = 0,
+        //                     IsAdmin = false
+        //                 },
+        //                 new AppUser
+        //                 {
+        //                     Id = "4",
+        //                     UserName = "Gronstal.Larson@gmail.com",
+        //                     NormalizedUserName = "GRONSTAL.LARSON@GMAIL.COM",
+        //                     Email = "gronstal.larson@gmail.com",
+        //                     NormalizedEmail = "GRONSTAL.LARSON@GMAIL.COM",
+        //                     EmailConfirmed = true,
+        //                     PasswordHash = hasher.HashPassword(null, "Password4!"),
+        //                     SecurityStamp = string.Empty,
+        //                     EntityId = 0,
+        //                     IsAdmin = true
+        //                 }
+        //             );
+        //     }
+        // }
 
         public override int SaveChanges()
         {

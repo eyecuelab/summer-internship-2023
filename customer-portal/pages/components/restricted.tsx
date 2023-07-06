@@ -1,25 +1,40 @@
 import React, { useState, useEffect, PropsWithChildren } from "react";
-import { useSession, signOut, getSession, GetSessionParams } from "next-auth/react";
+import {
+    useSession,
+    signOut,
+    getSession,
+    GetSessionParams,
+} from "next-auth/react";
 import classNames from "classnames";
 import Sidebar from "./sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import Layout from "./layout";
+import { Session } from "next-auth";
+import axios from "axios";
 
 interface Commit {
-  name: string;
-  message: string;
-  date: string;
+    name: string;
+    message: string;
+    date: string;
+}
+interface CommitResponse {
+    commit: {
+        author: {
+            name: string;
+            email: string;
+            date: string;
+        };
+        message: string;
+    };
 }
 
-interface CommitResponse {
-  commit: {
-    author: {
-      name: string;
-      email: string;
-      date: string;
-    };
-    message: string;
-  };
+async function register(session: Session | null) {
+    try {
+        await axios.post("https://localhost:7243/api/Users/register", session?.user);
+        console.log("session user:", session?.user);
+    } catch (error) {
+        console.error("Failed to transmit user data:", error);
+    }
 }
 
 const Restricted = () => {
@@ -27,7 +42,7 @@ const Restricted = () => {
   const [apiData, setApiData] = useState<Commit[] | null>(null);
   let currentUser: any = session?.user?.email
   const [role, setRole] = useState<string>('');
-  currentUser = "user1@example.com"
+//   currentUser = "user1@example.com"
 
 
   useEffect(() => {
@@ -93,21 +108,24 @@ const Restricted = () => {
     <div>Loading...</div>
   );
   
+
 };
 
 export default Restricted;
 
-export async function getServerSideProps(context: GetSessionParams | undefined) {
-  const session = await getSession(context);
-  if (!session) {
+export async function getServerSideProps(
+    context: GetSessionParams | undefined
+) {
+    const session = await getSession(context);
+    if (!session) {
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            },
+        };
+    }
     return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
+        props: { session },
     };
-  }
-  return {
-    props: { session },
-  };
 }
