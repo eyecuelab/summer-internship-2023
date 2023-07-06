@@ -6,9 +6,10 @@ import {
     GetSessionParams,
 } from "next-auth/react";
 import classNames from "classnames";
-import Sidebar from "./sidebar";
+import Sidebar from "./Sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Layout from "./layout";
+import Layout from "./Layout";
+import AdminDashboard from "./AdminDashboard";
 import { Session } from "next-auth";
 import axios from "axios";
 
@@ -37,7 +38,7 @@ async function register(session: Session | null) {
     }
 }
 
-const Restricted = () => {
+const Dashboard = () => {
     const { data: session, status } = useSession({ required: true });
     const [apiData, setApiData] = useState<Commit[] | null>(null);
 
@@ -84,7 +85,7 @@ const Restricted = () => {
     );
 };
 
-export default Restricted;
+export default Dashboard;
 
 export async function getServerSideProps(
     context: GetSessionParams | undefined
