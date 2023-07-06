@@ -72,7 +72,7 @@ TBD
 
 To view the Swagger documentation for the WebApi, launch the project using `dotnet watch run` using Terminal or Powershell, then input the following URL into your browser: `https://localhost:7243/swagger/index.html`
 
-![swaggerendpoints](WebApi/wwwroot/img/swaggerendpoints.png)
+![swaggerendpoints](webapi/WebApi/wwwroot/img/swaggerendpoints.png)
 
 ### Creating a New Instance in Postman or Swagger
 
