@@ -38,50 +38,77 @@ async function register(session: Session | null) {
 }
 
 const Restricted = () => {
-    const { data: session, status } = useSession({ required: true });
-    const [apiData, setApiData] = useState<Commit[] | null>(null);
+  const { data: session, status } = useSession({ required: true });
+  const [apiData, setApiData] = useState<Commit[] | null>(null);
+  let currentUser: any = session?.user?.email
+  const [role, setRole] = useState<string>('');
+//   currentUser = "user1@example.com"
 
-    useEffect(() => {
-        if (status === "authenticated") {
 
-            register(session);
-            console.log("session:", session);
-            fetch("https://localhost:7243/api/commits")
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(
-                            "HTTP error, status = " + response.status
-                        );
-                    }
-                    return response.json();
-                })
-                .then((json: CommitResponse[]) => {
-                    const commits = json.map((commit) => ({
-                        name: commit.commit.author.name,
-                        message: commit.commit.message,
-                        date: commit.commit.author.date,
-                    }));
-                    setApiData(commits);
-                })
-                .catch((error) => console.error("Error during fetch:", error));
+  useEffect(() => {
+    const fetchCurrentRole = async () => {
+      try {
+        const response = await fetch(
+          `https://localhost:7243/api/Users/VerifyUser?email=${currentUser}`
+        );
+        if (!response.ok) {
+          throw new Error("HTTP error, status = " + response.status);
         }
-    }, [status]);
+        const role = await response.text();
+        setRole(role); // Set the role in the state variable
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-    return status === "authenticated" ? (
-        <Layout username={session?.user?.name}>
-            <p>Commit Messages:</p>
-            {apiData &&
-                apiData.map((commit, index) => (
-                    <div key={index}>
-                        <p>Name: {commit.name}</p>
-                        <p>Message: {commit.message}</p>
-                        <p>Date: {commit.date}</p>
-                    </div>
-                ))}
-        </Layout>
-    ) : (
-        <div>loading...</div>
-    );
+    if (currentUser) {
+      fetchCurrentRole();
+    }
+  }, [currentUser]);
+
+  console.log(currentUser);
+
+  useEffect(() => {
+    if (role === "Is User") {
+      fetch("https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error, status = " + response.status);
+          }
+          return response.json();
+        })
+        .then((json: CommitResponse[]) => {
+          const commits = json.map(commit => ({
+            name: commit.commit.author.name,
+            message: commit.commit.message,
+            date: commit.commit.author.date
+          }));
+          setApiData(commits);
+        })
+        .catch((error) => console.error("Error during fetch:", error));
+    }
+  }, [role]);
+
+  return role === "Is User" ? (
+    <Layout username={session?.user?.name}>
+      <p>Commit Messages:</p>
+      {apiData && apiData.map((commit, index) => (
+        <div key={index}>
+          <p>Name: {commit.name}</p>
+          <p>Message: {commit.message}</p>
+          <p>Date: {commit.date}</p>
+        </div>
+      ))}
+    </Layout>
+  ) : role === "Not Registered" ? (
+    <div>You are not registered.</div>
+  ) : role === "Is Admin" ? (
+    <div>You are an admin</div>
+  ) : (
+    <div>Loading...</div>
+  );
+  
+
 };
 
 export default Restricted;

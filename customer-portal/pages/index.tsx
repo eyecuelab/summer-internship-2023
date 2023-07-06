@@ -1,5 +1,6 @@
 // import Link from "next/link";
 import { Container, Navbar, Text, Grid, Col, Image } from "@nextui-org/react";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -26,9 +27,11 @@ export default function Home() {
             <Text weight={"bold"} size={30} css={{ textAlign: "center" }}>
               For your Current and Future Projects
             </Text>
-            <Text size={20} css={{ textAlign: "center" }}>
-              Sign in to get started
-            </Text>
+            <Link href="/api/auth/signin">
+              <Text size={20} css={{ textAlign: "center" }}>Sign In
+                 to get started
+              </Text>
+            </Link>
             <Image
               width={420}
               height={480}
