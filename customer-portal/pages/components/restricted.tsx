@@ -17,7 +17,6 @@ interface Commit {
     message: string;
     date: string;
 }
-
 interface CommitResponse {
     commit: {
         author: {
@@ -31,7 +30,8 @@ interface CommitResponse {
 
 async function register(session: Session | null) {
     try {
-        await axios.post("https://localhost:7243/api/users/register", session?.user);
+        await axios.post("https://localhost:7243/api/Users/register", session?.user);
+        console.log("session user:", session?.user);
     } catch (error) {
         console.error("Failed to transmit user data:", error);
     }
@@ -45,8 +45,8 @@ const Restricted = () => {
         if (status === "authenticated") {
 
             register(session);
-            console.log(session);
-            fetch("http://localhost:4000/api/commits")
+            console.log("session:", session);
+            fetch("https://localhost:7243/api/commits")
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(
