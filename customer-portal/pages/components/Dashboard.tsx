@@ -8,7 +8,7 @@ import {
 import classNames from "classnames";
 import Sidebar from "./Sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Layout from "./Layout";
+import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import { Session } from "next-auth";
 import axios from "axios";
