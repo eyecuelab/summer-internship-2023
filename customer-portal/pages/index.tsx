@@ -1,4 +1,3 @@
-// import Link from "next/link";
 import { Container, Navbar, Text, Grid, Col, Image } from "@nextui-org/react";
 import Link from "next/link";
 
