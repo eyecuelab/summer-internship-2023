@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
-  build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
