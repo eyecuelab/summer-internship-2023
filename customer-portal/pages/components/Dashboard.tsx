@@ -5,6 +5,7 @@ import {
   getSession,
   GetSessionParams,
 } from "next-auth/react";
+import { useRouter } from 'next/router';
 import classNames from "classnames";
 import Sidebar from "./Sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
@@ -12,6 +13,7 @@ import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import { Session } from "next-auth";
 import axios from "axios";
+
 
 interface Commit {
   name: string;
@@ -46,7 +48,8 @@ const Dashboard = () => {
   const { data: session, status } = useSession({ required: true });
   const [apiData, setApiData] = useState<Commit[] | null>(null);
   let currentUser: any = session?.user?.email;
-  const [role, setRole] = useState<boolean>(false);
+  const [role, setRole] = useState<string>("");
+  const [isAdmin, setIsAdmin] = useState<string>("false");
 
   useEffect(() => {
     const fetchCurrentRole = async () => {
@@ -57,8 +60,8 @@ const Dashboard = () => {
         if (!response.ok) {
           throw new Error("HTTP error, status = " + response.status);
         }
-        const user = await response.json();
-        setRole(user.isAdmin); // Set the role in the state variable
+        const roleResponse = await response.text();
+        setIsAdmin(roleResponse);
       } catch (error) {
         console.error(error);
       }
@@ -72,8 +75,7 @@ const Dashboard = () => {
   console.log(currentUser);
 
   useEffect(() => {
-    if (!role) {
-      // If user is not an admin
+    if (isAdmin === "false") {
       fetch(
         "https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023"
       )
@@ -93,12 +95,10 @@ const Dashboard = () => {
         })
         .catch((error) => console.error("Error during fetch:", error));
     }
-  }, [role]);
+  }, [isAdmin]);
 
-  return role ? (
+  return isAdmin === "true" ? (
     <AdminDashboard></AdminDashboard>
-  ) : role === undefined ? (
-    <div>Loading...</div>
   ) : (
     <Layout username={session?.user?.name}>
       <p>Project Commit History:</p>

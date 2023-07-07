@@ -93,9 +93,9 @@ namespace WebApi.DataAccess
             if (user == null)
                 return "Not Registered";
             else if (user.IsAdmin == true)
-                return "Is Admin";
+                return "true";
             else
-                return "Is User";
+                return "false";
         }
     }
 }
