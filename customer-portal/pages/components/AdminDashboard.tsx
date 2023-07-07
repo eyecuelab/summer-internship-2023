@@ -5,11 +5,10 @@ import {
   getSession,
   GetSessionParams,
 } from "next-auth/react";
-import classNames from "classnames";
-import Sidebar from "./Sidebar";
-import { Bars3Icon } from "@heroicons/react/24/outline";
+import { useRouter } from 'next/router';
 import Layout from "./layout";
 import { Session } from "next-auth";
+import { GetServerSidePropsContext } from 'next';
 import axios from "axios";
 
 interface Commit {
@@ -45,8 +44,36 @@ async function register(session: Session | null) {
 
 const AdminDashboard = () => {
   const { data: session, status } = useSession({ required: true });
-  const [apiData, setApiData] = useState<Commit[] | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [users, setUsers] = useState<User[]>([]);
+  const currentUser = session?.user?.email;
+
+  useEffect(() => {
+    const fetchCurrentRole = async () => {
+      try {
+        const response = await fetch(`https://localhost:7243/api/Users/VerifyUser?email=${currentUser}`);
+        if (!response.ok) {
+          throw new Error("HTTP error, status = " + response.status);
+        }
+        const roleResponse = await response.text();
+        setIsAdmin(roleResponse === "true");
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (currentUser) {
+      fetchCurrentRole();
+    }
+  }, [currentUser]);
+
+  const router = useRouter();
+  
+  useEffect(() => {
+    if (!isAdmin) {
+      router.push('/components/Dashboard'); // Your regular dashboard route here
+    }
+  }, [isAdmin, router]);
 
   useEffect(() => {
     fetch(`https://localhost:7243/api/Users`)
@@ -64,22 +91,6 @@ const AdminDashboard = () => {
     if (status === "authenticated") {
       register(session);
       console.log("session:", session);
-      fetch("https://localhost:7243/api/commits")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("HTTP error, status = " + response.status);
-          }
-          return response.json();
-        })
-        .then((json: CommitResponse[]) => {
-          const commits = json.map((commit) => ({
-            name: commit.commit.author.name,
-            message: commit.commit.message,
-            date: commit.commit.author.date,
-          }));
-          setApiData(commits);
-        })
-        .catch((error) => console.error("Error during fetch:", error));
     }
   }, [status]);
 
@@ -103,9 +114,7 @@ const AdminDashboard = () => {
 
 export default AdminDashboard;
 
-export async function getServerSideProps(
-  context: GetSessionParams | undefined
-) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
   if (!session) {
     return {
