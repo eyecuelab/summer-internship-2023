@@ -6,9 +6,9 @@ import {
     GetSessionParams,
 } from "next-auth/react";
 import classNames from "classnames";
-import Sidebar from "./sidebar";
+import Sidebar from "./Sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Layout from "./layout";
+import Layout from "./Layout";
 import { Session } from "next-auth";
 import axios from "axios";
 
@@ -17,7 +17,6 @@ interface Commit {
     message: string;
     date: string;
 }
-
 interface CommitResponse {
     commit: {
         author: {
@@ -31,13 +30,14 @@ interface CommitResponse {
 
 async function register(session: Session | null) {
     try {
-        await axios.post("https://localhost:7243/api/users/register", session?.user);
+        await axios.post("https://localhost:7243/api/Users/register", session?.user);
+        console.log("session user:", session?.user);
     } catch (error) {
         console.error("Failed to transmit user data:", error);
     }
 }
 
-const Restricted = () => {
+const AdminDashboard = () => {
     const { data: session, status } = useSession({ required: true });
     const [apiData, setApiData] = useState<Commit[] | null>(null);
 
@@ -45,8 +45,8 @@ const Restricted = () => {
         if (status === "authenticated") {
 
             register(session);
-            console.log(session);
-            fetch("https://localhost:7243/api/Github/commits/eyecuelab/summer-internship-2023")
+            console.log("session:", session);
+            fetch("https://localhost:7243/api/commits")
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(
@@ -84,7 +84,7 @@ const Restricted = () => {
     );
 };
 
-export default Restricted;
+export default AdminDashboard;
 
 export async function getServerSideProps(
     context: GetSessionParams | undefined
