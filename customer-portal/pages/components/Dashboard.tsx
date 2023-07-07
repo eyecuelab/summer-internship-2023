@@ -1,9 +1,9 @@
 import React, { useState, useEffect, PropsWithChildren } from "react";
 import {
-    useSession,
-    signOut,
-    getSession,
-    GetSessionParams,
+  useSession,
+  signOut,
+  getSession,
+  GetSessionParams,
 } from "next-auth/react";
 import classNames from "classnames";
 import Sidebar from "./Sidebar";
@@ -12,7 +12,6 @@ import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import { Session } from "next-auth";
 import axios from "axios";
-
 
 interface Commit {
   name: string;
@@ -32,21 +31,23 @@ interface CommitResponse {
 }
 
 async function register(session: Session | null) {
-	try {
-			await axios.post("https://localhost:7243/api/Users/register", session?.user);
-			console.log("session user:", session?.user);
-	} catch (error) {
-			console.error("Failed to transmit user data:", error);
-	}
+  try {
+    await axios.post(
+      "https://localhost:7243/api/Users/register",
+      session?.user
+    );
+    console.log("session user:", session?.user);
+  } catch (error) {
+    console.error("Failed to transmit user data:", error);
+  }
 }
 
 const Dashboard = () => {
   const { data: session, status } = useSession({ required: true });
   const [apiData, setApiData] = useState<Commit[] | null>(null);
-  let currentUser: any = session?.user?.email
-  const [role, setRole] = useState<string>('');
-	const [isAdmin, setIsAdmin] = useState<boolean>(false);
-
+  let currentUser: any = session?.user?.email;
+  const [role, setRole] = useState<boolean>(false);
+  // const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCurrentRole = async () => {
@@ -57,8 +58,8 @@ const Dashboard = () => {
         if (!response.ok) {
           throw new Error("HTTP error, status = " + response.status);
         }
-        const isAdminResponse = await response.text();
-        setIsAdmin(isAdminResponse === "true");
+        const user = await response.json();
+        setRole(user.isAdmin); // Set the role in the state variable
       } catch (error) {
         console.error(error);
       }
@@ -72,8 +73,11 @@ const Dashboard = () => {
   console.log(currentUser);
 
   useEffect(() => {
-    if (!isAdmin) {
-      fetch("https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023")
+    if (!role) {
+      // If user is not an admin
+      fetch(
+        "https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023"
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error("HTTP error, status = " + response.status);
@@ -81,36 +85,41 @@ const Dashboard = () => {
           return response.json();
         })
         .then((json: CommitResponse[]) => {
-          const commits = json.map(commit => ({
+          const commits = json.map((commit) => ({
             name: commit.commit.author.name,
             message: commit.commit.message,
-            date: commit.commit.author.date
+            date: commit.commit.author.date,
           }));
           setApiData(commits);
         })
         .catch((error) => console.error("Error during fetch:", error));
     }
-  }, [isAdmin]);
+  }, [role]);
 
-	return isAdmin ? (
+  return role ? (
     <AdminDashboard></AdminDashboard>
-		) : (
-			<Layout username={session?.user?.name}>
-				<p>Project Commit History:</p>
-				{apiData && apiData.map((commit, index) => (
-					<div key={index}>
-						<p>Name: {commit.name}</p>
-						<p>Message: {commit.message}</p>
-						<p>Date: {commit.date}</p>
-					</div>
-				))}
-			</Layout>
-		);
-	}
-	
+  ) : role === undefined ? (
+    <div>Loading...</div>
+  ) : (
+    <Layout username={session?.user?.name}>
+      <p>Project Commit History:</p>
+      {apiData &&
+        apiData.map((commit, index) => (
+          <div key={index}>
+            <p>Name: {commit.name}</p>
+            <p>Message: {commit.message}</p>
+            <p>Date: {commit.date}</p>
+          </div>
+        ))}
+    </Layout>
+  );
+};
+
 export default Dashboard;
 
-export async function getServerSideProps(context: GetSessionParams | undefined) {
+export async function getServerSideProps(
+  context: GetSessionParams | undefined
+) {
   const session = await getSession(context);
   if (!session) {
     return {
