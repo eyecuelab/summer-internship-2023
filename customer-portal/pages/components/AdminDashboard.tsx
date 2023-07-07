@@ -1,32 +1,38 @@
 import React, { useState, useEffect, PropsWithChildren } from "react";
 import {
-    useSession,
-    signOut,
-    getSession,
-    GetSessionParams,
+  useSession,
+  signOut,
+  getSession,
+  GetSessionParams,
 } from "next-auth/react";
 import classNames from "classnames";
 import Sidebar from "./Sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Layout from "./Layout";
+import Layout from "./layout";
 import { Session } from "next-auth";
 import axios from "axios";
 
 interface Commit {
-    name: string;
-    message: string;
-    date: string;
+  name: string;
+  message: string;
+  date: string;
 }
 interface CommitResponse {
-    commit: {
-        author: {
-            name: string;
-            email: string;
-            date: string;
-        };
-        message: string;
+  commit: {
+    author: {
+      name: string;
+      email: string;
+      date: string;
     };
+    message: string;
+  };
 }
+
+type User = {
+  email: string;
+  isAdmin: boolean;
+  entityId: number;
+};
 
 async function register(session: Session | null) {
     try {
@@ -38,67 +44,78 @@ async function register(session: Session | null) {
 }
 
 const AdminDashboard = () => {
-    const { data: session, status } = useSession({ required: true });
-    const [apiData, setApiData] = useState<Commit[] | null>(null);
+  const { data: session, status } = useSession({ required: true });
+  const [apiData, setApiData] = useState<Commit[] | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
 
-    useEffect(() => {
-        if (status === "authenticated") {
-
-            register(session);
-            console.log("session:", session);
-            fetch("https://localhost:7243/api/commits")
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(
-                            "HTTP error, status = " + response.status
-                        );
-                    }
-                    return response.json();
-                })
-                .then((json: CommitResponse[]) => {
-                    const commits = json.map((commit) => ({
-                        name: commit.commit.author.name,
-                        message: commit.commit.message,
-                        date: commit.commit.author.date,
-                    }));
-                    setApiData(commits);
-                })
-                .catch((error) => console.error("Error during fetch:", error));
+  useEffect(() => {
+    fetch(`https://localhost:7243/api/Users`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`${response.status}: ${response.statusText}`);
         }
-    }, [status]);
+        return response.json();
+      })
+      .then(data => setUsers(data))
+      .catch(error => console.error('Error:', error));
+  }, []);
 
-    return status === "authenticated" ? (
-        <Layout username={session?.user?.name}>
-            <p>Commit Messages:</p>
-            {apiData &&
-                apiData.map((commit, index) => (
-                    <div key={index}>
-                        <p>Name: {commit.name}</p>
-                        <p>Message: {commit.message}</p>
-                        <p>Date: {commit.date}</p>
-                    </div>
-                ))}
-        </Layout>
-    ) : (
-        <div>loading...</div>
-    );
+  useEffect(() => {
+    if (status === "authenticated") {
+      register(session);
+      console.log("session:", session);
+      fetch("https://localhost:7243/api/commits")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("HTTP error, status = " + response.status);
+          }
+          return response.json();
+        })
+        .then((json: CommitResponse[]) => {
+          const commits = json.map((commit) => ({
+            name: commit.commit.author.name,
+            message: commit.commit.message,
+            date: commit.commit.author.date,
+          }));
+          setApiData(commits);
+        })
+        .catch((error) => console.error("Error during fetch:", error));
+    }
+  }, [status]);
+
+  return status === "authenticated" ? (
+    <Layout username={session?.user?.name}>
+      <p>Current Clients:</p>
+      <div>
+      {users.map((user, index) => (
+        <div key={index}>
+          <p>Email: {user.email}</p>
+          <p>Is Admin: {user.isAdmin ? 'Yes' : 'No'}</p>
+          <p>Entity ID: {user.entityId}</p>
+        </div>
+      ))}
+    </div>
+    </Layout>
+  ) : (
+    <div>loading...</div>
+  );
 };
 
 export default AdminDashboard;
 
 export async function getServerSideProps(
-    context: GetSessionParams | undefined
+  context: GetSessionParams | undefined
 ) {
-    const session = await getSession(context);
-    if (!session) {
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false,
-            },
-        };
-    }
+  const session = await getSession(context);
+  if (!session) {
     return {
-        props: { session },
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
     };
+  }
+  return {
+    props: { session },
+  };
 }

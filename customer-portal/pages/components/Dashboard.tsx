@@ -8,7 +8,7 @@ import {
 import classNames from "classnames";
 import Sidebar from "./Sidebar";
 import { Bars3Icon } from "@heroicons/react/24/outline";
-import Layout from "./Layout";
+import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import { Session } from "next-auth";
 import axios from "axios";
@@ -45,7 +45,7 @@ const Dashboard = () => {
   const [apiData, setApiData] = useState<Commit[] | null>(null);
   let currentUser: any = session?.user?.email
   const [role, setRole] = useState<string>('');
-  currentUser = "user1@example.com"
+	const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
 
   useEffect(() => {
@@ -57,8 +57,8 @@ const Dashboard = () => {
         if (!response.ok) {
           throw new Error("HTTP error, status = " + response.status);
         }
-        const role = await response.text();
-        setRole(role); // Set the role in the state variable
+        const isAdminResponse = await response.text();
+        setIsAdmin(isAdminResponse === "true");
       } catch (error) {
         console.error(error);
       }
@@ -72,7 +72,7 @@ const Dashboard = () => {
   console.log(currentUser);
 
   useEffect(() => {
-    if (role === "Is User") {
+    if (!isAdmin) {
       fetch("https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023")
         .then((response) => {
           if (!response.ok) {
@@ -90,30 +90,24 @@ const Dashboard = () => {
         })
         .catch((error) => console.error("Error during fetch:", error));
     }
-  }, [role]);
+  }, [isAdmin]);
 
-	// return status === "authenticated" ? 
-  return role === "Is User" ? (
-    <Layout username={session?.user?.name}>
-      <p>Commit Messages:</p>
-      {apiData && apiData.map((commit, index) => (
-        <div key={index}>
-          <p>Name: {commit.name}</p>
-          <p>Message: {commit.message}</p>
-          <p>Date: {commit.date}</p>
-        </div>
-      ))}
-    </Layout>
-  ) : role === "Not Registered" ? (
-    <div>You are not registered.</div>
-  ) : role === "Is Admin" ? (
-    <div>You are an admin</div>
-  ) : (
-    <div>Loading...</div>
-  );
-  
-};
-
+	return isAdmin ? (
+    <AdminDashboard></AdminDashboard>
+		) : (
+			<Layout username={session?.user?.name}>
+				<p>Project Commit History:</p>
+				{apiData && apiData.map((commit, index) => (
+					<div key={index}>
+						<p>Name: {commit.name}</p>
+						<p>Message: {commit.message}</p>
+						<p>Date: {commit.date}</p>
+					</div>
+				))}
+			</Layout>
+		);
+	}
+	
 export default Dashboard;
 
 export async function getServerSideProps(context: GetSessionParams | undefined) {

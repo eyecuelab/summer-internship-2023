@@ -28,7 +28,7 @@ export default function Home() {
             </Text>
             <Link href="/api/auth/signin">
               <Text size={20} css={{ textAlign: "center" }}>Sign In
-                 to get started
+                to get started
               </Text>
             </Link>
             <Image
