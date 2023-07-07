@@ -47,7 +47,6 @@ const Dashboard = () => {
   const [apiData, setApiData] = useState<Commit[] | null>(null);
   let currentUser: any = session?.user?.email;
   const [role, setRole] = useState<boolean>(false);
-  // const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCurrentRole = async () => {
