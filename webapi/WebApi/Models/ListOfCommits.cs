@@ -12,6 +12,7 @@ namespace WebApi.Models
     public class ListOfCommits
     {
         public string sha { get; set; }
+        public int commitCount { get; set; }
         public Commit commit { get; set; }
     }
 

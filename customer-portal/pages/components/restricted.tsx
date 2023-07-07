@@ -46,7 +46,7 @@ const Restricted = () => {
 
             register(session);
             console.log(session);
-            fetch("http://localhost:4000/api/commits")
+            fetch("https://localhost:7243/api/Github/commits/eyecuelab/summer-internship-2023")
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(

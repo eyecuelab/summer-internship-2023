@@ -14,6 +14,12 @@ namespace WebApi.DataAccess
             _context = context;
         }
 
+        public void AddCommitCount(ListOfCommits listOfCommits)
+        {
+            _context.ListOfCommits.Add(listOfCommits);
+            _context.SaveChanges();
+        }
+
 
         public void AddAuthor(Author author)
         {
@@ -96,6 +102,11 @@ namespace WebApi.DataAccess
                 return "Is Admin";
             else
                 return "Is User";
+        }
+
+        public void AddCommitCount(int commitCount)
+        {
+            throw new NotImplementedException();
         }
     }
 }
