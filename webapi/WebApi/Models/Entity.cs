@@ -9,9 +9,11 @@ namespace WebApi.Models
 {
     public class Entity
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string EntityId { get; set; }
         [Required]
         public string CompanyName { get; set; }
-        public List<EntityAppUser> EntityAppUsers { get; set; }
+        public List<EntityProject> JoingEntityProjectsEntities { get; set; }
     }
 }
