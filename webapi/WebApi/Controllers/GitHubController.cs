@@ -16,11 +16,13 @@ namespace WebApi.Controllers
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly IDataAccessProvider _dataAccessProvider;
+        private readonly PostgreSqlContext _context;
 
         public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider)
         {
             _clientFactory = clientFactory;
             _dataAccessProvider = dataAccessProvider;
+            
         }
 
         // GET ALL COMMITS FOR ONE REPO 
@@ -49,6 +51,7 @@ namespace WebApi.Controllers
                     // Replace with the appropriate property from your JSON model
                     var commitSha = commit.sha;
                     commitInfo.commitSha = commitSha;
+
                     _dataAccessProvider.AddAuthor(author);
                     _dataAccessProvider.AddCommit(commitInfo);
 

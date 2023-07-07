@@ -17,7 +17,6 @@ namespace WebApi.Models
         public int EntityId { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
-        public List<EntityAppUser> EntityAppUsers { get; set; }
         public List<ProjectAppUser> ProjectAppUsers { get; set; }
     }
 }
