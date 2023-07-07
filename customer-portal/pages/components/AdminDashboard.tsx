@@ -1,30 +1,13 @@
-import React, { useState, useEffect, PropsWithChildren } from "react";
+import React, { useState, useEffect } from "react";
 import {
   useSession,
-  signOut,
   getSession,
-  GetSessionParams,
 } from "next-auth/react";
 import { useRouter } from 'next/router';
 import Layout from "./layout";
 import { Session } from "next-auth";
+import { GetServerSidePropsContext } from 'next';
 import axios from "axios";
-
-interface Commit {
-  name: string;
-  message: string;
-  date: string;
-}
-interface CommitResponse {
-  commit: {
-    author: {
-      name: string;
-      email: string;
-      date: string;
-    };
-    message: string;
-  };
-}
 
 type User = {
   email: string;
@@ -91,7 +74,7 @@ const AdminDashboard = () => {
       register(session);
       console.log("session:", session);
     }
-  }, [status]);
+  }, [status, session]); 
 
   return status === "authenticated" ? (
     <Layout username={session?.user?.name}>
@@ -113,7 +96,7 @@ const AdminDashboard = () => {
 
 export default AdminDashboard;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
   if (!session) {
     return {
