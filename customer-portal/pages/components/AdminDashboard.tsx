@@ -1,9 +1,9 @@
 import React, { useState, useEffect, PropsWithChildren } from "react";
 import {
-    useSession,
-    signOut,
-    getSession,
-    GetSessionParams,
+  useSession,
+  signOut,
+  getSession,
+  GetSessionParams,
 } from "next-auth/react";
 import classNames from "classnames";
 import Sidebar from "./Sidebar";
@@ -12,13 +12,11 @@ import Layout from "./layout";
 import { Session } from "next-auth";
 import axios from "axios";
 
-
 interface Commit {
   name: string;
   message: string;
   date: string;
 }
-
 interface CommitResponse {
   commit: {
     author: {
@@ -30,49 +28,43 @@ interface CommitResponse {
   };
 }
 
+type User = {
+  email: string;
+  isAdmin: boolean;
+  entityId: number;
+};
+
 async function register(session: Session | null) {
-	try {
-			await axios.post("https://localhost:7243/api/Users/register", session?.user);
-			console.log("session user:", session?.user);
-	} catch (error) {
-			console.error("Failed to transmit user data:", error);
-	}
+    try {
+        await axios.post("https://localhost:7243/api/Users/register", session?.user);
+        console.log("session user:", session?.user);
+    } catch (error) {
+        console.error("Failed to transmit user data:", error);
+    }
 }
 
 const AdminDashboard = () => {
   const { data: session, status } = useSession({ required: true });
   const [apiData, setApiData] = useState<Commit[] | null>(null);
-  let currentUser: any = session?.user?.email
-  const [role, setRole] = useState<string>('');
-  currentUser = "user1@example.com"
-
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
-    const fetchCurrentRole = async () => {
-      try {
-        const response = await fetch(
-          `https://localhost:7243/api/Users/VerifyUser?email=${currentUser}`
-        );
+    fetch(`https://localhost:7243/api/Users`)
+      .then(response => {
         if (!response.ok) {
-          throw new Error("HTTP error, status = " + response.status);
+          throw new Error(`${response.status}: ${response.statusText}`);
         }
-        const role = await response.text();
-        setRole(role); // Set the role in the state variable
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    if (currentUser) {
-      fetchCurrentRole();
-    }
-  }, [currentUser]);
-
-  console.log(currentUser);
+        return response.json();
+      })
+      .then(data => setUsers(data))
+      .catch(error => console.error('Error:', error));
+  }, []);
 
   useEffect(() => {
-    if (role === "Is User") {
-      fetch("https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023")
+    if (status === "authenticated") {
+      register(session);
+      console.log("session:", session);
+      fetch("https://localhost:7243/api/commits")
         .then((response) => {
           if (!response.ok) {
             throw new Error("HTTP error, status = " + response.status);
@@ -80,42 +72,40 @@ const AdminDashboard = () => {
           return response.json();
         })
         .then((json: CommitResponse[]) => {
-          const commits = json.map(commit => ({
+          const commits = json.map((commit) => ({
             name: commit.commit.author.name,
             message: commit.commit.message,
-            date: commit.commit.author.date
+            date: commit.commit.author.date,
           }));
           setApiData(commits);
         })
         .catch((error) => console.error("Error during fetch:", error));
     }
-  }, [role]);
+  }, [status]);
 
-	// return status === "authenticated" ? 
-  return role === "Is User" ? (
+  return status === "authenticated" ? (
     <Layout username={session?.user?.name}>
-      <p>Commit Messages:</p>
-      {apiData && apiData.map((commit, index) => (
+      <p>Current Clients:</p>
+      <div>
+      {users.map((user, index) => (
         <div key={index}>
-          <p>Name: {commit.name}</p>
-          <p>Message: {commit.message}</p>
-          <p>Date: {commit.date}</p>
+          <p>Email: {user.email}</p>
+          <p>Is Admin: {user.isAdmin ? 'Yes' : 'No'}</p>
+          <p>Entity ID: {user.entityId}</p>
         </div>
       ))}
+    </div>
     </Layout>
-  ) : role === "Not Registered" ? (
-    <div>You are not registered.</div>
-  ) : role === "Is Admin" ? (
-    <div>You are an admin</div>
   ) : (
-    <div>Loading...</div>
+    <div>loading...</div>
   );
-  
 };
 
 export default AdminDashboard;
 
-export async function getServerSideProps(context: GetSessionParams | undefined) {
+export async function getServerSideProps(
+  context: GetSessionParams | undefined
+) {
   const session = await getSession(context);
   if (!session) {
     return {
