@@ -46,14 +46,14 @@ namespace WebApi.DataAccess
             _context.SaveChanges();
         }
 
-        public void DeleteProject(string projectId)
+        public void DeleteProject(int projectId)
         {
             var project = _context.Projects.FirstOrDefault(p => p.ProjectId == projectId);
             _context.Projects.Remove(project);
             _context.SaveChanges();
         }
 
-        public Project GetProjectSingleRecord(string projectId)
+        public Project GetProjectSingleRecord(int projectId)
         {
             return _context.Projects.FirstOrDefault(p => p.ProjectId == projectId);
         }
@@ -75,14 +75,14 @@ namespace WebApi.DataAccess
             _context.SaveChanges();
         }
 
-        public void DeleteEntity(string entityId)
+        public void DeleteEntity(int entityId)
         {
             var entity = _context.Entities.FirstOrDefault(e => e.EntityId == entityId);
             _context.Entities.Remove(entity);
             _context.SaveChanges();
         }
 
-        public Entity GetEntitySingleRecord(string entityId)
+        public Entity GetEntitySingleRecord(int entityId)
         {
             return _context.Entities.FirstOrDefault(e => e.EntityId == entityId);
         }

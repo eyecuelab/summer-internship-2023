@@ -80,31 +80,6 @@ namespace WebApi.Controllers
             }
         }
 
-
-        // var userId = Guid.NewGuid().ToString();
-
-        // AppUser user = new AppUser()
-        // {
-        //     Id = appUser.Id,
-        //     UserName = appUser.Email,
-        //     Email = appUser.Email,
-        //     EntityId = 0,
-        //     SecurityStamp = Guid.NewGuid().ToString(),
-        //     IsAdmin = false
-        // };
-        // var result = await _userManager.CreateAsync(user);
-        // if (!result.Succeeded)
-        //     // return StatusCode(
-        //     //     StatusCodes.Status500InternalServerError,
-        //     //     new UserResponse
-        //     //     {
-        //     //         Status = "Error",
-        //     //         Message = "User creation failed! Please check user details and try again."
-        //     //     }
-        //     // );
-        //     return "Ok";
-
-
         [HttpGet("VerifyUser")]
         public async Task<string> VerifyUser(string email, CancellationToken c = default)
         {
@@ -133,6 +108,7 @@ namespace WebApi.Controllers
 
             return await query.ToListAsync();
         }
+
     }
 }
 

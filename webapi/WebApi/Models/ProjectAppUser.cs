@@ -6,7 +6,7 @@ namespace WebApi.Models
         public int ProjectAppUserId { get; set; }   
         public int ProjectId { get; set; }
         public int AppUserId { get; set; }
-        public Project project { get; set; }
-        public AppUser appUser { get; set; }
+        public Project Project { get; set; }
+        public AppUser AppUser { get; set; }
     }
 }

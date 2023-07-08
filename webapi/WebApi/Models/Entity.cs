@@ -11,9 +11,9 @@ namespace WebApi.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string EntityId { get; set; }
+        public int EntityId { get; set; }
         [Required]
         public string CompanyName { get; set; }
-        public List<EntityProject> JoinEntityProjectsEntities { get; set; }
+        public List<EntityProject> EntityProjects { get; set; }
     }
 }

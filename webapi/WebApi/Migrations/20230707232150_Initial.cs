@@ -4,10 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -87,7 +89,8 @@ namespace WebApi.Migrations
                 name: "Entities",
                 columns: table => new
                 {
-                    EntityId = table.Column<string>(type: "text", nullable: false),
+                    EntityId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CompanyName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -99,7 +102,8 @@ namespace WebApi.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    ProjectId = table.Column<string>(type: "text", nullable: false),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ProjectName = table.Column<string>(type: "text", nullable: false),
                     EntityId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -242,28 +246,29 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntityAppUsers",
+                name: "EntityProjects",
                 columns: table => new
                 {
-                    EntityAppUserId = table.Column<int>(type: "integer", nullable: false)
+                    EntityProjectId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     EntityId = table.Column<int>(type: "integer", nullable: false),
-                    AppUserId = table.Column<string>(type: "text", nullable: true),
-                    EntityId1 = table.Column<string>(type: "text", nullable: true)
+                    ProjectId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityAppUsers", x => x.EntityAppUserId);
+                    table.PrimaryKey("PK_EntityProjects", x => x.EntityProjectId);
                     table.ForeignKey(
-                        name: "FK_EntityAppUsers_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_EntityAppUsers_Entities_EntityId1",
-                        column: x => x.EntityId1,
+                        name: "FK_EntityProjects_Entities_EntityId",
+                        column: x => x.EntityId,
                         principalTable: "Entities",
-                        principalColumn: "EntityId");
+                        principalColumn: "EntityId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EntityProjects_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -274,22 +279,22 @@ namespace WebApi.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ProjectId = table.Column<int>(type: "integer", nullable: false),
                     AppUserId = table.Column<int>(type: "integer", nullable: false),
-                    ProjectId1 = table.Column<string>(type: "text", nullable: true),
-                    appUserId = table.Column<string>(type: "text", nullable: true)
+                    AppUserId1 = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProjectAppUsers", x => x.ProjectAppUserId);
                     table.ForeignKey(
-                        name: "FK_ProjectAppUsers_AspNetUsers_appUserId",
-                        column: x => x.appUserId,
+                        name: "FK_ProjectAppUsers_AspNetUsers_AppUserId1",
+                        column: x => x.AppUserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ProjectAppUsers_Projects_ProjectId1",
-                        column: x => x.ProjectId1,
+                        name: "FK_ProjectAppUsers_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
-                        principalColumn: "ProjectId");
+                        principalColumn: "ProjectId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -297,6 +302,7 @@ namespace WebApi.Migrations
                 columns: table => new
                 {
                     sha = table.Column<string>(type: "text", nullable: true),
+                    commitCount = table.Column<int>(type: "integer", nullable: false),
                     commitId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -306,6 +312,17 @@ namespace WebApi.Migrations
                         column: x => x.commitId,
                         principalTable: "Commits",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "IsAdmin", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "1", 0, "09e0c06d-4c43-4d40-894c-135ac67eba1f", "user1@example.com", true, 1, true, false, null, "USER1@EXAMPLE.COM", "USER1", "AQAAAAEAACcQAAAAEA2dCX5lOQSh7Ql8RFGldN72sl5GdQGqYsXpTmYACiKnYu6U702DfUUoDjXYne0IRw==", null, false, "", false, "user1" },
+                    { "2", 0, "f6be7ae8-02e3-4b28-8ec5-a240061d9ba6", "user2@example.com", true, 1, true, false, null, "USER2@EXAMPLE.COM", "USER2", "AQAAAAEAACcQAAAAEMF8ePuZ8Kcq1t5zd0kXSwwyC33rMulXD05DhqU63aWPjRtMGf8W7pkYauX7D+7cuw==", null, false, "", false, "user2" },
+                    { "3", 0, "9bfff87d-96c5-434c-a480-2194b4191357", "user3@example.com", true, 0, false, false, null, "USER3@EXAMPLE.COM", "USER3", "AQAAAAEAACcQAAAAEH+wKZtP/y9Y9YwR5C2MrEY/zqjpMEbOyO87eDxMJYo6wYIzNLZsbEYaBFeuS5nBjw==", null, false, "", false, "user3" },
+                    { "4", 0, "21805642-ffc3-4680-8625-65a4767e41fc", "gronstal.larson@gmail.com", true, 0, true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAEJq6FONhlCxH+Q+0WmAD5ftTCCQNbD1koPxIm94h6+FLexT5z6rpvLQuGwiW/ZRRfg==", null, false, "", false, "Gronstal.Larson@gmail.com" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -356,14 +373,14 @@ namespace WebApi.Migrations
                 column: "committerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityAppUsers_AppUserId",
-                table: "EntityAppUsers",
-                column: "AppUserId");
+                name: "IX_EntityProjects_EntityId",
+                table: "EntityProjects",
+                column: "EntityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityAppUsers_EntityId1",
-                table: "EntityAppUsers",
-                column: "EntityId1");
+                name: "IX_EntityProjects_ProjectId",
+                table: "EntityProjects",
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListOfCommits_commitId",
@@ -371,14 +388,14 @@ namespace WebApi.Migrations
                 column: "commitId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectAppUsers_appUserId",
+                name: "IX_ProjectAppUsers_AppUserId1",
                 table: "ProjectAppUsers",
-                column: "appUserId");
+                column: "AppUserId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectAppUsers_ProjectId1",
+                name: "IX_ProjectAppUsers_ProjectId",
                 table: "ProjectAppUsers",
-                column: "ProjectId1");
+                column: "ProjectId");
         }
 
         /// <inheritdoc />
@@ -400,7 +417,7 @@ namespace WebApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "EntityAppUsers");
+                name: "EntityProjects");
 
             migrationBuilder.DropTable(
                 name: "ListOfCommits");

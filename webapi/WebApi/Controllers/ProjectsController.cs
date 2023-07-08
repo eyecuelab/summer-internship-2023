@@ -11,8 +11,6 @@ namespace WebApi.Controllers
     {
         private readonly IDataAccessProvider _dataAccessProvider;
 
-
-
         public ProjectsController(IDataAccessProvider dataAccessProvider)
         {
             _dataAccessProvider = dataAccessProvider;
@@ -26,7 +24,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{projectId}")]
-        public IActionResult UpdateProject(string projectId, [FromBody] Project project)
+        public IActionResult UpdateProject(int projectId, [FromBody] Project project)
         {
             var existingProject = _dataAccessProvider.GetProjectSingleRecord(projectId);
             if (existingProject == null)
@@ -42,7 +40,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{projectId}")]
-        public IActionResult DeleteProject(string projectId)
+        public IActionResult DeleteProject(int projectId)
         {
             var existingProject = _dataAccessProvider.GetProjectSingleRecord(projectId);
             if (existingProject == null)
@@ -55,7 +53,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{projectId}")]
-        public IActionResult GetProject(string projectId)
+        public IActionResult GetProject(int projectId)
         {
             var project = _dataAccessProvider.GetProjectSingleRecord(projectId);
             if (project == null)

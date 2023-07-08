@@ -10,14 +10,14 @@ namespace WebApi.DataAccess
         void AddCommit(Commit commit);
         void AddProject(Project project);
         void UpdateProject(Project project);
-        void DeleteProject(string projectId);
-        Project GetProjectSingleRecord(string projectId);
+        void DeleteProject(int projectId);
+        Project GetProjectSingleRecord(int projectId);
         List<Project> GetProjectInfo();
 
         void AddEntity(Entity entity);
         void UpdateEntity(Entity entity);
-        void DeleteEntity(string entityId);
-        Entity GetEntitySingleRecord(string entityId);
+        void DeleteEntity(int entityId);
+        Entity GetEntitySingleRecord(int entityId);
         List<Entity> GetEntityInfo();
 
         Task<string> VerifyUser(string email, CancellationToken c = default);

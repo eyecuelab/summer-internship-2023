@@ -12,8 +12,8 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    [Migration("20230706225120_commitcount")]
-    partial class commitcount
+    [Migration("20230707232150_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -226,6 +226,80 @@ namespace WebApi.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "09e0c06d-4c43-4d40-894c-135ac67eba1f",
+                            Email = "user1@example.com",
+                            EmailConfirmed = true,
+                            EntityId = 1,
+                            IsAdmin = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER1@EXAMPLE.COM",
+                            NormalizedUserName = "USER1",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA2dCX5lOQSh7Ql8RFGldN72sl5GdQGqYsXpTmYACiKnYu6U702DfUUoDjXYne0IRw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user1"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f6be7ae8-02e3-4b28-8ec5-a240061d9ba6",
+                            Email = "user2@example.com",
+                            EmailConfirmed = true,
+                            EntityId = 1,
+                            IsAdmin = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER2@EXAMPLE.COM",
+                            NormalizedUserName = "USER2",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMF8ePuZ8Kcq1t5zd0kXSwwyC33rMulXD05DhqU63aWPjRtMGf8W7pkYauX7D+7cuw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user2"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "9bfff87d-96c5-434c-a480-2194b4191357",
+                            Email = "user3@example.com",
+                            EmailConfirmed = true,
+                            EntityId = 0,
+                            IsAdmin = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER3@EXAMPLE.COM",
+                            NormalizedUserName = "USER3",
+                            PasswordHash = "AQAAAAEAACcQAAAAEH+wKZtP/y9Y9YwR5C2MrEY/zqjpMEbOyO87eDxMJYo6wYIzNLZsbEYaBFeuS5nBjw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user3"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "21805642-ffc3-4680-8625-65a4767e41fc",
+                            Email = "gronstal.larson@gmail.com",
+                            EmailConfirmed = true,
+                            EntityId = 0,
+                            IsAdmin = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GRONSTAL.LARSON@GMAIL.COM",
+                            NormalizedUserName = "GRONSTAL.LARSON@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJq6FONhlCxH+Q+0WmAD5ftTCCQNbD1koPxIm94h6+FLexT5z6rpvLQuGwiW/ZRRfg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Gronstal.Larson@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("WebApi.Models.Author", b =>
@@ -306,8 +380,11 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Entity", b =>
                 {
-                    b.Property<string>("EntityId")
-                        .HasColumnType("text");
+                    b.Property<int>("EntityId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityId"));
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -318,30 +395,27 @@ namespace WebApi.Migrations
                     b.ToTable("Entities");
                 });
 
-            modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
+            modelBuilder.Entity("WebApi.Models.EntityProject", b =>
                 {
-                    b.Property<int>("EntityAppUserId")
+                    b.Property<int>("EntityProjectId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityAppUserId"));
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityProjectId"));
 
                     b.Property<int>("EntityId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("EntityId1")
-                        .HasColumnType("text");
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("integer");
 
-                    b.HasKey("EntityAppUserId");
+                    b.HasKey("EntityProjectId");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("EntityId");
 
-                    b.HasIndex("EntityId1");
+                    b.HasIndex("ProjectId");
 
-                    b.ToTable("EntityAppUsers");
+                    b.ToTable("EntityProjects");
                 });
 
             modelBuilder.Entity("WebApi.Models.ListOfCommits", b =>
@@ -362,8 +436,11 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.Project", b =>
                 {
-                    b.Property<string>("ProjectId")
-                        .HasColumnType("text");
+                    b.Property<int>("ProjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectId"));
 
                     b.Property<int>("EntityId")
                         .HasColumnType("integer");
@@ -388,20 +465,17 @@ namespace WebApi.Migrations
                     b.Property<int>("AppUserId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("AppUserId1")
+                        .HasColumnType("text");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("ProjectId1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("appUserId")
-                        .HasColumnType("text");
-
                     b.HasKey("ProjectAppUserId");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("AppUserId1");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectAppUsers");
                 });
@@ -472,19 +546,23 @@ namespace WebApi.Migrations
                     b.Navigation("committer");
                 });
 
-            modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
+            modelBuilder.Entity("WebApi.Models.EntityProject", b =>
                 {
-                    b.HasOne("WebApi.Models.AppUser", "AppUser")
-                        .WithMany("EntityAppUsers")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("WebApi.Models.Entity", "Entity")
-                        .WithMany("EntityAppUsers")
-                        .HasForeignKey("EntityId1");
+                        .WithMany("EntityProjects")
+                        .HasForeignKey("EntityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.HasOne("WebApi.Models.Project", "Project")
+                        .WithMany("EntityProjects")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Entity");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("WebApi.Models.ListOfCommits", b =>
@@ -498,33 +576,35 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
                 {
-                    b.HasOne("WebApi.Models.Project", "project")
+                    b.HasOne("WebApi.Models.AppUser", "AppUser")
                         .WithMany("ProjectAppUsers")
-                        .HasForeignKey("ProjectId1");
+                        .HasForeignKey("AppUserId1");
 
-                    b.HasOne("WebApi.Models.AppUser", "appUser")
+                    b.HasOne("WebApi.Models.Project", "Project")
                         .WithMany("ProjectAppUsers")
-                        .HasForeignKey("appUserId");
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("appUser");
+                    b.Navigation("AppUser");
 
-                    b.Navigation("project");
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("WebApi.Models.AppUser", b =>
                 {
-                    b.Navigation("EntityAppUsers");
-
                     b.Navigation("ProjectAppUsers");
                 });
 
             modelBuilder.Entity("WebApi.Models.Entity", b =>
                 {
-                    b.Navigation("EntityAppUsers");
+                    b.Navigation("EntityProjects");
                 });
 
             modelBuilder.Entity("WebApi.Models.Project", b =>
                 {
+                    b.Navigation("EntityProjects");
+
                     b.Navigation("ProjectAppUsers");
                 });
 #pragma warning restore 612, 618
