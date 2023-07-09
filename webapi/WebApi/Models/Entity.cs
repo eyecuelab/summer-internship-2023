@@ -14,6 +14,5 @@ namespace WebApi.Models
         public string EntityId { get; set; }
         [Required]
         public string CompanyName { get; set; }
-        public List<EntityProject> JoinEntityProjectsEntities { get; set; }
     }
 }
