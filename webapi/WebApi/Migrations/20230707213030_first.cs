@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class first : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -242,28 +242,29 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntityAppUsers",
+                name: "EntityProject",
                 columns: table => new
                 {
-                    EntityAppUserId = table.Column<int>(type: "integer", nullable: false)
+                    EntityProjectId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     EntityId = table.Column<int>(type: "integer", nullable: false),
-                    AppUserId = table.Column<string>(type: "text", nullable: true),
+                    ProjectId = table.Column<int>(type: "integer", nullable: false),
+                    ProjectId1 = table.Column<string>(type: "text", nullable: true),
                     EntityId1 = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityAppUsers", x => x.EntityAppUserId);
+                    table.PrimaryKey("PK_EntityProject", x => x.EntityProjectId);
                     table.ForeignKey(
-                        name: "FK_EntityAppUsers_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_EntityAppUsers_Entities_EntityId1",
+                        name: "FK_EntityProject_Entities_EntityId1",
                         column: x => x.EntityId1,
                         principalTable: "Entities",
                         principalColumn: "EntityId");
+                    table.ForeignKey(
+                        name: "FK_EntityProject_Projects_ProjectId1",
+                        column: x => x.ProjectId1,
+                        principalTable: "Projects",
+                        principalColumn: "ProjectId");
                 });
 
             migrationBuilder.CreateTable(
@@ -297,6 +298,7 @@ namespace WebApi.Migrations
                 columns: table => new
                 {
                     sha = table.Column<string>(type: "text", nullable: true),
+                    commitCount = table.Column<int>(type: "integer", nullable: false),
                     commitId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -356,14 +358,14 @@ namespace WebApi.Migrations
                 column: "committerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityAppUsers_AppUserId",
-                table: "EntityAppUsers",
-                column: "AppUserId");
+                name: "IX_EntityProject_EntityId1",
+                table: "EntityProject",
+                column: "EntityId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityAppUsers_EntityId1",
-                table: "EntityAppUsers",
-                column: "EntityId1");
+                name: "IX_EntityProject_ProjectId1",
+                table: "EntityProject",
+                column: "ProjectId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ListOfCommits_commitId",
@@ -400,7 +402,7 @@ namespace WebApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "EntityAppUsers");
+                name: "EntityProject");
 
             migrationBuilder.DropTable(
                 name: "ListOfCommits");

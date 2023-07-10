@@ -304,6 +304,7 @@ namespace WebApi.Migrations
             modelBuilder.Entity("WebApi.Models.Entity", b =>
                 {
                     b.Property<string>("EntityId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
                     b.Property<string>("CompanyName")
@@ -315,16 +316,13 @@ namespace WebApi.Migrations
                     b.ToTable("Entities");
                 });
 
-            modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
+            modelBuilder.Entity("WebApi.Models.EntityProject", b =>
                 {
-                    b.Property<int>("EntityAppUserId")
+                    b.Property<int>("EntityProjectId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityAppUserId"));
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityProjectId"));
 
                     b.Property<int>("EntityId")
                         .HasColumnType("integer");
@@ -332,13 +330,19 @@ namespace WebApi.Migrations
                     b.Property<string>("EntityId1")
                         .HasColumnType("text");
 
-                    b.HasKey("EntityAppUserId");
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("AppUserId");
+                    b.Property<string>("ProjectId1")
+                        .HasColumnType("text");
+
+                    b.HasKey("EntityProjectId");
 
                     b.HasIndex("EntityId1");
 
-                    b.ToTable("EntityAppUsers");
+                    b.HasIndex("ProjectId1");
+
+                    b.ToTable("EntityProject");
                 });
 
             modelBuilder.Entity("WebApi.Models.ListOfCommits", b =>
@@ -360,6 +364,7 @@ namespace WebApi.Migrations
             modelBuilder.Entity("WebApi.Models.Project", b =>
                 {
                     b.Property<string>("ProjectId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
                     b.Property<int>("EntityId")
@@ -469,19 +474,19 @@ namespace WebApi.Migrations
                     b.Navigation("committer");
                 });
 
-            modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
+            modelBuilder.Entity("WebApi.Models.EntityProject", b =>
                 {
-                    b.HasOne("WebApi.Models.AppUser", "AppUser")
-                        .WithMany("EntityAppUsers")
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("WebApi.Models.Entity", "Entity")
-                        .WithMany("EntityAppUsers")
+                    b.HasOne("WebApi.Models.Entity", "entity")
+                        .WithMany("JoinEntityProjectsEntities")
                         .HasForeignKey("EntityId1");
 
-                    b.Navigation("AppUser");
+                    b.HasOne("WebApi.Models.Project", "project")
+                        .WithMany("JoinEntityProjectsEntities")
+                        .HasForeignKey("ProjectId1");
 
-                    b.Navigation("Entity");
+                    b.Navigation("entity");
+
+                    b.Navigation("project");
                 });
 
             modelBuilder.Entity("WebApi.Models.ListOfCommits", b =>
@@ -510,18 +515,18 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.AppUser", b =>
                 {
-                    b.Navigation("EntityAppUsers");
-
                     b.Navigation("ProjectAppUsers");
                 });
 
             modelBuilder.Entity("WebApi.Models.Entity", b =>
                 {
-                    b.Navigation("EntityAppUsers");
+                    b.Navigation("JoinEntityProjectsEntities");
                 });
 
             modelBuilder.Entity("WebApi.Models.Project", b =>
                 {
+                    b.Navigation("JoinEntityProjectsEntities");
+
                     b.Navigation("ProjectAppUsers");
                 });
 #pragma warning restore 612, 618
