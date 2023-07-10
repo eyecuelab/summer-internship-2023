@@ -20,7 +20,9 @@ class MyDocument extends Document {
     render() {
         return (
             <Html lang="en">
-                <Head>{CssBaseline.flush()}</Head>
+                <Head>{CssBaseline.flush()} 
+                <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Rasa&display=swap" rel="stylesheet"></link>
+                </Head>
                 <body>
                     <Main />
                     <NextScript />
