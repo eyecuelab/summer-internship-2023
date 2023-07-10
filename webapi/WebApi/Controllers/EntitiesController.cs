@@ -26,7 +26,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{entityId}")]
-        public IActionResult UpdateEntity(int entityId, [FromBody] Entity entity)
+        public IActionResult UpdateEntity(string entityId, [FromBody] Entity entity)
         {
             var existingEntity = _dataAccessProvider.GetEntitySingleRecord(entityId);
             if (existingEntity == null)
@@ -41,7 +41,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{entityId}")]
-        public IActionResult DeleteEntity(int entityId)
+        public IActionResult DeleteEntity(string entityId)
         {
             var existingEntity = _dataAccessProvider.GetEntitySingleRecord(entityId);
             if (existingEntity == null)
@@ -54,7 +54,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{entityId}")]
-        public IActionResult GetEntity(int entityId)
+        public IActionResult GetEntity(string entityId)
         {
             var entity = _dataAccessProvider.GetEntitySingleRecord(entityId);
             if (entity == null)
@@ -70,47 +70,6 @@ namespace WebApi.Controllers
         {
             var entities = _dataAccessProvider.GetEntityInfo();
             return Ok(entities);
-        }
-
-        //HTTP Post Request that includes AddProject / join table
-        [HttpPost]
-        [Route("AddProject")]
-        public ActionResult AddProject(List<int> projects, int entityId, int projectId)
-        {
-            var entityExists = _context.Entities.Any(e => e.EntityId == entityId);
-
-            if (!entityExists)
-            {
-                return NotFound("Entity not found");
-            }
-            foreach (int project in projects)
-            {
-                var projectExists = _context.Projects.Any(p => p.ProjectId == projectId);
-
-                if (!projectExists)
-                {
-                    var newProject = new Project
-                    { 
-                    };
-                    _context.Projects.Add(newProject);
-                    _context.SaveChanges();
-                    projectId = newProject.ProjectId;
-                }
-                #nullable enable
-                EntityProject? join = _context.EntityProjects.FirstOrDefault(
-                    e => (e.ProjectId == project && e.EntityId == entityId)
-                );
-                #nullable disable
-
-                if (join == null && entityId != 0)
-                {
-                    _context.EntityProjects.Add(
-                        new EntityProject() { ProjectId = project, EntityId = entityId }
-                    );
-                    _context.SaveChanges();
-                }
-            }
-            return Ok();
         }
     }
 }

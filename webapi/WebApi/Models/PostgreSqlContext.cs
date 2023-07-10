@@ -18,8 +18,6 @@ namespace WebApi.DataAccess
         public DbSet<Committer> Committer { get; set; }
         public DbSet<Commit> Commits { get; set; }
         public DbSet<ProjectAppUser> ProjectAppUsers { get; set; }
-        public DbSet<EntityProject> EntityProjects { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -39,7 +37,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password1!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 1,
+                            EntityId = 1.ToString(),
                             IsAdmin = true
                         },
                         new AppUser
@@ -52,7 +50,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password2!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 1,
+                            EntityId = 1.ToString(),
                             IsAdmin = true
                         },
                         new AppUser
@@ -65,7 +63,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password3!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 0,
+                            EntityId = 0.ToString(),
                             IsAdmin = false
                         },
                         new AppUser
@@ -78,7 +76,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password4!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 0,
+                            EntityId = 0.ToString(),
                             IsAdmin = true
                         }
                     );

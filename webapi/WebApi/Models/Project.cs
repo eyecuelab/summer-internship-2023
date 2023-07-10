@@ -17,9 +17,5 @@ namespace WebApi.Models
         [Required]
         public string EntityId { get; set; }
         public List<ProjectAppUser> ProjectAppUsers { get; set; }
-        public List<EntityProject> EntityProjects { get; set; }
-        // public int GitHubId { get; set; }
-        // public int TrelloId { get; set; }
-        // public int Token { get; set; }
     }
 }

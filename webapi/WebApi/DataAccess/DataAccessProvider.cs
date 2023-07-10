@@ -75,14 +75,14 @@ namespace WebApi.DataAccess
             _context.SaveChanges();
         }
 
-        public void DeleteEntity(int entityId)
+        public void DeleteEntity(string entityId)
         {
             var entity = _context.Entities.FirstOrDefault(e => e.EntityId == entityId);
             _context.Entities.Remove(entity);
             _context.SaveChanges();
         }
 
-        public Entity GetEntitySingleRecord(int entityId)
+        public Entity GetEntitySingleRecord(string entityId)
         {
             return _context.Entities.FirstOrDefault(e => e.EntityId == entityId);
         }

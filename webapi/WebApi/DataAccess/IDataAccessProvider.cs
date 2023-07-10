@@ -16,8 +16,8 @@ namespace WebApi.DataAccess
 
         void AddEntity(Entity entity);
         void UpdateEntity(Entity entity);
-        void DeleteEntity(int entityId);
-        Entity GetEntitySingleRecord(int entityId);
+        void DeleteEntity(string entityId);
+        Entity GetEntitySingleRecord(string entityId);
         List<Entity> GetEntityInfo();
 
         Task<string> VerifyUser(string email, CancellationToken c = default);

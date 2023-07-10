@@ -87,7 +87,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<AppUser>> Get(string email, bool isAdmin, int entityId)
+        public async Task<List<AppUser>> Get(string email, bool isAdmin, string entityId)
         {
             IQueryable<AppUser> query = _context.AppUsers.AsQueryable();
 
@@ -100,7 +100,7 @@ namespace WebApi.Controllers
             {
                 query = query.Where(entry => entry.IsAdmin == true);
             }
-            if (entityId >= 0)
+            if (entityId != null)
             {
                 query = query.Where(entry => entry.EntityId == entityId);
             }
