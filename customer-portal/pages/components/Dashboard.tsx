@@ -47,6 +47,7 @@ const Dashboard = () => {
   const [role, setRole] = useState<string>("");
   const [isAdmin, setIsAdmin] = useState<string>("false");
 
+
 	useEffect(() => {
     if (status === "authenticated") {
       register(session);

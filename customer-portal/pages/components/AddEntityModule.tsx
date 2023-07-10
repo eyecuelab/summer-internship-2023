@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
+import axios from "axios";
 
 export default function AddEntityModule() {
   const [visible, setVisible] = useState(false);
@@ -8,9 +9,21 @@ export default function AddEntityModule() {
   const handler = () => setVisible(true);
   const closeHandler = () => setVisible(false);
 
-  const handleAddCompany = () => {
-    // Perform your API request here using the companyName value
-    console.log("Company Name:", companyName);
+  const handleAddCompany = async () => {
+    try {
+      const url = 'https://localhost:7243/api/entities';
+      const payload = {
+        companyName: companyName
+      };
+  
+      const response = await axios.post(url, payload);
+  
+      // Handle the response data
+      console.log(response.data);
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
 
     // Reset input field
     setCompanyName("");
