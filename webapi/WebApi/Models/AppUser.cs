@@ -14,7 +14,7 @@ namespace WebApi.Models
         [Required]
         public string Email { get; set; }
         [Required]
-        public int EntityId { get; set; }
+        public string EntityId { get; set; }
         [Required]
         public bool IsAdmin { get; set; }
         public List<ProjectAppUser> ProjectAppUsers { get; set; }
