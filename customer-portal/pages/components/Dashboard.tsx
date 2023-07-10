@@ -1,16 +1,8 @@
-import React, { useState, useEffect, PropsWithChildren } from "react";
-import {
-  useSession,
-  signOut,
-  getSession,
-  GetSessionParams,
-} from "next-auth/react";
+import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
-import { Session } from "next-auth";
 import axios from "axios";
-
-
 
 interface Commit {
   name: string;
@@ -29,7 +21,7 @@ interface CommitResponse {
   };
 }
 
-async function register(session: Session | null) {
+async function register(session: any) {
   try {
     await axios.post(
       "https://localhost:7243/api/Users/register",
@@ -43,12 +35,12 @@ async function register(session: Session | null) {
 
 const Dashboard = () => {
   const { data: session, status } = useSession({ required: true });
-  const [apiData, setApiData] = useState<Commit[] | null>(null);
-  let currentUser: any = session?.user?.email;
-  const [role, setRole] = useState<string>("");
+  const [apiData, setApiData] = useState<Commit[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const currentUser: any = session?.user?.email;
   const [isAdmin, setIsAdmin] = useState<string>("false");
 
-	useEffect(() => {
+  useEffect(() => {
     if (status === "authenticated") {
       register(session);
       console.log("session:", session);
@@ -75,7 +67,6 @@ const Dashboard = () => {
       fetchCurrentRole();
     }
   }, [currentUser]);
-
 
   useEffect(() => {
     if (isAdmin === "false") {
@@ -112,7 +103,7 @@ const Dashboard = () => {
     fontSize: '24px',
     lineHeight: '40.8px',
     color: '#404040'
-  }
+  };
 
   const messageStyle = {
     fontFamily: 'Open Sans',
@@ -120,50 +111,50 @@ const Dashboard = () => {
     fontSize: '16px',
     lineHeight: '27.2px',
     color: '#888888'
-  }
+  };
 
   const nameStyle = {
     ...messageStyle,
     fontStyle: 'italic',
     color: '#CECECE',
-  }
+  };
 
+  const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedDate(event.target.value);
+  };
+
+  const uniqueDates = [...new Set(apiData.map(commit => formatDate(commit.date)))];
+  
+  const filteredData = apiData.filter(
+    (commit) => selectedDate === formatDate(commit.date)
+  );
 
   return isAdmin === "true" ? (
     <AdminDashboard></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
-      
       <p>Project Commit History:</p>
       <br />
-      {apiData &&
-        apiData.map((commit, index) => (
-          <div key={index}>
-            <p style={dateStyle}>{formatDate(commit.date)}</p>
-            <p style={nameStyle}>{commit.name}</p>
-            <p style={messageStyle}>{commit.message}</p>
-            <br />
-          </div>
+
+      <select value={selectedDate} onChange={handleDateChange}>
+        <option value="">All Dates</option>
+        {uniqueDates.map((date, index) => (
+          <option key={index} value={date}>
+            {date}
+          </option>
         ))}
+      </select>
+
+      {filteredData.map((commit, index) => (
+        <div key={index}>
+          <p style={dateStyle}>{formatDate(commit.date)}</p>
+          <p style={nameStyle}>{commit.name}</p>
+          <p style={messageStyle}>{commit.message}</p>
+          <br />
+        </div>
+      ))}
     </Layout>
   );
 };
 
 export default Dashboard;
-
-export async function getServerSideProps(
-  context: GetSessionParams | undefined
-) {
-  const session = await getSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: { session },
-  };
-}
