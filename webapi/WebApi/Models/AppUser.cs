@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WebApi.Models
 {
     public class AppUser : IdentityUser
-    {   
+    {
         [Required]
         public string Email { get; set; }
         [Required]
