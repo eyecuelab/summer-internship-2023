@@ -10,19 +10,33 @@ namespace WebApi.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IDataAccessProvider _dataAccessProvider;
+        private readonly PostgreSqlContext _context;
 
 
 
-        public ProjectsController(IDataAccessProvider dataAccessProvider)
+        public ProjectsController(IDataAccessProvider dataAccessProvider, PostgreSqlContext context)
         {
             _dataAccessProvider = dataAccessProvider;
+            _context = context;
+
         }
 
         [HttpPost]
         public IActionResult AddProject([FromBody] Project project)
         {
-            _dataAccessProvider.AddProject(project);
-            return Ok();
+            if (project != null)
+            {
+                
+                
+                _context.Projects.Add(project);
+                _context.SaveChanges();
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("No project data provided.");
+            }
         }
 
         [HttpPut("{projectId}")]

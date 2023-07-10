@@ -48,6 +48,13 @@ const Dashboard = () => {
   const [role, setRole] = useState<string>("");
   const [isAdmin, setIsAdmin] = useState<string>("false");
 
+	useEffect(() => {
+    if (status === "authenticated") {
+      register(session);
+      console.log("session:", session);
+    }
+  }, [status, session]);
+
   useEffect(() => {
     const fetchCurrentRole = async () => {
       try {
@@ -69,7 +76,6 @@ const Dashboard = () => {
     }
   }, [currentUser]);
 
-  console.log(currentUser);
 
   useEffect(() => {
     if (isAdmin === "false") {

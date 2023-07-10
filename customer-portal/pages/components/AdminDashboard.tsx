@@ -8,6 +8,8 @@ import Layout from "./layout";
 import { Session } from "next-auth";
 import { GetServerSidePropsContext } from 'next';
 import axios from "axios";
+import AddEntityModule from "./AddEntityModule";
+import AddProjectModal from "./AddProjectsModal";
 
 type User = {
   email: string;
@@ -78,6 +80,8 @@ const AdminDashboard = () => {
 
   return status === "authenticated" ? (
     <Layout username={session?.user?.name}>
+      <AddEntityModule/>
+      <AddProjectModal/>
       <p>Current Clients:</p>
       <div>
       {users.map((user, index) => (
