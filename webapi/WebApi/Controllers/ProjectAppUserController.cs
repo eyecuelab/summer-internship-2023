@@ -38,6 +38,25 @@ namespace WebApi.Controllers
             }
         }
 
-        
+        [HttpGet("getall")]
+        public IActionResult GetAll()
+        {
+            var allProjectAppUsers = _context.ProjectAppUsers.ToList();
+            return Ok(allProjectAppUsers);
+        }
+
+        [HttpGet("getusers/{projectId}")]
+        public IActionResult GetUsersforProject(string projectId)
+        {
+            var usersForProject = _context.ProjectAppUsers.Where(proj => proj.ProjectId == projectId).ToList();
+            return Ok(usersForProject);
+        }
+
+        [HttpGet("getprojs/{appUserId}")]
+        public IActionResult GetProjectsFromUser(string appUserId)
+        {
+            var projectsforUser = _context.ProjectAppUsers.Where(proj => proj.AppUserId == appUserId).ToList();
+            return Ok(projectsforUser);
+        }
     }
 }
