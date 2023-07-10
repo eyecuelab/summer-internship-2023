@@ -11,6 +11,7 @@ import { Session } from "next-auth";
 import axios from "axios";
 
 
+
 interface Commit {
   name: string;
   message: string;
@@ -99,17 +100,49 @@ const Dashboard = () => {
     }
   }, [isAdmin]);
 
+  const formatDate = (dateString: string): string => {
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  const dateStyle = {
+    fontFamily: 'Rasa',
+    fontWeight: 600,
+    fontSize: '24px',
+    lineHeight: '40.8px',
+    color: '#404040'
+  }
+
+  const messageStyle = {
+    fontFamily: 'Open Sans',
+    fontWeight: 400,
+    fontSize: '16px',
+    lineHeight: '27.2px',
+    color: '#888888'
+  }
+
+  const nameStyle = {
+    ...messageStyle,
+    fontStyle: 'italic',
+    color: '#CECECE',
+  }
+
+
   return isAdmin === "true" ? (
     <AdminDashboard></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
+      
       <p>Project Commit History:</p>
+      <br />
       {apiData &&
         apiData.map((commit, index) => (
           <div key={index}>
-            <p>Name: {commit.name}</p>
-            <p>Message: {commit.message}</p>
-            <p>Date: {commit.date}</p>
+            <p style={dateStyle}>{formatDate(commit.date)}</p>
+            <p style={nameStyle}>{commit.name}</p>
+            <p style={messageStyle}>{commit.message}</p>
+            <br />
           </div>
         ))}
     </Layout>
