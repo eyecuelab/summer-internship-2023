@@ -36,7 +36,7 @@ const Layout: React.FC<LayoutProps & PropsWithChildren<{}>> = ({ username, child
       <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} />
 
       {/* content */}
-      <div className="row-start-1 col-start-2 p-10"> {children}</div>
+      <div className="row-start-1 col-start-2 p-10" style={{ backgroundColor: '#F7F7F8',marginTop: '-24px', zIndex: 100, maxWidth: '1165px' }}> {children}</div>
     </div>
     </>
   );
