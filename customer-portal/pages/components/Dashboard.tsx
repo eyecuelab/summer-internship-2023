@@ -75,7 +75,6 @@ const Dashboard = () => {
     }
   }, [currentUser]);
 
-  console.log(currentUser);
 
   useEffect(() => {
     if (isAdmin === "false") {
