@@ -64,6 +64,7 @@ namespace WebApi.Controllers
                     UserName = appUser.Email,
                     Email = appUser.Email,
                     SecurityStamp = Guid.NewGuid().ToString(),
+                    EntityId = "0"
                 };
                 var result = await _userManager.CreateAsync(newAppUser);
 
@@ -100,7 +101,7 @@ namespace WebApi.Controllers
             {
                 query = query.Where(entry => entry.IsAdmin == true);
             }
-            if (entityId != null)
+            if (!string.IsNullOrEmpty(entityId))
             {
                 query = query.Where(entry => entry.EntityId == entityId);
             }

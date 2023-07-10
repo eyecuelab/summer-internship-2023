@@ -18,5 +18,6 @@ namespace WebApi.Models
         [Required]
         public bool IsAdmin { get; set; }
         public List<ProjectAppUser> ProjectAppUsers { get; set; }
+
     }
 }
