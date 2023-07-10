@@ -124,10 +124,10 @@ const Dashboard = () => {
   };
 
   const uniqueDates = [...new Set(apiData.map(commit => formatDate(commit.date)))];
-  
-  const filteredData = apiData.filter(
-    (commit) => selectedDate === formatDate(commit.date)
-  );
+
+  const filteredData = selectedDate
+  ? apiData.filter((commit) => selectedDate === formatDate(commit.date))
+  : apiData;
 
   return isAdmin === "true" ? (
     <AdminDashboard></AdminDashboard>
