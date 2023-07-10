@@ -1,12 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Models
 {
     public class ProjectAppUser
-    {   
-        public int ProjectAppUserId { get; set; }   
-        public int ProjectId { get; set; }
-        public int AppUserId { get; set; }
-        public Project Project { get; set; }
-        public AppUser AppUser { get; set; }
+    {  
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
+        public string ProjectAppUserId { get; set; }   
+        public string ProjectId { get; set; }
+        public string AppUserId { get; set; }
+        public Project project { get; set; }
+        public AppUser appUser { get; set; }
     }
 }
