@@ -353,29 +353,21 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
                 {
-                    b.Property<int>("ProjectAppUserId")
+                    b.Property<string>("ProjectAppUserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectAppUserId"));
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ProjectId1")
                         .HasColumnType("text");
 
-                    b.Property<string>("appUserId")
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectId")
                         .HasColumnType("text");
 
                     b.HasKey("ProjectAppUserId");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("AppUserId");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectAppUsers");
                 });
@@ -457,13 +449,13 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
                 {
-                    b.HasOne("WebApi.Models.Project", "project")
-                        .WithMany("ProjectAppUsers")
-                        .HasForeignKey("ProjectId1");
-
                     b.HasOne("WebApi.Models.AppUser", "appUser")
                         .WithMany("ProjectAppUsers")
-                        .HasForeignKey("appUserId");
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("WebApi.Models.Project", "project")
+                        .WithMany("ProjectAppUsers")
+                        .HasForeignKey("ProjectId");
 
                     b.Navigation("appUser");
 

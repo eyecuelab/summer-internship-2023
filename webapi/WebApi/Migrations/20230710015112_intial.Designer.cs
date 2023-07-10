@@ -12,8 +12,8 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    [Migration("20230706225120_commitcount")]
-    partial class commitcount
+    [Migration("20230710015112_intial")]
+    partial class intial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -307,6 +307,7 @@ namespace WebApi.Migrations
             modelBuilder.Entity("WebApi.Models.Entity", b =>
                 {
                     b.Property<string>("EntityId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
                     b.Property<string>("CompanyName")
@@ -316,32 +317,6 @@ namespace WebApi.Migrations
                     b.HasKey("EntityId");
 
                     b.ToTable("Entities");
-                });
-
-            modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
-                {
-                    b.Property<int>("EntityAppUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("EntityAppUserId"));
-
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("EntityId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("EntityId1")
-                        .HasColumnType("text");
-
-                    b.HasKey("EntityAppUserId");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("EntityId1");
-
-                    b.ToTable("EntityAppUsers");
                 });
 
             modelBuilder.Entity("WebApi.Models.ListOfCommits", b =>
@@ -363,10 +338,12 @@ namespace WebApi.Migrations
             modelBuilder.Entity("WebApi.Models.Project", b =>
                 {
                     b.Property<string>("ProjectId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
-                    b.Property<int>("EntityId")
-                        .HasColumnType("integer");
+                    b.Property<string>("EntityId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("ProjectName")
                         .IsRequired()
@@ -379,29 +356,21 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
                 {
-                    b.Property<int>("ProjectAppUserId")
+                    b.Property<string>("ProjectAppUserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ProjectAppUserId"));
-
-                    b.Property<int>("AppUserId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ProjectId1")
                         .HasColumnType("text");
 
-                    b.Property<string>("appUserId")
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ProjectId")
                         .HasColumnType("text");
 
                     b.HasKey("ProjectAppUserId");
 
-                    b.HasIndex("ProjectId1");
+                    b.HasIndex("AppUserId");
 
-                    b.HasIndex("appUserId");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectAppUsers");
                 });
@@ -472,21 +441,6 @@ namespace WebApi.Migrations
                     b.Navigation("committer");
                 });
 
-            modelBuilder.Entity("WebApi.Models.EntityAppUser", b =>
-                {
-                    b.HasOne("WebApi.Models.AppUser", "AppUser")
-                        .WithMany("EntityAppUsers")
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("WebApi.Models.Entity", "Entity")
-                        .WithMany("EntityAppUsers")
-                        .HasForeignKey("EntityId1");
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Entity");
-                });
-
             modelBuilder.Entity("WebApi.Models.ListOfCommits", b =>
                 {
                     b.HasOne("WebApi.Models.Commit", "commit")
@@ -498,13 +452,13 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
                 {
-                    b.HasOne("WebApi.Models.Project", "project")
-                        .WithMany("ProjectAppUsers")
-                        .HasForeignKey("ProjectId1");
-
                     b.HasOne("WebApi.Models.AppUser", "appUser")
                         .WithMany("ProjectAppUsers")
-                        .HasForeignKey("appUserId");
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("WebApi.Models.Project", "project")
+                        .WithMany("ProjectAppUsers")
+                        .HasForeignKey("ProjectId");
 
                     b.Navigation("appUser");
 
@@ -513,14 +467,7 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.AppUser", b =>
                 {
-                    b.Navigation("EntityAppUsers");
-
                     b.Navigation("ProjectAppUsers");
-                });
-
-            modelBuilder.Entity("WebApi.Models.Entity", b =>
-                {
-                    b.Navigation("EntityAppUsers");
                 });
 
             modelBuilder.Entity("WebApi.Models.Project", b =>
