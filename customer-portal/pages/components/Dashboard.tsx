@@ -147,29 +147,6 @@ const Dashboard = () => {
       <br />
       <br />
 
-      {/* <select
-  value={selectedDate}
-  onChange={handleDateChange}
-  style={{
-    float: 'right',
-    fontFamily: 'Open Sans',
-    fontWeight: 600,
-    fontSize: '16px',
-    lineHeight: '25.6px',
-    color: '#404040',
-    backgroundColor: '#F7F7F8',
-    padding: '5px 10px'
-  }}
-      >
-
-  <option value="">All Dates</option>
-  {uniqueDates.map((date, index) => (
-    <option key={index} value={date}>
-      {date}
-    </option>
-  ))}
-</select> */}
-
 <select
   value={selectedDate}
   onChange={handleDateChange}
