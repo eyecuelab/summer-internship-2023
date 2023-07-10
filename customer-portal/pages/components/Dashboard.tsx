@@ -126,8 +126,18 @@ const Dashboard = () => {
   const uniqueDates = [...new Set(apiData.map(commit => formatDate(commit.date)))];
 
   const filteredData = selectedDate
-  ? apiData.filter((commit) => selectedDate === formatDate(commit.date))
-  : apiData;
+    ? apiData.filter((commit) => selectedDate === formatDate(commit.date))
+    : apiData;
+
+  const renderCommits = (commits: Commit[]) => {
+    return commits.map((commit, index) => (
+      <div key={index}>
+        <p style={nameStyle}>{commit.name}</p>
+        <p style={messageStyle}>{commit.message}</p>
+        <br />
+      </div>
+    ));
+  };
 
   return isAdmin === "true" ? (
     <AdminDashboard></AdminDashboard>
@@ -145,14 +155,19 @@ const Dashboard = () => {
         ))}
       </select>
 
-      {filteredData.map((commit, index) => (
-        <div key={index}>
-          <p style={dateStyle}>{formatDate(commit.date)}</p>
-          <p style={nameStyle}>{commit.name}</p>
-          <p style={messageStyle}>{commit.message}</p>
-          <br />
-        </div>
-      ))}
+      {selectedDate ? (
+        <>
+          <p style={dateStyle}>{formatDate(selectedDate)}</p>
+          {renderCommits(filteredData)}
+        </>
+      ) : (
+        uniqueDates.map((date, index) => (
+          <div key={index}>
+            <p style={dateStyle}>{date}</p>
+            {renderCommits(apiData.filter(commit => formatDate(commit.date) === date))}
+          </div>
+        ))
+      )}
     </Layout>
   );
 };
