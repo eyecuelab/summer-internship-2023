@@ -57,12 +57,15 @@ namespace WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError,
                     new UserResponse { Status = "Error", Message = "User already exists!" });
             }
-            else
+            else if(_context.emailEntities.Any(e => e.Email == appUser.Email))
             {
+                var emailEntity = _context.emailEntities.FirstOrDefault(e => e.Email == appUser.Email);
+                
                 var newAppUser = new AppUser()
                 {
                     UserName = appUser.Email,
                     Email = appUser.Email,
+                    EntityId = emailEntity.EntityId,
                     SecurityStamp = Guid.NewGuid().ToString(),
                     EntityId = "0"
                 };
@@ -78,6 +81,7 @@ namespace WebApi.Controllers
                         new UserResponse { Status = "Error", Message = "User registration failed" });
                 }
             }
+            return BadRequest("Invalid request");
         }
 
         [HttpGet("VerifyUser")]
@@ -101,6 +105,7 @@ namespace WebApi.Controllers
             {
                 query = query.Where(entry => entry.IsAdmin == true);
             }
+
             if (!string.IsNullOrEmpty(entityId))
             {
                 query = query.Where(entry => entry.EntityId == entityId);

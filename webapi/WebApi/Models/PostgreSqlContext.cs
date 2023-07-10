@@ -17,6 +17,7 @@ namespace WebApi.DataAccess
         public DbSet<Author> Authors { get; set; }
         public DbSet<Committer> Committer { get; set; }
         public DbSet<Commit> Commits { get; set; }
+        public DbSet<EmailEntity> emailEntities{ get; set; }
         public DbSet<ProjectAppUser> ProjectAppUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {

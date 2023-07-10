@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApi.DataAccess;
@@ -11,9 +12,11 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    partial class PostgreSqlContextModelSnapshot : ModelSnapshot
+    [Migration("20230710184332_intial")]
+    partial class intial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,6 +178,7 @@ namespace WebApi.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("EntityId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("IsAdmin")
@@ -299,32 +303,6 @@ namespace WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Committer");
-                });
-
-            modelBuilder.Entity("WebApi.Models.EmailEntity", b =>
-                {
-                    b.Property<string>("EmailEntityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("EntityId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("appUserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("EmailEntityId");
-
-                    b.HasIndex("EntityId");
-
-                    b.HasIndex("appUserId");
-
-                    b.ToTable("emailEntities");
                 });
 
             modelBuilder.Entity("WebApi.Models.Entity", b =>
@@ -462,23 +440,6 @@ namespace WebApi.Migrations
                     b.Navigation("author");
 
                     b.Navigation("committer");
-                });
-
-            modelBuilder.Entity("WebApi.Models.EmailEntity", b =>
-                {
-                    b.HasOne("WebApi.Models.Entity", "entity")
-                        .WithMany()
-                        .HasForeignKey("EntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApi.Models.AppUser", "appUser")
-                        .WithMany()
-                        .HasForeignKey("appUserId");
-
-                    b.Navigation("appUser");
-
-                    b.Navigation("entity");
                 });
 
             modelBuilder.Entity("WebApi.Models.ListOfCommits", b =>
