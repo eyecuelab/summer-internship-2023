@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Profile from '../components/Profile';
+import Profile from '../components/profile';
 
 const UserProfilePage = () => {
   const router = useRouter();

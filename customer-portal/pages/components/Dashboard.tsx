@@ -3,6 +3,8 @@ import { useSession } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import axios from "axios";
+import Image from "next/image";
+import Graphs from "../../.next/cache/images/Mask group.png";
 
 interface Commit {
   name: string;
@@ -161,8 +163,11 @@ const Dashboard = () => {
     <Layout username={session?.user?.name}>
       <p style={userStyle}>Lucia Schmitt</p>
       <p style={titleStyle}>Team Lead</p>
-      <br />
-      <p style={messageStyle}>Aliqua laboris culpa dolor irure ipsum enim dolore deserunt quis. Adipisicing veniam ea commodo qui culpa enim. Pariatur veniam non ullamco occaecat deserunt aliqua officia. Quis id non eiusmod laborum enim cupidatat fugiat sint cillum fugiat exercitation irure.Mollit tempor veniam nisi nulla quis reprehenderit deserunt dolor commodo sint non. Duis sit veniam occaecat duis excepteur pariatur magna occaecat culpa ipsum. Officia eu ipsum ipsum ex cupidatat aliquip irure consequat ipsum. Cupidatat labore est irure enim fugiat nulla duis. Voluptate esse commodo non magna magna mollit. Cupidatat voluptate ea dolore do laborum enim amet reprehenderit tempor consectetur duis pariatur. Anim laboris laboris sunt veniam occaecat commodo exercitation laboris enim labore veniam do proident amet. </p>
+			<Image 
+			src={Graphs}
+			width={890}
+			height={147}
+			/>
       <br />
       <br />
 

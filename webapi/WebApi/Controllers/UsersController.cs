@@ -53,20 +53,23 @@ namespace WebApi.Controllers
 
             if (existingUser != null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new UserResponse { Status = "Error", Message = "User already exists!" });
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new UserResponse { Status = "Error", Message = "User already exists!" }
+                );
             }
-            else if(_context.emailEntities.Any(e => e.Email == appUser.Email))
+            else if (_context.emailEntities.Any(e => e.Email == appUser.Email))
             {
-                var emailEntity = _context.emailEntities.FirstOrDefault(e => e.Email == appUser.Email);
-                
+                var emailEntity = _context.emailEntities.FirstOrDefault(
+                    e => e.Email == appUser.Email
+                );
+
                 var newAppUser = new AppUser()
                 {
                     UserName = appUser.Email,
                     Email = appUser.Email,
                     EntityId = emailEntity.EntityId,
                     SecurityStamp = Guid.NewGuid().ToString(),
-                    EntityId = "0"
                 };
                 var result = await _userManager.CreateAsync(newAppUser);
 
@@ -76,8 +79,10 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                        new UserResponse { Status = "Error", Message = "User registration failed" });
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        new UserResponse { Status = "Error", Message = "User registration failed" }
+                    );
                 }
             }
             return BadRequest("Invalid request");
@@ -91,7 +96,21 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<AppUser>> Get(string email, bool isAdmin, string entityId)
+        [Route("{id}")]
+        public async Task<ActionResult<AppUser>> Get(string id)
+        {
+            AppUser appUser = await _context.AppUsers.FindAsync(id);
+
+            if (appUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(appUser);
+        }
+
+        [HttpGet]
+        public async Task<List<AppUser>> GetUser(string email, bool isAdmin, string entityId)
         {
             IQueryable<AppUser> query = _context.AppUsers.AsQueryable();
 
@@ -112,8 +131,5 @@ namespace WebApi.Controllers
 
             return await query.ToListAsync();
         }
-
     }
 }
-
-
