@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useState } from "react";
 import classNames from "classnames";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar";
 import { signOut } from "next-auth/react";
 
 interface LayoutProps {
