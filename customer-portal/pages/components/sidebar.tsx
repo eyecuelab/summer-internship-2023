@@ -67,15 +67,15 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
       </div>
       <div className={cn({ "grid place-content-stretch p-4 ": true })}>
       {currentPage.startsWith('/Profile') ? (
-        <ProfileSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+        <ProfileSidebar collapsed={collapsed} setCollapsed={setCollapsed} user={""} />
       ) : (
         authors.map((author, index) => (
-            <div key={index} className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full">
+            <div key={index} className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3">
               {!collapsed && (
                 <div className="flex flex-col">
                   <Link
                     href={`/Profile/${author}`} // Pass the author name to the profile route
-                    className="text-slate-500 text-sm"
+                    className="text-slate-500 text-sm text-right"
                   >
                     {author}
                   </Link>
