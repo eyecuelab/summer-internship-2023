@@ -10,8 +10,6 @@ import AdminDashboard from "./AdminDashboard";
 import { Session } from "next-auth";
 import axios from "axios";
 
-
-
 interface Commit {
   name: string;
   message: string;
