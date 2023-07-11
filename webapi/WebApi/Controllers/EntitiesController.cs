@@ -9,12 +9,13 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class EntitiesController : ControllerBase
     {
-
         private readonly IDataAccessProvider _dataAccessProvider;
+        private readonly PostgreSqlContext _context;
 
-        public EntitiesController(IDataAccessProvider dataAccessProvider)
+        public EntitiesController(IDataAccessProvider dataAccessProvider, PostgreSqlContext context)
         {
             _dataAccessProvider = dataAccessProvider;
+            _context = context;
         }
 
         [HttpPost]

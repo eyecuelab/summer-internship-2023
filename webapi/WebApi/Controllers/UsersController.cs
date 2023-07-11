@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -54,13 +53,17 @@ namespace WebApi.Controllers
 
             if (existingUser != null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    new UserResponse { Status = "Error", Message = "User already exists!" });
+                return StatusCode(
+                    StatusCodes.Status500InternalServerError,
+                    new UserResponse { Status = "Error", Message = "User already exists!" }
+                );
             }
-            else if(_context.emailEntities.Any(e => e.Email == appUser.Email))
+            else if (_context.emailEntities.Any(e => e.Email == appUser.Email))
             {
-                var emailEntity = _context.emailEntities.FirstOrDefault(e => e.Email == appUser.Email);
-                
+                var emailEntity = _context.emailEntities.FirstOrDefault(
+                    e => e.Email == appUser.Email
+                );
+
                 var newAppUser = new AppUser()
                 {
                     UserName = appUser.Email,
@@ -76,37 +79,14 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                        new UserResponse { Status = "Error", Message = "User registration failed" });
+                    return StatusCode(
+                        StatusCodes.Status500InternalServerError,
+                        new UserResponse { Status = "Error", Message = "User registration failed" }
+                    );
                 }
             }
             return BadRequest("Invalid request");
         }
-
-
-        // var userId = Guid.NewGuid().ToString();
-
-        // AppUser user = new AppUser()
-        // {
-        //     Id = appUser.Id,
-        //     UserName = appUser.Email,
-        //     Email = appUser.Email,
-        //     EntityId = 0,
-        //     SecurityStamp = Guid.NewGuid().ToString(),
-        //     IsAdmin = false
-        // };
-        // var result = await _userManager.CreateAsync(user);
-        // if (!result.Succeeded)
-        //     // return StatusCode(
-        //     //     StatusCodes.Status500InternalServerError,
-        //     //     new UserResponse
-        //     //     {
-        //     //         Status = "Error",
-        //     //         Message = "User creation failed! Please check user details and try again."
-        //     //     }
-        //     // );
-        //     return "Ok";
-
 
         [HttpGet("VerifyUser")]
         public async Task<string> VerifyUser(string email, CancellationToken c = default)
@@ -116,7 +96,21 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<List<AppUser>> Get(string email, bool isAdmin, string entityId)
+        [Route("{id}")]
+        public async Task<ActionResult<AppUser>> Get(string id)
+        {
+            AppUser appUser = await _context.AppUsers.FindAsync(id);
+
+            if (appUser == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(appUser);
+        }
+
+        [HttpGet]
+        public async Task<List<AppUser>> GetUser(string email, bool isAdmin, string entityId)
         {
             IQueryable<AppUser> query = _context.AppUsers.AsQueryable();
 
@@ -132,12 +126,10 @@ namespace WebApi.Controllers
 
             if (!string.IsNullOrEmpty(entityId))
             {
-                query = query.Where(entry => entry.EntityId == entityId);
+                query = query.Where(entry => entry.EntityId == "entityId"); 
             }
 
             return await query.ToListAsync();
         }
     }
 }
-
-

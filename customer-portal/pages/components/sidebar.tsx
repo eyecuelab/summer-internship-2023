@@ -1,5 +1,5 @@
 // components/Sidebar.tsx
-import React from "react";
+import React, {  useEffect, useState } from "react";
 import cn from "classnames";
 import {
   ChevronDoubleLeftIcon,
@@ -7,27 +7,44 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from 'next/router';
+import ProfileSidebar from "./ProfileSidebar";
 
 // 👇 props to get and set the collapsed state from parent component
 type Props = {
   collapsed: boolean;
-  setCollapsed(collapsed: boolean): void;
+  setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedUser: React.Dispatch<React.SetStateAction<string | null>>;
 };
-const Sidebar = ({ collapsed, setCollapsed }: Props) => {
-  // 👇 use the correct icon depending on the state.
+const Sidebar = ({ collapsed, setCollapsed, setSelectedUser }: Props) => {
+  const [users, setUsers] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState<string>(''); // Track the current page
+  const router = useRouter();
+
+  useEffect(() => {
+    setCurrentPage(router.pathname); // Set the current page on initial load and on route changes
+  }, [router.pathname]);
+
+      // Function to fetch users
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch("https://localhost:7243/api/Users"); 
+        const data = await response.json();
+        setUsers(data);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+    // 👇 use the correct icon depending on the state.
   const Icon = collapsed ? ChevronDoubleRightIcon : ChevronDoubleLeftIcon;
   return (
-    <div
-      className={cn({
-        "bg-gray-100 text-black-50 z-20": true,
-      })}
-    >
-      <div
-        className={cn({
-          "flex flex-col justify-between": true,
-        })}
-      >
-        {/* logo and collapse button */}
+    <div className={cn({"bg-gray-100 text-black-50 z-20": true})}>
+      <div className={cn({"flex flex-col justify-between": true})}>
         <div
           className={cn({
             "flex items-center border-b border-b-gray-500": true,
@@ -42,75 +59,46 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
               "hover:bg-gray-300 ": true, // colors
               "w-10 h-10 rounded-full": true, // shape
             })}
-            // 👇 set the collapsed state on click
             onClick={() => setCollapsed(!collapsed)}
           >
             <Icon className="w-5 h-5" />
           </button>
         </div>
       </div>
-      <div
-          className={cn({
-            "grid place-content-stretch p-4 ": true,
-          })}
-        >
-          <div className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full">
-            <Image
-              src={
-                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              }
-              height={36}
-              width={36}
-              alt="profile image"
-              className="rounded-full"
-            />
-            {!collapsed && (
-              <div className="flex flex-col">
-                <Link href="#" className="text-slate-500 text-sm">
-                  Lucia Schmitt
-                </Link>
-              </div>
-            )}
-          </div><br/>
-          <div className="flex gap-4 items-center h-11 overflow-hidden  bg-gray-200 hover:bg-gray-400 rounded-full">
-            <Image
-              src={
-                "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              }
-              height={36}
-              width={36}
-              alt="profile image"
-              className="rounded-full"
-            />
-            {!collapsed && (
-              <div className="flex flex-col ">
-                <Link href="#" className="text-slate-500 text-sm">
-                  Elijah James
-                </Link>
-              </div>
-            )}
-          </div><br/>
-          <div className="flex gap-4 items-center h-11 overflow-hidden  bg-gray-200 hover:bg-gray-400 rounded-full">
-            <Image
-              src={
-                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              }
-              height={36}
-              width={36}
-              alt="profile image"
-              className="rounded-full"
-            />
-            {!collapsed && (
-              <div className="flex flex-col ">
-                <Link href="#" className="text-slate-500 text-sm">
-                  Andy Cassler
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
+      <div className={cn({ "grid place-content-stretch p-4 ": true })}>
+      {currentPage.startsWith('/Profile') ? ( // Check if the current page starts with '/Profile'
+        <ProfileSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      ) : (
+        users.map((user) => (
+            <div key={user.id} className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full">
+              <Image
+                src={user.image}
+                height={36}
+                width={36}
+                alt="profile image"
+                className="rounded-full"
+              />
+              {!collapsed && (
+                <div className="flex flex-col">
+                  <Link
+                    href={`/Profile/${user.id}`} // Pass the user ID to the profile route
+                    className="text-slate-500 text-sm"
+                  >
+                    {user.email}
+                  </Link>
+                </div>
+              )}
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };
+
 export default Sidebar;
+
+
+
+
 
