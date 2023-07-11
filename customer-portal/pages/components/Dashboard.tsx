@@ -105,6 +105,13 @@ const Dashboard = () => {
     color: '#404040'
   };
 
+  const userStyle = {
+    ...dateStyle,
+    fontWeight: 400,
+    fontSize: '48px',
+    lineHeight: '67.2px',
+  };
+
   const messageStyle = {
     fontFamily: 'Open Sans',
     fontWeight: 400,
@@ -118,6 +125,15 @@ const Dashboard = () => {
     fontStyle: 'italic',
     color: '#CECECE',
   };
+
+  const titleStyle = {
+    ...messageStyle,
+    fontSize: '16px',
+    lineHeight: '25.6px',
+    color: '#404040'
+  };
+
+  
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDate(event.target.value);
@@ -143,7 +159,10 @@ const Dashboard = () => {
     <AdminDashboard></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
-      <p>Project Commit History:</p>
+      <p style={userStyle}>Lucia Schmitt</p>
+      <p style={titleStyle}>Team Lead</p>
+      <br />
+      <p style={messageStyle}>Aliqua laboris culpa dolor irure ipsum enim dolore deserunt quis. Adipisicing veniam ea commodo qui culpa enim. Pariatur veniam non ullamco occaecat deserunt aliqua officia. Quis id non eiusmod laborum enim cupidatat fugiat sint cillum fugiat exercitation irure.Mollit tempor veniam nisi nulla quis reprehenderit deserunt dolor commodo sint non. Duis sit veniam occaecat duis excepteur pariatur magna occaecat culpa ipsum. Officia eu ipsum ipsum ex cupidatat aliquip irure consequat ipsum. Cupidatat labore est irure enim fugiat nulla duis. Voluptate esse commodo non magna magna mollit. Cupidatat voluptate ea dolore do laborum enim amet reprehenderit tempor consectetur duis pariatur. Anim laboris laboris sunt veniam occaecat commodo exercitation laboris enim labore veniam do proident amet. </p>
       <br />
       <br />
 
@@ -165,8 +184,6 @@ const Dashboard = () => {
     boxShadow: 'none',
     width: '254px',
     height: '35px',
-    // top: '-2154px',
-    // left: '2402px',
   }}
 >
   <option value="">All Dates</option>
