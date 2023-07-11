@@ -5,6 +5,7 @@ import AdminDashboard from "./AdminDashboard";
 import axios from "axios";
 import Image from "next/image";
 import Graphs from "../../public/img/Mask group.png";
+import ProfileSidebar from "./ProfileSidebar";
 
 interface Commit {
   name: string;
@@ -41,6 +42,8 @@ const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const currentUser: any = session?.user?.email;
   const [isAdmin, setIsAdmin] = useState<string>("false");
+  const [selectedAuthor, setSelectedAuthor] = useState<string>("");
+  const [selectedUser, setSelectedUser] = useState<string>("");
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -149,6 +152,7 @@ const Dashboard = () => {
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDate(event.target.value);
+    setSelectedAuthor(getAuthorByDate(event.target.value)); // set the selected author's name
   };
 
   const uniqueDates = Array.from(
@@ -173,10 +177,14 @@ const Dashboard = () => {
     <AdminDashboard></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
-      <Image />
-      <p style={userStyle}>Lucia Schmitt</p>
+      <p style={userStyle}>{selectedAuthor || "Default User Name"}</p> 
       <p style={titleStyle}>Team Lead</p>
-      <Image alt="user picture" src={Graphs} width={890} height={147} />
+      <Image
+        alt="user picture"
+        src={Graphs}
+        width={890}
+        height={147}
+      />
       <br />
       <br />
 
