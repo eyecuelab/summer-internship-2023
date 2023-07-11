@@ -6,10 +6,10 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import Img25 from "../../.next/cache/images/image 25.png";
-import Img26 from "../../.next/cache/images/image 26.png";
-import Img27 from "../../.next/cache/images/image 27.png";
-import Img28 from "../../.next/cache/images/image 28.png";
+import Img25 from "../../public/img/image 25.png";
+import Img26 from "../../public/img/image 26.png";
+import Img27 from "../../public/img/image 27.png";
+import Img28 from "../../public/img/image 28.png";
 import Link from "next/link";
 
 // 👇 props to get and set the collapsed state from parent component
