@@ -99,61 +99,65 @@ const Dashboard = () => {
   // Adding a function to get author by date
   const getAuthorByDate = (date: string): string => {
     // Find the commit made on the given date and return the author's name
-    const commit = apiData.find(commit => formatDate(commit.date) === date);
+    const commit = apiData.find((commit) => formatDate(commit.date) === date);
     return commit?.name || ""; // If the commit is found, return the name, otherwise return empty string
-  }
+  };
 
-//Bandaid fix for a typescript overload function thing? Talk to Erin About it
+  //Bandaid fix for a typescript overload function thing? Talk to Erin About it
   const formatDate = (dateString: string): string => {
-    const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', options);
-  }
+    return date.toLocaleDateString("en-US", options);
+  };
 
   const dateStyle = {
-    fontFamily: 'Rasa',
+    fontFamily: "Rasa",
     fontWeight: 600,
-    fontSize: '24px',
-    lineHeight: '40.8px',
-    color: '#404040'
+    fontSize: "24px",
+    lineHeight: "40.8px",
+    color: "#404040",
   };
 
   const userStyle = {
     ...dateStyle,
     fontWeight: 400,
-    fontSize: '48px',
-    lineHeight: '67.2px',
+    fontSize: "48px",
+    lineHeight: "67.2px",
   };
 
   const messageStyle = {
-    fontFamily: 'Open Sans',
+    fontFamily: "Open Sans",
     fontWeight: 400,
-    fontSize: '16px',
-    lineHeight: '27.2px',
-    color: '#888888'
+    fontSize: "16px",
+    lineHeight: "27.2px",
+    color: "#888888",
   };
 
   const nameStyle = {
     ...messageStyle,
-    fontStyle: 'italic',
-    color: '#CECECE',
+    fontStyle: "italic",
+    color: "#CECECE",
   };
 
   const titleStyle = {
     ...messageStyle,
-    fontSize: '16px',
-    lineHeight: '25.6px',
-    color: '#404040'
+    fontSize: "16px",
+    lineHeight: "25.6px",
+    color: "#404040",
   };
-
-  
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDate(event.target.value);
     setSelectedAuthor(getAuthorByDate(event.target.value)); // set the selected author's name
   };
 
-  const uniqueDates = Array.from(new Set(apiData.map(commit => formatDate(commit.date))));
+  const uniqueDates = Array.from(
+    new Set(apiData.map((commit) => formatDate(commit.date)))
+  );
 
   const filteredData = selectedDate
     ? apiData.filter((commit) => selectedDate === formatDate(commit.date))
@@ -184,33 +188,33 @@ const Dashboard = () => {
       <br />
       <br />
 
-<select
-  value={selectedDate}
-  onChange={handleDateChange}
-  style={{
-    marginLeft: 'auto',
-    fontFamily: 'Open Sans',
-    float: 'right',
-    fontWeight: 600,
-    fontSize: '16px',
-    lineHeight: '25.6px',
-    color: '#404040',
-    backgroundColor: '#F7F7F8',
-    padding: '5px 10px',
-    border: 'none',
-    outline: 'none',
-    boxShadow: 'none',
-    width: '254px',
-    height: '35px',
-  }}
->
-  <option value="">All Dates</option>
-  {uniqueDates.map((date, index) => (
-    <option key={index} value={date}>
-      {date}
-    </option>
-  ))}
-</select>
+      <select
+        value={selectedDate}
+        onChange={handleDateChange}
+        style={{
+          marginLeft: "auto",
+          fontFamily: "Open Sans",
+          float: "right",
+          fontWeight: 600,
+          fontSize: "16px",
+          lineHeight: "25.6px",
+          color: "#404040",
+          backgroundColor: "#F7F7F8",
+          padding: "5px 10px",
+          border: "none",
+          outline: "none",
+          boxShadow: "none",
+          width: "254px",
+          height: "35px",
+        }}
+      >
+        <option value="">All Dates</option>
+        {uniqueDates.map((date, index) => (
+          <option key={index} value={date}>
+            {date}
+          </option>
+        ))}
+      </select>
 
       {selectedDate ? (
         <>
@@ -221,7 +225,9 @@ const Dashboard = () => {
         uniqueDates.map((date, index) => (
           <div key={index}>
             <p style={dateStyle}>{date}</p>
-            {renderCommits(apiData.filter(commit => formatDate(commit.date) === date))}
+            {renderCommits(
+              apiData.filter((commit) => formatDate(commit.date) === date)
+            )}
           </div>
         ))
       )}
