@@ -6,6 +6,10 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import Img25 from "/Users/eliotgronstal/Desktop/EyeCue/summer-internship-2023/customer-portal/.next/cache/images/image 25.png";
+import Img26 from "/Users/eliotgronstal/Desktop/EyeCue/summer-internship-2023/customer-portal/.next/cache/images/image 26.png";
+import Img27 from "/Users/eliotgronstal/Desktop/EyeCue/summer-internship-2023/customer-portal/.next/cache/images/image 27.png";
+import Img28 from "/Users/eliotgronstal/Desktop/EyeCue/summer-internship-2023/customer-portal/.next/cache/images/image 28.png";
 import Link from "next/link";
 
 // 👇 props to get and set the collapsed state from parent component
@@ -57,9 +61,7 @@ const ProfileSidebar = ({ collapsed, setCollapsed }: Props) => {
         >
           <div className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full">
             <Image
-              src={
-                "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              }
+              src={Img25}
               height={36}
               width={36}
               alt="profile image"
@@ -75,9 +77,7 @@ const ProfileSidebar = ({ collapsed, setCollapsed }: Props) => {
           </div><br/>
           <div className="flex gap-4 items-center h-11 overflow-hidden  bg-gray-200 hover:bg-gray-400 rounded-full">
             <Image
-              src={
-                "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              }
+              src={Img26}
               height={36}
               width={36}
               alt="profile image"
@@ -93,9 +93,7 @@ const ProfileSidebar = ({ collapsed, setCollapsed }: Props) => {
           </div><br/>
           <div className="flex gap-4 items-center h-11 overflow-hidden  bg-gray-200 hover:bg-gray-400 rounded-full">
             <Image
-              src={
-                "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              }
+              src={Img27}
               height={36}
               width={36}
               alt="profile image"
@@ -111,9 +109,7 @@ const ProfileSidebar = ({ collapsed, setCollapsed }: Props) => {
             </div><br/>
             <div className="flex gap-4 items-center h-11 overflow-hidden  bg-gray-200 hover:bg-gray-400 rounded-full">
             <Image
-              src={
-                "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-              }
+              src={Img28}
               height={36}
               width={36}
               alt="profile image"

@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import React, { useState, useEffect, PropsWithChildren } from "react";
+import {
+  useSession,
+  signOut,
+  getSession,
+  GetSessionParams,
+} from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
+import { Session } from "next-auth";
 import axios from "axios";
 
 interface Commit {
