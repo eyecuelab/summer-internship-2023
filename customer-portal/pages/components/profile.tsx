@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import {
   useSession,
   signOut,
@@ -35,15 +35,20 @@ const Profile = () => {
   let currentUser: any = session?.user?.email;
   const [role, setRole] = useState<string>("");
   const [isAdmin, setIsAdmin] = useState<string>("false");
+  const [username, setUsername] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("details");
 
   useEffect(() => {
     // Ensure id exists and is not an array
-    if (id && typeof id === 'string') {
+    if (id && typeof id === "string") {
       // Fetch the data for this user
       fetch(`https://localhost:7243/api/Users/${id}`)
-        .then(response => response.json())
-        .then(data => setUser(data)) // NEW - Set user data
-        .catch(err => console.error(err));
+        .then((response) => response.json())
+        .then((data) => {
+          setUser(data);
+          setUsername(data.userName);
+        })
+        .catch((err) => console.error(err));
     }
   }, [id]);
 
@@ -67,7 +72,6 @@ const Profile = () => {
       fetchCurrentRole();
     }
   }, [currentUser]);
-
 
   useEffect(() => {
     if (isAdmin === "false") {
@@ -93,50 +97,114 @@ const Profile = () => {
   }, [isAdmin]);
 
   const formatDate = (dateString: string): string => {
-    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    const options = { month: "long", day: "numeric", year: "numeric" };
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', options);
+    return date.toLocaleDateString("en-US", options);
   };
 
   const dateStyle = {
-    fontFamily: 'Rasa',
+    fontFamily: "Rasa",
     fontWeight: 600,
-    fontSize: '24px',
-    lineHeight: '40.8px',
-    color: '#404040'
-  }
+    fontSize: "24px",
+    lineHeight: "40.8px",
+    color: "#404040",
+  };
 
   const messageStyle = {
-    fontFamily: 'Open Sans',
+    fontFamily: "Open Sans",
     fontWeight: 400,
-    fontSize: '16px',
-    lineHeight: '27.2px',
-    color: '#888888'
-  }
+    fontSize: "16px",
+    lineHeight: "27.2px",
+    color: "#888888",
+  };
 
   const nameStyle = {
     ...messageStyle,
-    fontStyle: 'italic',
-    color: '#CECECE',
-  }
+    fontStyle: "italic",
+    color: "#CECECE",
+  };
 
   const titleStyle = {
     ...messageStyle,
-    fontSize: '16px',
-    lineHeight: '25.6px',
-    color: '#404040'
+    fontSize: "16px",
+    lineHeight: "25.6px",
+    color: "#404040",
   };
 
+  const renderActiveTab = () => {
+    switch (activeTab) {
+      case "details":
+        return (
+          <>
+            <br />
+            <p className="profile-header-font">Personal Bio</p>
+            <p style={messageStyle}>
+              Aliqua laboris culpa dolor irure ipsum enim dolore deserunt quis.
+              Adipisicing veniam ea commodo qui culpa enim. Pariatur veniam non
+              ullamco occaecat deserunt aliqua officia. Quis id non eiusmod
+              laborum enim cupidatat fugiat sint cillum fugiat exercitation
+              irure.Mollit tempor veniam nisi nulla quis reprehenderit deserunt
+              dolor commodo sint non. Duis sit veniam occaecat duis excepteur
+              pariatur magna occaecat culpa ipsum. Officia eu ipsum ipsum ex
+              cupidatat aliquip irure consequat ipsum.
+            </p>
+            <br />
+            <p className="profile-header-font">Strengths & Responsibilities</p>
+            <br />
+            <p style={messageStyle}>Frontend Development</p>
+            <p style={messageStyle}>Backend Development</p>
+            <p style={messageStyle}>Fullstack Development</p>
+            <br />
+          </>
+        );
+      case "permissions":
+        return (
+          <>
+            <p>Permissions content goes here</p>
+          </>
+        );
+      case "privacy":
+        return (
+          <>
+            <p>Privacy Settings content goes here</p>
+          </>
+        );
+      default:
+        return null;
+    }
+  };
 
   return isAdmin === "true" ? (
     <AdminDashboard></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
-      {/* <ProfileSidebar></ProfileSidebar> */}
-      <p className="profile-header-font">Personal Bio</p>
-      <p style={messageStyle}>Aliqua laboris culpa dolor irure ipsum enim dolore deserunt quis. Adipisicing veniam ea commodo qui culpa enim. Pariatur veniam non ullamco occaecat deserunt aliqua officia. Quis id non eiusmod laborum enim cupidatat fugiat sint cillum fugiat exercitation irure.Mollit tempor veniam nisi nulla quis reprehenderit deserunt dolor commodo sint non. Duis sit veniam occaecat duis excepteur pariatur magna occaecat culpa ipsum. Officia eu ipsum ipsum ex cupidatat aliquip irure consequat ipsum. Cupidatat labore est irure enim fugiat nulla duis. Voluptate esse commodo non magna magna mollit. Cupidatat voluptate ea dolore do laborum enim amet reprehenderit tempor consectetur duis pariatur. Anim laboris laboris sunt veniam occaecat commodo exercitation laboris enim labore veniam do proident amet. </p>
+      <p className="profile-header-font">{username}</p>
       <br />
-      <p className="profile-header-font">Project Commit History:</p>
+      <div style={messageStyle}>
+        <button
+          className="profile-button-details"
+          onClick={() => setActiveTab("details")}
+        >
+          Details |{" "}
+        </button>
+        <button
+          className="profile-button-details"
+          onClick={() => setActiveTab("permissions")}
+        >
+          Permissions |{" "}
+        </button>
+        <button
+          className="profile-button-details"
+          onClick={() => setActiveTab("privacy")}
+        >
+          Privacy Settings
+        </button>
+        <br />
+      </div>
+
+      {renderActiveTab()}
+
+      <p className="profile-header-font">Project Commit History</p>
       <br />
       {apiData &&
         apiData.map((commit, index) => (
