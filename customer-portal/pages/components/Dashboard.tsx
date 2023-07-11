@@ -143,7 +143,7 @@ const Dashboard = () => {
     setSelectedDate(event.target.value);
   };
 
-  const uniqueDates = [...new Set(apiData.map(commit => formatDate(commit.date)))];
+  const uniqueDates = Array.from(new Set(apiData.map(commit => formatDate(commit.date))));
 
   const filteredData = selectedDate
     ? apiData.filter((commit) => selectedDate === formatDate(commit.date))
@@ -165,7 +165,8 @@ const Dashboard = () => {
     <Layout username={session?.user?.name}>
       <p style={userStyle}>Lucia Schmitt</p>
       <p style={titleStyle}>Team Lead</p>
-			<Image 
+			<Image
+            alt="user picture"
 			src={Graphs}
 			width={890}
 			height={147}
