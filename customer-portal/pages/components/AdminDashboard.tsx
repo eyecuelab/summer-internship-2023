@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Layout from "./layout";
+import AdminLayout from "./adminLayout";
 import { Session } from "next-auth";
 import { GetServerSidePropsContext } from "next";
 import axios from "axios";
@@ -13,6 +13,17 @@ type User = {
   isAdmin: boolean;
   entityId: number;
 };
+
+interface Entity {
+  companyName: string;
+  entityId: string;
+}
+
+
+type Props = {
+  currentEntity(entity: Entity): void;
+};
+
 
 async function register(session: Session | null) {
   try {
@@ -30,8 +41,18 @@ const AdminDashboard = () => {
   const { data: session, status } = useSession({ required: true });
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [users, setUsers] = useState<User[]>([]);
+  const [currentEntity, setCurrentEntity] = useState<Entity | null>(null);
+  const [intialEntity, setIntialEntity] = useState<Entity | null>(null);
   const currentUser = session?.user?.email;
 
+  const handleSelectedEntity = (selectedEntity: Entity | null) => {
+    console.log("Selected Entity in AdminDashboard:", selectedEntity);
+    setCurrentEntity(selectedEntity)
+    console.log("This is the current entity", currentEntity)
+  };
+
+  console.log("intial data", intialEntity);
+  console.log("current entity in dashboard", currentEntity);
   useEffect(() => {
     const fetchCurrentRole = async () => {
       try {
@@ -80,21 +101,49 @@ const AdminDashboard = () => {
     }
   }, [status, session]);
 
+  useEffect(() => {
+    const fetchAllEntities = async () => {
+      try {
+        const response = await fetch(`https://localhost:7243/api/Entities`);
+
+        const data = await response.json();
+
+        if (data.length > 0) {
+          setIntialEntity(data);
+        }
+
+        console.log("default entity " , data);
+      } catch (error) {
+        console.error("Failed to transmit user data:", error);
+      }
+    };
+  
+    fetchAllEntities();
+    
+  }, []);
+
+
   return status === "authenticated" ? (
-    <Layout username={session?.user?.name}>
-      <AddEntityModule/>
-      <AddProjectModal/>
+    
+      <AdminLayout
+        username={session?.user?.name}
+        currentEntity={currentEntity}
+        onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
+      >
+      <AddEntityModule />
+      <AddProjectModal />
       <p>Current Clients:</p>
       <div>
         {users.map((user, index) => (
           <div key={index}>
             <p>Email: {user.email}</p>
-            <p>Is Admin: {user.isAdmin ? "True" : "False"}</p>
+            <p>Is Admin: {user.isAdmin ? "Yes" : "No"}</p>
             <p>Entity ID: {user.entityId}</p>
+          
           </div>
         ))}
       </div>
-    </Layout>
+    </AdminLayout>
   ) : (
     <div>loading...</div>
   );

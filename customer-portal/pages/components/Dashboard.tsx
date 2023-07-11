@@ -93,6 +93,8 @@ const Dashboard = () => {
     }
   }, [isAdmin]);
 
+
+//Bandaid fix for a typescript overload function thing? Talk to Erin About it
   const formatDate = (dateString: string): string => {
     const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
     const date = new Date(dateString);
