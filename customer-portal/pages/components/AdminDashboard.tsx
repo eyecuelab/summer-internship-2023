@@ -45,6 +45,12 @@ const AdminDashboard = () => {
   const [intialEntity, setIntialEntity] = useState<Entity | null>(null);
   const currentUser = session?.user?.email;
 
+  const handleSelectedEntity = (selectedEntity: Entity | null) => {
+    console.log("Selected Entity in AdminDashboard:", selectedEntity);
+    setCurrentEntity(selectedEntity)
+    console.log("This is the current entity", currentEntity)
+  };
+
   console.log("intial data", intialEntity);
   console.log("current entity in dashboard", currentEntity);
   useEffect(() => {
@@ -119,7 +125,11 @@ const AdminDashboard = () => {
 
   return status === "authenticated" ? (
     
-    <AdminLayout username={session?.user?.name} currentEntity={currentEntity}>
+      <AdminLayout
+        username={session?.user?.name}
+        currentEntity={currentEntity}
+        onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
+      >
       <AddEntityModule />
       <AddProjectModal />
       <p>Current Clients:</p>
