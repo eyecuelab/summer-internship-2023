@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class intial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,7 +34,7 @@ namespace WebApi.Migrations
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
-                    EntityId = table.Column<string>(type: "text", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: true),
                     IsAdmin = table.Column<bool>(type: "boolean", nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -101,8 +101,7 @@ namespace WebApi.Migrations
                 name: "Projects",
                 columns: table => new
                 {
-                    ProjectId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProjectId = table.Column<string>(type: "text", nullable: false),
                     ProjectName = table.Column<string>(type: "text", nullable: false),
                     EntityId = table.Column<string>(type: "text", nullable: false)
                 },
@@ -245,13 +244,37 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "emailEntities",
+                columns: table => new
+                {
+                    EmailEntityId = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: false),
+                    appUserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_emailEntities", x => x.EmailEntityId);
+                    table.ForeignKey(
+                        name: "FK_emailEntities_AspNetUsers_appUserId",
+                        column: x => x.appUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_emailEntities_Entities_EntityId",
+                        column: x => x.EntityId,
+                        principalTable: "Entities",
+                        principalColumn: "EntityId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProjectAppUsers",
                 columns: table => new
                 {
                     ProjectAppUserId = table.Column<string>(type: "text", nullable: false),
                     ProjectId = table.Column<string>(type: "text", nullable: true),
-                    AppUserId = table.Column<string>(type: "text", nullable: true),
-                    ProjectId1 = table.Column<int>(type: "integer", nullable: true)
+                    AppUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -262,8 +285,8 @@ namespace WebApi.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ProjectAppUsers_Projects_ProjectId1",
-                        column: x => x.ProjectId1,
+                        name: "FK_ProjectAppUsers_Projects_ProjectId",
+                        column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "ProjectId");
                 });
@@ -290,10 +313,10 @@ namespace WebApi.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "IsAdmin", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1", 0, "b41d0eaf-7b09-4724-bfe2-96a4602e9278", "user1@example.com", true, "1", true, false, null, "USER1@EXAMPLE.COM", "USER1", "AQAAAAEAACcQAAAAEPTnQJe9SU43heZLPlJNu6k8R1jQpNyDakiOfSo2Y6DPV+kvbNOsRts3Fk2OVI9U0g==", null, false, "", false, "user1" },
-                    { "2", 0, "0e11cb39-cb3b-4fe7-a22f-1de44cdfcbd1", "user2@example.com", true, "1", true, false, null, "USER2@EXAMPLE.COM", "USER2", "AQAAAAEAACcQAAAAEPwBPsFP4+OHGNZ2acrXy6up5L6JfABnK+/tNWj/Z/i6snzeOqHGj536rXaUpw7Z3g==", null, false, "", false, "user2" },
-                    { "3", 0, "bf59f493-1e11-431b-97c5-d3c669f18dba", "user3@example.com", true, "0", false, false, null, "USER3@EXAMPLE.COM", "USER3", "AQAAAAEAACcQAAAAEAtcemv4fgDXMUTCsKpcE3iYfUtuuMctl/krn/oyji8FOpmVB4+yUrYLlI0hcz1RDA==", null, false, "", false, "user3" },
-                    { "4", 0, "a178997a-0154-4450-ab18-f84563a9b6e7", "gronstal.larson@gmail.com", true, "0", true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAEAicF0faW3TP/Q5oQfjWJTuF5omAbC0pbQHf0qoeY1o8L3LBw6tp9HcMkkCCT3TH8A==", null, false, "", false, "Gronstal.Larson@gmail.com" }
+                    { "1", 0, "a501ad12-34ce-485f-bb9e-f180607c54d9", "user1@example.com", true, "1", true, false, null, "USER1@EXAMPLE.COM", "USER1", "AQAAAAEAACcQAAAAELme9/H+iMgNJwEyQzd1AcpxYjpJceyDNhwnGRm7ziA8J0vBtmKJgF8cXFXhrtKieA==", null, false, "", false, "user1" },
+                    { "2", 0, "a2ebeab4-76ac-41e9-af32-91e8e92a65f8", "user2@example.com", true, "1", true, false, null, "USER2@EXAMPLE.COM", "USER2", "AQAAAAEAACcQAAAAENQg8PmOYFUwTJNJkdAnKI10h7WdZJoR9jZlEBXdtl8RkSnt0IPFDUSnVVTMSRPWsg==", null, false, "", false, "user2" },
+                    { "3", 0, "1779b021-d0a1-4a42-8e7b-677a891adacc", "user3@example.com", true, "0", false, false, null, "USER3@EXAMPLE.COM", "USER3", "AQAAAAEAACcQAAAAEPClBJvUNl5Xf8GkwWPcXv/B0oyeTrfiAIoAXeibs7T9hl4zWi1MbDv5mzjsCPh4ng==", null, false, "", false, "user3" },
+                    { "4", 0, "df32f0f1-f38c-4e4e-a554-e528044ae145", "gronstal.larson@gmail.com", true, "0", true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAEO9ts/r2ckYq1toAePB3Y0+PRRDEh9UUzk5Wo8zdQChUSBJrCBAwExtjSNw6MwGr4A==", null, false, "", false, "Gronstal.Larson@gmail.com" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -344,6 +367,16 @@ namespace WebApi.Migrations
                 column: "committerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_emailEntities_appUserId",
+                table: "emailEntities",
+                column: "appUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_emailEntities_EntityId",
+                table: "emailEntities",
+                column: "EntityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ListOfCommits_commitId",
                 table: "ListOfCommits",
                 column: "commitId");
@@ -354,9 +387,9 @@ namespace WebApi.Migrations
                 column: "AppUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectAppUsers_ProjectId1",
+                name: "IX_ProjectAppUsers_ProjectId",
                 table: "ProjectAppUsers",
-                column: "ProjectId1");
+                column: "ProjectId");
         }
 
         /// <inheritdoc />
@@ -378,7 +411,7 @@ namespace WebApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Entities");
+                name: "emailEntities");
 
             migrationBuilder.DropTable(
                 name: "ListOfCommits");
@@ -388,6 +421,9 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Entities");
 
             migrationBuilder.DropTable(
                 name: "Commits");

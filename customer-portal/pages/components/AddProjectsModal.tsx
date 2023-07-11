@@ -1,26 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Text, Input, Row } from "@nextui-org/react";
+import axios from "axios";
 
-export default function AddProjectModal() {
+interface ProjectModalProps {
+    currentEntity: Entity | null;
+    onSelectedEntity: (selectedEntity: Entity | null) => void;
+  }
+
+  interface Entity {
+    companyName: string;
+    entityId: string;
+  }
+
+  export default function AddProjectModal({
+    currentEntity,
+    onSelectedEntity,
+  }: ProjectModalProps) {
   const [visible, setVisible] = useState(false);
   const [projectName, setProjectName] = useState("");
-  const [githubLink, setGithubLink] = useState("");
-  const [trelloLink, setTrelloLink] = useState("");
+  
 
   const handleOpen = () => setVisible(true);
   const handleClose = () => setVisible(false);
 
-  const handleAddProject = () => {
-    // Perform your API request here using the input values
-    console.log("Project Name:", projectName);
-    console.log("GitHub Link:", githubLink);
-    console.log("Trello Link:", trelloLink);
+  console.log("current entity in projectmodal ", currentEntity)
 
+  const handleAddProject = async () => {
+    try {
+      const url = 'https://localhost:7243/api/projects';
+      const payload = {
+        EntityId: currentEntity?.entityId,
+        ProjectName: projectName,
+      };
+  
+      const response = await axios.post(url, payload);
+  
+      // Handle the response data
+      console.log(response.data);
+    } catch (error) {
+      // Handle error
+      console.error(error);
+    }
+  
     // Reset input fields
     setProjectName("");
-    setGithubLink("");
-    setTrelloLink("");
-
+  
     // Close the modal
     handleClose();
   };
@@ -53,26 +77,6 @@ export default function AddProjectModal() {
             placeholder="Project Name"
             value={projectName}
             onChange={(e) => setProjectName(e.target.value)}
-          />
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="GitHub Link"
-            value={githubLink}
-            onChange={(e) => setGithubLink(e.target.value)}
-          />
-          <Input
-            clearable
-            bordered
-            fullWidth
-            color="primary"
-            size="lg"
-            placeholder="Trello Link"
-            value={trelloLink}
-            onChange={(e) => setTrelloLink(e.target.value)}
           />
         </Modal.Body>
         <Modal.Footer>

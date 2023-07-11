@@ -26,8 +26,8 @@ namespace WebApi.Controllers
         {
             if (project != null)
             {
-                
-                
+
+
                 _context.Projects.Add(project);
                 _context.SaveChanges();
 
@@ -78,6 +78,21 @@ namespace WebApi.Controllers
             }
 
             return Ok(project);
+        }
+
+        [HttpGet("projectsbyentity/{entityId}")]
+        public IActionResult GetProjectsFromEntityId(string entityId)
+        {
+            var projects = _context.Projects
+                .Where(p => p.EntityId == entityId)
+                .ToList();
+
+            if (projects.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(projects);
         }
 
         [HttpGet]
