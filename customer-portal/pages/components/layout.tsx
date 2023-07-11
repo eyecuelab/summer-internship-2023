@@ -1,14 +1,23 @@
 import React, { PropsWithChildren, useState } from "react";
 import classNames from "classnames";
 import Sidebar from "./sidebar";
+import ProfileSidebar from "./ProfileSidebar";
 import { signOut } from "next-auth/react";
 
 interface LayoutProps {
   username: string | undefined | null;
 }
 
+type Props = {
+  user: string;
+  collapsed: boolean;
+  setCollapsed(collapsed: boolean): void;
+};
+
 const Layout: React.FC<LayoutProps & PropsWithChildren<{}>> = ({ username, children }) => {
   const [collapsed, setSidebarCollapsed] = useState(false);
+  const [profileSidebar, setProfileSidebar] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
 
   return (
     <>
@@ -33,7 +42,7 @@ const Layout: React.FC<LayoutProps & PropsWithChildren<{}>> = ({ username, child
       })}
     >
       {/* sidebar */}
-      <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} />
+      {selectedUser ? <ProfileSidebar user={selectedUser} collapsed={collapsed} setCollapsed={setSidebarCollapsed} /> : <Sidebar collapsed={collapsed} setCollapsed={setSidebarCollapsed} setSelectedUser={setSelectedUser} />}
 
       {/* content */}
       <div className="row-start-1 col-start-2 p-10" style={{ backgroundColor: '#F7F7F8',marginTop: '-24px', zIndex: 100, maxWidth: '1165px' }}> {children}</div>
