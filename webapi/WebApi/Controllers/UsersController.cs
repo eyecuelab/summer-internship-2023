@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
-using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -132,7 +131,7 @@ namespace WebApi.Controllers
 
             if (!string.IsNullOrEmpty(entityId))
             {
-                query = query.Where(entry => entry.EntityId == entityId);
+                query = query.Where(entry => entry.EntityId == "entityId"); 
             }
 
             return await query.ToListAsync();
