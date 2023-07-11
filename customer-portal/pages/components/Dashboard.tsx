@@ -4,7 +4,7 @@ import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import axios from "axios";
 import Image from "next/image";
-import Graphs from "../../.next/cache/images/Mask group.png";
+import Graphs from "../../public/img/Mask group.png";
 
 interface Commit {
   name: string;
