@@ -101,10 +101,10 @@ const Dashboard = () => {
   }, [isAdmin]);
 
   const formatDate = (dateString: string): string => {
-    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    const options: Intl.DateTimeFormatOptions = { month: 'long', day: 'numeric', year: 'numeric' };
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', options);
-  };
+  }
 
   const dateStyle = {
     fontFamily: 'Rasa',
