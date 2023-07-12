@@ -16,23 +16,14 @@ namespace WebApi.Controllers
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly IDataAccessProvider _dataAccessProvider;
-        private readonly PostgreSqlContext _context;
+        private readonly IConfiguration _configuration;
 
-        public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider)
+        public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider, IConfiguration configuration)
         {
             _clientFactory = clientFactory;
             _dataAccessProvider = dataAccessProvider;
-            
+            _configuration = configuration;
         }
-
-        private readonly IConfiguration _configuration;
-
-    public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider, IConfiguration configuration)
-    {
-        _clientFactory = clientFactory;
-        _dataAccessProvider = dataAccessProvider;
-        _configuration = configuration;
-    }
 
         // GET ALL COMMITS FOR ONE REPO 
         [HttpGet("commits/{owner}/{repo}")]
@@ -131,8 +122,8 @@ namespace WebApi.Controllers
                 return StatusCode((int)response.StatusCode);
             }
         }
-        [HttpGet("summarized-commits/{owner}/{repo}")]
-        public async Task<IActionResult> GetSummarizedCommits(string owner, string repo, IConfiguration configuration)
+        [HttpPost("summarized-commits/{owner}/{repo}")]
+        public async Task<IActionResult> GetSummarizedCommits(string owner, string repo)
         {
             var commitsResult = await GetListOfCommits(owner, repo);
             if (commitsResult is OkObjectResult okResult)
@@ -146,7 +137,7 @@ namespace WebApi.Controllers
 
                     foreach (var commitMessage in commitMessages)
                     {
-                        var openAiController = new OpenAIController(_clientFactory, _configuration); // Add this line
+                        var openAiController = new OpenAIController(_clientFactory, _configuration);
                         var summarizeResult = await openAiController.SummarizeText(commitMessage);
                         if (summarizeResult is OkObjectResult okSummarizeResult)
                         {
@@ -169,6 +160,5 @@ namespace WebApi.Controllers
                 return StatusCode(statusCode);
             }
         }
-
     }
 }
