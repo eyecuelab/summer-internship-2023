@@ -23,42 +23,47 @@ const ProfileSidebar = ({ collapsed, setCollapsed }: Props) => {
   const Icon = collapsed ? ChevronDoubleRightIcon : ChevronDoubleLeftIcon;
   return (
     <div
-      className={cn({
-        "bg-gray-100 text-black-50 z-20": true,
-      })}
-    >
-      <div
-        className={cn({
-          "flex flex-col justify-between": true,
-        })}
-      >
+                className={cn({
+                    // use grid layout
+                    "grid min-h-screen pt-10": true, // add padding-top to accommodate the navbar
+                    // create two rows for navbar and content, and two columns for sidebar and main content
+                    "grid-cols-sidebar-main": true,
+                    // toggle the width of the sidebar depending on the state
+                    "grid-cols-sidebar": !collapsed,
+                    "grid-cols-sidebar-collapsed": collapsed,
+                    // transition animation classes
+                    "transition-[grid-template-columns] duration-300 ease-in-out":
+                        true,
+                })}
+            >
+    <div className={cn({
+      "bg-gray-100 text-black-50 z-20": true,
+    })}>
+      <div className={cn({
+        "flex flex-col justify-between": true,
+      })}>
         {/* logo and collapse button */}
-        <div
-          className={cn({
-            "flex items-center border-b border-b-gray-500": true,
-            "p-4 justify-between": !collapsed,
-            "py-4 justify-center": collapsed,
-          })}
-        >
+        <div className={cn({
+          "flex items-center border-b border-b-gray-500": true,
+          "p-4 justify-between": !collapsed,
+          "py-4 justify-center": collapsed,
+        })}>
           {!collapsed && <span className="whitespace-nowrap">User Details</span>}
           <button
             className={cn({
-              "grid place-content-center": true, // position
-              "hover:bg-gray-300 ": true, // colors
-              "w-10 h-10 rounded-full": true, // shape
+              "grid place-content-center": true,
+              "hover:bg-gray-300": true,
+              "w-10 h-10 rounded-full": true,
             })}
-            // 👇 set the collapsed state on click
             onClick={() => setCollapsed(!collapsed)}
           >
             <Icon className="w-5 h-5" />
           </button>
         </div>
       </div>
-      <div
-          className={cn({
-            "grid place-content-stretch p-4 ": true,
-          })}
-        >
+      <div className={cn({
+        "grid place-content-stretch p-4": true,
+      })}>
           <div className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full">
             <Image
               src={Img25}
@@ -125,6 +130,7 @@ const ProfileSidebar = ({ collapsed, setCollapsed }: Props) => {
           </div><br/>
           </div>
         </div>
+      </div>
   );
 };
 export default ProfileSidebar;

@@ -16,13 +16,13 @@ namespace WebApi.Controllers
     {
         private readonly IHttpClientFactory _clientFactory;
         private readonly IDataAccessProvider _dataAccessProvider;
-        private readonly PostgreSqlContext _context;
+        private readonly IConfiguration _configuration;
 
-        public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider)
+        public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider, IConfiguration configuration)
         {
             _clientFactory = clientFactory;
             _dataAccessProvider = dataAccessProvider;
-            
+            _configuration = configuration;
         }
 
         // GET ALL COMMITS FOR ONE REPO 
@@ -120,6 +120,45 @@ namespace WebApi.Controllers
                 // Handle the case when the API request was not successful
                 // You can return an appropriate response or error message
                 return StatusCode((int)response.StatusCode);
+            }
+        }
+        [HttpPost("summarized-commits/{owner}/{repo}")]
+        public async Task<IActionResult> GetSummarizedCommits(string owner, string repo)
+        {
+            var commitsResult = await GetListOfCommits(owner, repo);
+            if (commitsResult is OkObjectResult okResult)
+            {
+                var commits = okResult.Value as List<ListOfCommits>;
+
+                if (commits != null)
+                {
+                    var commitMessages = commits.Select(x => x.commit.message).ToList();
+                    var summarizedCommits = new List<string>();
+
+                    foreach (var commitMessage in commitMessages)
+                    {
+                        var openAiController = new OpenAIController(_clientFactory, _configuration);
+                        var summarizeResult = await openAiController.SummarizeText(commitMessage);
+                        if (summarizeResult is OkObjectResult okSummarizeResult)
+                        {
+                            var summarizedMessage = okSummarizeResult.Value.ToString();
+                            summarizedCommits.Add(summarizedMessage);
+                        }
+                    }
+
+                    return Ok(summarizedCommits);
+                }
+                else
+                {
+                    // Handle the case when the commits list is null
+                    return NotFound("No commits found.");
+                }
+            }
+            else
+            {
+                // Handle the case when the GitHub API request was not successful
+                var statusCode = (commitsResult as StatusCodeResult)?.StatusCode ?? 500;
+                return StatusCode(statusCode);
             }
         }
     }

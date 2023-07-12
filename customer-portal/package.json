@@ -27,6 +27,7 @@
         "autoprefixer": "10.4.14",
         "axios": "^1.4.0",
         "classnames": "^2.3.2",
+        "cloudinary": "^1.37.3",
         "cors": "^2.8.5",
         "eslint": "8.42.0",
         "eslint-config-next": "13.4.4",
