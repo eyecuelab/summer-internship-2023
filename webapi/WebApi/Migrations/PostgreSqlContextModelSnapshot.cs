@@ -223,6 +223,80 @@ namespace WebApi.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a501ad12-34ce-485f-bb9e-f180607c54d9",
+                            Email = "user1@example.com",
+                            EmailConfirmed = true,
+                            EntityId = "1",
+                            IsAdmin = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER1@EXAMPLE.COM",
+                            NormalizedUserName = "USER1",
+                            PasswordHash = "AQAAAAEAACcQAAAAELme9/H+iMgNJwEyQzd1AcpxYjpJceyDNhwnGRm7ziA8J0vBtmKJgF8cXFXhrtKieA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user1"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a2ebeab4-76ac-41e9-af32-91e8e92a65f8",
+                            Email = "user2@example.com",
+                            EmailConfirmed = true,
+                            EntityId = "1",
+                            IsAdmin = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER2@EXAMPLE.COM",
+                            NormalizedUserName = "USER2",
+                            PasswordHash = "AQAAAAEAACcQAAAAENQg8PmOYFUwTJNJkdAnKI10h7WdZJoR9jZlEBXdtl8RkSnt0IPFDUSnVVTMSRPWsg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user2"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "1779b021-d0a1-4a42-8e7b-677a891adacc",
+                            Email = "user3@example.com",
+                            EmailConfirmed = true,
+                            EntityId = "0",
+                            IsAdmin = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "USER3@EXAMPLE.COM",
+                            NormalizedUserName = "USER3",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPClBJvUNl5Xf8GkwWPcXv/B0oyeTrfiAIoAXeibs7T9hl4zWi1MbDv5mzjsCPh4ng==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "user3"
+                        },
+                        new
+                        {
+                            Id = "4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "df32f0f1-f38c-4e4e-a554-e528044ae145",
+                            Email = "gronstal.larson@gmail.com",
+                            EmailConfirmed = true,
+                            EntityId = "0",
+                            IsAdmin = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "GRONSTAL.LARSON@GMAIL.COM",
+                            NormalizedUserName = "GRONSTAL.LARSON@GMAIL.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO9ts/r2ckYq1toAePB3Y0+PRRDEh9UUzk5Wo8zdQChUSBJrCBAwExtjSNw6MwGr4A==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TwoFactorEnabled = false,
+                            UserName = "Gronstal.Larson@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("WebApi.Models.Author", b =>
