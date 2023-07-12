@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
 import axios from "axios";
+import ResuableButton from "./ReusableButton";
 
 interface AddUserModuleProps {
     currentEntity: Entity | null;
@@ -22,7 +23,7 @@ export default function AddEntityModule({
   const handler = () => setVisible(true);
   const closeHandler = () => setVisible(false);
 
-  const handleAddCompany = async () => {
+  const handleAddUser = async () => {
 
     try {
       const url = 'https://localhost:7243/api/emailentity';
@@ -84,11 +85,11 @@ export default function AddEntityModule({
             <Button flat color="error" onPress={closeHandler}>
               Close
             </Button>
-            <Button 
+            <ResuableButton
               style={{ color: "black" }}
-              onPress={handleAddCompany}>
-              Add
-            </Button>
+              onClick={handleAddUser}>
+              Add User
+            </ResuableButton>
           </Row>
         </Modal.Footer>
       </Modal>
