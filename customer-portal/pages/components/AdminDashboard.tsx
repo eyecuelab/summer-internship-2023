@@ -7,6 +7,7 @@ import { GetServerSidePropsContext } from "next";
 import axios from "axios";
 import AddEntityModule from "./AddEntityModule";
 import AddProjectModal from "./AddProjectsModal";
+import AddUserModule from "./AddUserModule";
 
 type User = {
     email: string;
@@ -16,6 +17,12 @@ type User = {
 
 interface Entity {
     companyName: string;
+    entityId: string;
+}
+
+interface Project {
+    projectName: string;
+    projectId: string;
     entityId: string;
 }
 
@@ -29,7 +36,6 @@ async function register(session: Session | null) {
             "https://localhost:7243/api/Users/register",
             session?.user
         );
-        console.log("session user:", session?.user);
     } catch (error) {
         console.error("Failed to transmit user data:", error);
     }
@@ -41,6 +47,8 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState<User[]>([]);
     const [currentEntity, setCurrentEntity] = useState<Entity | null>(null);
     const [intialEntity, setIntialEntity] = useState<Entity | null>(null);
+    const [intialProject, setIntialProject] = useState<Array<Project>>([]);
+    const [currentProject, setCurrentProject] = useState<Array<Project>>([]);
     const currentUser = session?.user?.email;
 
     const handleSelectedEntity = (selectedEntity: Entity | null) => {
@@ -98,6 +106,7 @@ const AdminDashboard = () => {
         }
     }, [status, session]);
 
+    //FETCHING ENTITES FOR INTIAL STATE AND SETTING IT TO [0]
     useEffect(() => {
         const fetchAllEntities = async () => {
             try {
@@ -108,10 +117,11 @@ const AdminDashboard = () => {
                 const data = await response.json();
 
                 if (data.length > 0) {
-                    setIntialEntity(data);
+                    const [firstEntity] = data;
+                    setIntialEntity(firstEntity);
+                    setCurrentEntity(firstEntity);
+                    console.log("default entity ", firstEntity);
                 }
-
-                console.log("default entity ", data);
             } catch (error) {
                 console.error("Failed to transmit user data:", error);
             }
@@ -119,6 +129,36 @@ const AdminDashboard = () => {
 
         fetchAllEntities();
     }, []);
+
+    // FETCHING ALL PROJECTS ASSOCIATED WITH INTIAL ENTITY
+    useEffect(() => {
+        const fetchAllProjectsforEntity = async () => {
+            try {
+                const response = await fetch(
+                    `https://localhost:7243/api/projects/projectsbyentity/${currentEntity?.entityId}`
+                );
+
+                const projectData = await response.json();
+
+                if (projectData.length > 0) {
+                    setIntialProject(projectData);
+                    setCurrentProject(projectData);
+                    console.log(
+                        "default projects for intial entity",
+                        projectData
+                    );
+                } else {
+                    return console.log("no projects for this entity");
+                }
+
+                console.log("default projects for intial entity", projectData);
+            } catch (error) {
+                console.error("Failed to transmit user data:", error);
+            }
+        };
+
+        fetchAllProjectsforEntity();
+    }, [currentEntity]);
 
     return status === "authenticated" ? (
         <AdminLayout
@@ -131,13 +171,15 @@ const AdminDashboard = () => {
                 currentEntity={currentEntity}
                 onSelectedEntity={handleSelectedEntity}
             />
+            <AddUserModule
+                currentEntity={currentEntity}
+                onSelectedEntity={handleSelectedEntity}
+            />
             <p>Current Clients:</p>
             <div>
-                {users.map((user, index) => (
+                {currentProject.map((projectData, index) => (
                     <div key={index}>
-                        <p>Email: {user.email}</p>
-                        <p>Is Admin: {user.isAdmin ? "Yes" : "No"}</p>
-                        <p>Entity ID: {user.entityId}</p>
+                        <p>Project Name: {projectData.projectName}</p>
                     </div>
                 ))}
             </div>
