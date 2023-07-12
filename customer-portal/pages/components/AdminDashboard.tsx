@@ -8,6 +8,7 @@ import axios from "axios";
 import AddEntityModule from "./AddEntityModule";
 import AddProjectModal from "./AddProjectsModal";
 import AddUserModule from "./AddUserModule";
+import ResuableButton from "./ReusableButton";
 
 type User = {
     email: string;
@@ -175,14 +176,22 @@ const AdminDashboard = () => {
                 currentEntity={currentEntity}
                 onSelectedEntity={handleSelectedEntity}
             />
-            <p>Current Clients:</p>
+            <p>Current Projects:</p>
             <div>
-                {currentProject.map((projectData, index) => (
-                    <div key={index}>
+                {currentProject.map((projectData) => (
+                    <><div key={projectData.projectId}>
+
                         <p>Project Name: {projectData.projectName}</p>
                     </div>
+
+                            <ResuableButton key={`btn-${projectData.projectId}`} onClick={() => console.log(projectData)}>
+                                Add User
+                            </ResuableButton>
+                        </>
                 ))}
+              
             </div>
+
         </AdminLayout>
     ) : (
         <div>loading...</div>
