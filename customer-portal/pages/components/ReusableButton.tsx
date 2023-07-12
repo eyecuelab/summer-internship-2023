@@ -2,17 +2,17 @@ import { Button } from "@nextui-org/react";
 import type { ButtonProps } from "@nextui-org/react";
 
 type ReusableButtonPropsT = ButtonProps & {
-    onClick: () => void;
+    onPress: () => void;
     children: React.ReactNode;
 };
 
 export default function ResuableButton({
-    onClick,
+    onPress,
     children,
     ...rest
 }: ReusableButtonPropsT) {
     return (
-        <Button { ...rest } style={{ color: "black" }} onClick={onClick}>
+        <Button {...rest} style={{ color: "black" }} onPress={onPress}>
             {children}
         </Button>
     );
