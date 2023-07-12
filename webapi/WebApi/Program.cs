@@ -11,11 +11,10 @@ using WebApi.DataAccess;
 using System.Text;
 using System.Security.Claims;
 using WebApi.Models;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
-ConfigurationManager configuration = builder.Configuration;
+var configuration = builder.Configuration;
 
 DotNetEnv.Env.Load();
 
@@ -23,6 +22,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IConfiguration>(configuration);
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<PostgreSqlContext>()
@@ -37,7 +37,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
-build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
 builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -65,6 +65,7 @@ app.UseCors(policy =>
     policy.WithOrigins("http://localhost:3000") // replace with your front-end application url
     .AllowAnyHeader()
     .AllowAnyMethod());
+
 app.UseCors("corspolicy");
 
 app.UseAuthentication();
