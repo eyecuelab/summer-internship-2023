@@ -11,7 +11,7 @@ namespace WebApi.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ProjectId { get; set; }
+        public string ProjectId { get; set; }
         [Required]
         public string ProjectName { get; set; }
         [Required]

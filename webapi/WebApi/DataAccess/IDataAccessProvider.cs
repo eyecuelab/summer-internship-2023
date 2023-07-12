@@ -10,8 +10,8 @@ namespace WebApi.DataAccess
         void AddCommit(Commit commit);
         void AddProject(Project project);
         void UpdateProject(Project project);
-        void DeleteProject(int projectId);
-        Project GetProjectSingleRecord(int projectId);
+        void DeleteProject(string projectId);
+        Project GetProjectSingleRecord(string projectId);
         List<Project> GetProjectInfo();
 
         void AddEntity(Entity entity);

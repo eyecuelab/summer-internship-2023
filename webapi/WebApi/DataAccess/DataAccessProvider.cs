@@ -46,14 +46,14 @@ namespace WebApi.DataAccess
             _context.SaveChanges();
         }
 
-        public void DeleteProject(int projectId)
+        public void DeleteProject(string projectId)
         {
             var project = _context.Projects.FirstOrDefault(p => p.ProjectId == projectId);
             _context.Projects.Remove(project);
             _context.SaveChanges();
         }
 
-        public Project GetProjectSingleRecord(int projectId)
+        public Project GetProjectSingleRecord(string projectId)
         {
             return _context.Projects.FirstOrDefault(p => p.ProjectId == projectId);
         }
