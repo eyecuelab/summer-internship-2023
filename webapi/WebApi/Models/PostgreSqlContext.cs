@@ -38,7 +38,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password1!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 1.ToString(),
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
                             IsAdmin = true
                         },
                         new AppUser
@@ -51,7 +51,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password2!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 1.ToString(),
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
                             IsAdmin = true
                         },
                         new AppUser
@@ -64,7 +64,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password3!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 0.ToString(),
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
                             IsAdmin = true
                         },
                         new AppUser
@@ -77,7 +77,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password4!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 0.ToString(),
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
                             IsAdmin = true
                         },
                         new AppUser
@@ -90,7 +90,7 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password5!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 0.ToString(),
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
                             IsAdmin = true
                         },
                         new AppUser
@@ -103,8 +103,8 @@ namespace WebApi.DataAccess
                             EmailConfirmed = true,
                             PasswordHash = hasher.HashPassword(null, "Password6!"),
                             SecurityStamp = string.Empty,
-                            EntityId = 0.ToString(),
-                            IsAdmin = true
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
+                            IsAdmin = false
                         }
                     );
                     builder
@@ -112,29 +112,97 @@ namespace WebApi.DataAccess
                     .HasData(
                         new Entity
                         {
-                            EntityId = "1",
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
                             CompanyName = "EyeCue Lab"
                         },
                         new Entity
                         {
-                            EntityId = "0",
-                            CompanyName = "Devkoda"
+                            EntityId = "98a29f8d-3129-4af1-831a-ff52c16a5c6d",
+                            CompanyName = "CocaCola"
                         }
                     );
+                    builder
+                        .Entity<EmailEntity>()
+                        .HasData(
+                            new EmailEntity
+                            {
+                                Email = "szook7@gmail.com",
+                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                            },
+                            new EmailEntity
+                            {
+                                Email = "lee.justin001126@gmail.com",
+                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                            },
+                            new EmailEntity
+                            {
+                                Email = "erintimlin@gmail.com",
+                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                            },
+                            new EmailEntity
+                            {
+                                Email = "Gronstal.Larson@gmail.com",
+                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                            },
+                            new EmailEntity
+                            {
+                                Email = "b.bakshev@gmail.com",
+                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                            },
+                            new EmailEntity
+                            {
+                                Email = "eliot.lauren@gmail.com",
+                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                            }
+                        );
                     builder
                     .Entity<Project>()
                     .HasData(
                         new Project
                         {
-                            ProjectId= 1,
-                            EntityId= "1",
+                            ProjectId= "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                            EntityId= "ca2e28bc-1bd8-4e72-898c-edc028676877",
                             ProjectName= "EyeCue Lab Project"
                         },
                         new Project
                         {
-                            ProjectId= 2,
-                            EntityId= "0",
-                            ProjectName= "Devkoda Project"
+                            ProjectId= "0ed8fcad-f106-4717-b313-751a41e1077a",
+                            EntityId= "98a29f8d-3129-4af1-831a-ff52c16a5c6d",
+                            ProjectName= "CocaCola"
+                        }
+                    );
+                    builder
+                    .Entity<ProjectAppUser>()
+                    .HasData(            
+                        new ProjectAppUser
+                        {
+                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                            AppUserId = "1"
+                        },
+                        new ProjectAppUser
+                        {
+                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                            AppUserId = "2"
+                        },
+                        new ProjectAppUser
+                        {
+                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                            AppUserId = "3"
+                        },
+                        new ProjectAppUser
+                        {
+                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                            AppUserId = "4"
+                        },
+                        new ProjectAppUser
+                        {
+                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                            AppUserId = "5"
+                        },
+                        new ProjectAppUser
+                        {
+                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                            AppUserId = "6"
                         }
                     );
             }
