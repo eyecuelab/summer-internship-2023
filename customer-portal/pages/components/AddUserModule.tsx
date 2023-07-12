@@ -39,7 +39,7 @@ export default function AddUserModule({
     const handler = () => setShowAddUserModule(true);
     const closeHandler = () => setShowAddUserModule(false);
 
-    const handleAddUser = async () => {
+    const handleAddEmailEntity = async () => {
         try {
             const url = "https://localhost:7243/api/emailentity";
             const payload = {
@@ -98,7 +98,7 @@ export default function AddUserModule({
                         </Button>
                         <ResuableButton
                             style={{ color: "black" }}
-                            onPress={handleAddUser}
+                            onPress={handleAddEmailEntity}
                         >
                             Add User
                         </ResuableButton>
