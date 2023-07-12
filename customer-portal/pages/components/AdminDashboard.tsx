@@ -50,6 +50,8 @@ const AdminDashboard = () => {
     const [intialEntity, setIntialEntity] = useState<Entity | null>(null);
     const [intialProject, setIntialProject] = useState<Array<Project>>([]);
     const [currentProject, setCurrentProject] = useState<Array<Project>>([]);
+    const [showAddUserModule, setShowAddUserModule] = useState(false);
+    const [email, setEmail] = useState("");
     const currentUser = session?.user?.email;
 
     const handleSelectedEntity = (selectedEntity: Entity | null) => {
@@ -172,26 +174,31 @@ const AdminDashboard = () => {
                 currentEntity={currentEntity}
                 onSelectedEntity={handleSelectedEntity}
             />
-            <AddUserModule
-                currentEntity={currentEntity}
-                onSelectedEntity={handleSelectedEntity}
-            />
             <p>Current Projects:</p>
             <div>
                 {currentProject.map((projectData) => (
-                    <><div key={projectData.projectId}>
+                    <>
+                        <div key={projectData.projectId}>
+                            <p>Project Name: {projectData.projectName}</p>
+                        </div>
 
-                        <p>Project Name: {projectData.projectName}</p>
-                    </div>
-
-                            <ResuableButton key={`btn-${projectData.projectId}`} onClick={() => console.log(projectData)}>
-                                Add User
-                            </ResuableButton>
-                        </>
+                        <ResuableButton
+                            onPress={() => setShowAddUserModule(true)}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        >
+                            Add User to {projectData.projectName}
+                        </ResuableButton>
+                    </>
                 ))}
-              
             </div>
-
+            {showAddUserModule && (
+                <AddUserModule
+                    currentEntity={currentEntity}
+                    onSelectedEntity={handleSelectedEntity}
+                    showAddUserModule={showAddUserModule}
+                    setShowAddUserModule={setShowAddUserModule}
+                />
+            )}
         </AdminLayout>
     ) : (
         <div>loading...</div>
