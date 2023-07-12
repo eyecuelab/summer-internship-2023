@@ -108,5 +108,15 @@ namespace WebApi.DataAccess
         {
             throw new NotImplementedException();
         }
+
+        public void DeleteProject(int projectId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Project GetProjectSingleRecord(int projectId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
