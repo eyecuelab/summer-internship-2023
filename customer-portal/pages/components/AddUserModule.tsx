@@ -6,8 +6,16 @@ import ResuableButton from "./ReusableButton";
 interface AddUserModuleProps {
     currentEntity: Entity | null;
     onSelectedEntity: (selectedEntity: Entity | null) => void;
+    currentProject: Project | null;
+    setCurrentProject: (currentProject: Project | null) => void;
     showAddUserModule: boolean;
     setShowAddUserModule: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+interface Project {
+    projectName: string;
+    projectId: string;
+    entityId: string;
 }
 
 interface Entity {
@@ -18,10 +26,15 @@ interface Entity {
 export default function AddUserModule({
     currentEntity,
     onSelectedEntity,
+    currentProject,
+    setCurrentProject,
     showAddUserModule,
     setShowAddUserModule,
 }: AddUserModuleProps) {
     const [email, setEmail] = useState("");
+
+    console.log("current project in usermodule ",currentProject)
+    console.log("current entity in usermodule ", currentEntity)
 
     const handler = () => setShowAddUserModule(true);
     const closeHandler = () => setShowAddUserModule(false);

@@ -49,7 +49,7 @@ const AdminDashboard = () => {
     const [currentEntity, setCurrentEntity] = useState<Entity | null>(null);
     const [intialEntity, setIntialEntity] = useState<Entity | null>(null);
     const [intialProject, setIntialProject] = useState<Array<Project>>([]);
-    const [currentProject, setCurrentProject] = useState<Array<Project>>([]);
+    const [currentProject, setCurrentProject] = useState<Project | null>(null);
     const [showAddUserModule, setShowAddUserModule] = useState(false);
     const [email, setEmail] = useState("");
     const currentUser = session?.user?.email;
@@ -145,7 +145,6 @@ const AdminDashboard = () => {
 
                 if (projectData.length > 0) {
                     setIntialProject(projectData);
-                    setCurrentProject(projectData);
                     console.log(
                         "default projects for intial entity",
                         projectData
@@ -176,14 +175,17 @@ const AdminDashboard = () => {
             />
             <p>Current Projects:</p>
             <div>
-                {currentProject.map((projectData) => (
+                {intialProject.map((projectData) => (
                     <>
                         <div key={projectData.projectId}>
                             <p>Project Name: {projectData.projectName}</p>
                         </div>
 
                         <ResuableButton
-                            onPress={() => setShowAddUserModule(true)}
+                            onPress={() => {
+                                setCurrentProject(projectData); // Set the current project
+                                setShowAddUserModule(true); // Show the Add User module
+                            }}
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         >
                             Add User to {projectData.projectName}
@@ -195,6 +197,8 @@ const AdminDashboard = () => {
                 <AddUserModule
                     currentEntity={currentEntity}
                     onSelectedEntity={handleSelectedEntity}
+                    currentProject={currentProject}
+                    setCurrentProject={setCurrentProject}
                     showAddUserModule={showAddUserModule}
                     setShowAddUserModule={setShowAddUserModule}
                 />
