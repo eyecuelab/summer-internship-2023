@@ -34,7 +34,7 @@ namespace WebApi.Controllers
             }
             else
             {
-                return BadRequest("No projectAppUser data provided.");
+                return BadRequest("No email entity data provided.");
             }
         }
 
