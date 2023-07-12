@@ -11,6 +11,7 @@ interface Commit {
   name: string;
   message: string;
   date: string;
+  releaseNotes: string;
 }
 
 interface CommitResponse {
@@ -89,7 +90,9 @@ const Dashboard = () => {
             name: commit.commit.author.name,
             message: commit.commit.message,
             date: commit.commit.author.date,
+            releaseNotes: "",
           }));
+          
           setApiData(commits);
         })
         .catch((error) => console.error("Error during fetch:", error));
@@ -163,15 +166,16 @@ const Dashboard = () => {
     ? apiData.filter((commit) => selectedDate === formatDate(commit.date))
     : apiData;
 
-  const renderCommits = (commits: Commit[]) => {
-    return commits.map((commit, index) => (
-      <div key={index}>
-        <p style={nameStyle}>{commit.name}</p>
-        <p style={messageStyle}>{commit.message}</p>
-        <br />
-      </div>
-    ));
-  };
+    const renderCommits = (commits: Commit[]) => {
+      return commits.map((commit, index) => (
+        <div key={index}>
+          <p style={nameStyle}>{commit.name}</p>
+          <p style={messageStyle}>{commit.message}</p>
+          <p style={messageStyle}>Release Notes: {commit.releaseNotes}</p> {/* Display summarized commit message */}
+          <br />
+        </div>
+      ));
+    };
 
   return isAdmin === "true" ? (
     <AdminDashboard></AdminDashboard>
