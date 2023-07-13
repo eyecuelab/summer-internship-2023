@@ -51,7 +51,6 @@ const AdminDashboard = () => {
     const [intialProject, setIntialProject] = useState<Array<Project>>([]);
     const [currentProject, setCurrentProject] = useState<Project | null>(null);
     const [showAddUserModule, setShowAddUserModule] = useState(false);
-    const [email, setEmail] = useState("");
     const currentUser = session?.user?.email;
 
     const handleSelectedEntity = (selectedEntity: Entity | null) => {
@@ -180,6 +179,8 @@ const AdminDashboard = () => {
                         <div key={projectData.projectId}>
                             <p>Project Name: {projectData.projectName}</p>
                         </div>
+
+                        
 
                         <ResuableButton
                             onPress={() => {

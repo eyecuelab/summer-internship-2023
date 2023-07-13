@@ -184,37 +184,37 @@ namespace WebApi.DataAccess
                         {
                             ProjectAppUserId="1",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            AppUserId = "1"
+                            Email = "szook7@gmail.com"
                         },
                         new ProjectAppUser
                         {
                             ProjectAppUserId="2",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            AppUserId = "2"
+                            Email = "lee.justin001126@gmail.com"
                         },
                         new ProjectAppUser
                         {
                             ProjectAppUserId="3",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            AppUserId = "3"
+                            Email = "erintimlin@gmail.com"
                         },
                         new ProjectAppUser
                         {
                             ProjectAppUserId="4",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            AppUserId = "4"
+                            Email = "Gronstal.Larson@gmail.com"
                         },
                         new ProjectAppUser
                         {
                             ProjectAppUserId="5",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            AppUserId = "5"
+                            Email = "b.bakshev@gmail.com"
                         },
                         new ProjectAppUser
                         {
                             ProjectAppUserId="6",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            AppUserId = "6"
+                            Email = "eliot.lauren@gmail.com"
                         }
                     );
             }
