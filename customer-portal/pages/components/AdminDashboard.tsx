@@ -172,6 +172,8 @@ const AdminDashboard = () => {
         fetchAllProjectsforEntity();
     }, [currentEntity]);
 
+
+//FETCHING USER INFO FROM PROJECTAPPUSER ENDPOINT TO DISPLAY UNDER EACH PROJECT
     useEffect(() => {
         const fetchUsersForProjects = async () => {
             try {
@@ -216,29 +218,6 @@ const AdminDashboard = () => {
 
         fetchUsersForProjects();
     }, [intialProject]);
-
-    // useEffect(() => {
-    //     const fetchAllUsersForProject = async () => {
-    //         try {
-    //             const response = await fetch(
-    //                 `https://localhost:7243/api/projectappuser/getusers/${currentProject?.projectId}`
-    //             );
-
-    //             const projectAppUserData = await response.json();
-
-    //             if (projectAppUserData.length > 0) {
-    //                 setUsersForProject(projectAppUserData);
-    //                 console.log("default projectAppUsers", projectAppUserData);
-    //             } else {
-    //                 return console.log("no projectAppUsers for this Project");
-    //             }
-    //         } catch (error) {
-    //             console.error("Failed to transmit user data:", error);
-    //         }
-    //     };
-
-    //     fetchAllUsersForProject();
-    // }, [currentProject]);
 
     return status === "authenticated" ? (
         <AdminLayout
