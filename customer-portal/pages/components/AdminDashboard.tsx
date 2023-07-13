@@ -27,6 +27,12 @@ interface Project {
     entityId: string;
 }
 
+interface ProjectAppUser {
+    projectAppUserId: string;
+    projectId: string;
+    email: string;
+}
+
 type Props = {
     currentEntity(entity: Entity): void;
 };
@@ -51,7 +57,12 @@ const AdminDashboard = () => {
     const [intialProject, setIntialProject] = useState<Array<Project>>([]);
     const [currentProject, setCurrentProject] = useState<Project | null>(null);
     const [showAddUserModule, setShowAddUserModule] = useState(false);
+    const [usersForProject, setUsersForProject] = useState<
+        Array<ProjectAppUser>
+    >([]);
     const currentUser = session?.user?.email;
+
+    console.log("Intial Projects on page load ", intialProject);
 
     const handleSelectedEntity = (selectedEntity: Entity | null) => {
         setCurrentEntity(selectedEntity);
@@ -161,6 +172,53 @@ const AdminDashboard = () => {
         fetchAllProjectsforEntity();
     }, [currentEntity]);
 
+
+//FETCHING USER INFO FROM PROJECTAPPUSER ENDPOINT TO DISPLAY UNDER EACH PROJECT
+    useEffect(() => {
+        const fetchUsersForProjects = async () => {
+            try {
+                const promises = intialProject.map(async (projectData) => {
+                    const response = await fetch(
+                        `https://localhost:7243/api/projectappuser/getusers/${projectData.projectId}`
+                    );
+                    const projectAppUserData = await response.json();
+
+                    return {
+                        projectId: projectData.projectId,
+                        projectAppUsers: projectAppUserData,
+                    };
+                });
+
+                const projectUserResponses = await Promise.all(promises);
+
+                const updatedUsersForProjects = projectUserResponses.reduce(
+                    (acc: ProjectAppUser[], projectResponse: { projectId: string; projectAppUsers: any }) => {
+                        const { projectId, projectAppUsers } = projectResponse;
+                        if (projectAppUsers.length > 0) {
+                            return [
+                                ...acc,
+                                ...projectAppUsers.map((user: ProjectAppUser) => ({
+                                    ...user,
+                                    projectId
+                                }))
+                            ];
+                        } else {
+                            return acc;
+                        }
+                    },
+                    []
+                );
+
+                setUsersForProject(updatedUsersForProjects);
+                console.log("usersForProject data:", updatedUsersForProjects);
+            } catch (error) {
+                console.error("Failed to transmit user data:", error);
+            }
+        };
+
+        fetchUsersForProjects();
+    }, [intialProject]);
+
     return status === "authenticated" ? (
         <AdminLayout
             username={session?.user?.name}
@@ -178,9 +236,24 @@ const AdminDashboard = () => {
                     <>
                         <div key={projectData.projectId}>
                             <p>Project Name: {projectData.projectName}</p>
+                            <p>Current Users For Project:</p>
+                            <div>
+                                {usersForProject
+                                    .filter(
+                                        (user) =>
+                                            user.projectId ===
+                                            projectData.projectId
+                                    )
+                                    .map((user) => (
+                                        <p key={user.projectAppUserId}>
+                                            {user.email}
+                                        </p>
+                                    ))}
+                            </div>
                         </div>
+                        <br></br>
 
-                        
+                        <br></br>
 
                         <ResuableButton
                             onPress={() => {
@@ -191,6 +264,7 @@ const AdminDashboard = () => {
                         >
                             Add User to {projectData.projectName}
                         </ResuableButton>
+                        <br />
                     </>
                 ))}
             </div>
