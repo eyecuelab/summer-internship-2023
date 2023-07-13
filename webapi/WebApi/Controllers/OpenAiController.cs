@@ -1,5 +1,3 @@
-// Updated OpenAIController class
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -38,7 +36,7 @@ namespace WebApi.Controllers
             public string role {get; set;}
             public string content {get; set;}
         }
-        string inputText = "This is a test";
+        string inputText = "updated the openai code to only make a call once";
 
         [HttpPost("Summarize")]
         public async Task<IActionResult> SummarizeText([FromBody] List<string> commitMessages)
@@ -49,23 +47,14 @@ namespace WebApi.Controllers
             openAiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _openAiApiKey);
             openAiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var messages = new List<Message>{
-
-            new Message 
-            {
-                role = "user",
-                content = "Summarize this: " + inputText //string.Join(". ", commitMessages)
-            }
-
-            };
+            var messages = commitMessages.Select(commitMessage => new { role = "system", content = commitMessage }).ToList();
+            messages.Add(new { role = "user", content = "Summarize the following commit message: " + inputText });
 
             var openAiRequest = new
             {
                 model = "gpt-3.5-turbo",
-                messages = messages
+                messages
             };
-
-            Console.WriteLine(JsonConvert.SerializeObject(openAiRequest));
 
             var json = JsonConvert.SerializeObject(openAiRequest);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -75,13 +64,12 @@ namespace WebApi.Controllers
 
             if (openAiResponse.IsSuccessStatusCode)
             {
-                var response = JsonConvert.DeserializeObject<OpenAIResponse>(responseContent);
-                Console.WriteLine(JsonConvert.SerializeObject(response));
-                var summary = response.choices[0].text;
-                Console.WriteLine(summary);
-                var summaries = response?.choices?.Select(choice => choice.text).ToList();
+                // Deserialize the JSON response to extract the summary
 
-                return Ok(summaries);
+                var response = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                var summary = response.choices[0].message.content.ToString();
+
+                return Ok(summary);
             }
             else
             {
@@ -90,5 +78,6 @@ namespace WebApi.Controllers
                 return StatusCode(statusCode);
             }
         }
+
     }
 }
