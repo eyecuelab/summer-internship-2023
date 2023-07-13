@@ -27,6 +27,12 @@ interface Project {
     entityId: string;
 }
 
+interface ProjectAppUser {
+    projectAppUserId: string;
+    projectId: string;
+    email: string;
+}
+
 type Props = {
     currentEntity(entity: Entity): void;
 };
@@ -51,6 +57,9 @@ const AdminDashboard = () => {
     const [intialProject, setIntialProject] = useState<Array<Project>>([]);
     const [currentProject, setCurrentProject] = useState<Project | null>(null);
     const [showAddUserModule, setShowAddUserModule] = useState(false);
+    const [usersForProject, setUsersForProject] = useState<
+        Array<ProjectAppUser>
+    >([]);
     const currentUser = session?.user?.email;
 
     const handleSelectedEntity = (selectedEntity: Entity | null) => {
@@ -161,6 +170,29 @@ const AdminDashboard = () => {
         fetchAllProjectsforEntity();
     }, [currentEntity]);
 
+    useEffect(() => {
+        const fetchAllUsersForProject = async () => {
+            try {
+                const response = await fetch(
+                    `https://localhost:7243/api/projectappuser/getusers/${currentProject?.projectId}`
+                );
+
+                const projectAppUserData = await response.json();
+
+                if (projectAppUserData.length > 0) {
+                    setUsersForProject(projectAppUserData);
+                    console.log("default projectAppUsers", projectAppUserData);
+                } else {
+                    return console.log("no projectAppUsers for this Project");
+                }
+            } catch (error) {
+                console.error("Failed to transmit user data:", error);
+            }
+        };
+
+        fetchAllUsersForProject();
+    }, [currentProject]);
+
     return status === "authenticated" ? (
         <AdminLayout
             username={session?.user?.name}
@@ -178,9 +210,24 @@ const AdminDashboard = () => {
                     <>
                         <div key={projectData.projectId}>
                             <p>Project Name: {projectData.projectName}</p>
+                            <p>Current Users For Project:</p>
+                            <div>
+                                {usersForProject
+                                    .filter(
+                                        (user) =>
+                                            user.projectId ===
+                                            projectData.projectId
+                                    )
+                                    .map((user) => (
+                                        <p key={user.projectAppUserId}>
+                                            {user.email}
+                                        </p>
+                                    ))}
+                            </div>
                         </div>
+                        <br></br>
 
-                        
+                        <br></br>
 
                         <ResuableButton
                             onPress={() => {
@@ -191,6 +238,7 @@ const AdminDashboard = () => {
                         >
                             Add User to {projectData.projectName}
                         </ResuableButton>
+                        <br />
                     </>
                 ))}
             </div>
