@@ -41,27 +41,55 @@ export default function AddUserModule({
 
     const handleAddEmailEntity = async () => {
         try {
-            const url = "https://localhost:7243/api/emailentity";
+            const emailUrl = "https://localhost:7243/api/emailentity";
             const payload = {
                 Email: email,
                 EntityId: `${currentEntity?.entityId}`,
             };
-
-            const response = await axios.post(url, payload);
-
+    
+            const response = await axios.post(emailUrl, payload);
+            setEmail(email)
             // Handle the response data
-            console.log(response.data);
+            console.log(email);
+            console.log(response);
+    
+            // Make a second API call to retrieve users based on the email
+            const usersUrl = `https://localhost:7243/api/users?email=${email}`;
+            const usersResponse = await axios.get(usersUrl);
+    
+            // Handle the users response data
+            const id = usersResponse.data[0].id;
+            console.log("User ID:", id);
+    
         } catch (error) {
             // Handle error
             console.error(error);
         }
-
+    
         // Reset input field
         setEmail("");
-
+    
         // Close the modal
         closeHandler();
     };
+
+    // const handleAddProjectAppUser = async () => {
+    //     try {
+    //         const url = "https://localhost:7243/api/projectappuser";
+    //         const projectAppUserpayload = {
+    //             ProjectId: currentProject?.projectId,
+    //             AppUserId: appUserId,
+    //         };
+
+    //         const response = await axios.post(url, projectAppUserpayload);
+
+    //         // Handle the response data
+    //         console.log(response.data);
+    //     } catch (error) {
+    //         // Handle error
+    //         console.error(error);
+    //     }
+    // };
 
     return (
         <div>
