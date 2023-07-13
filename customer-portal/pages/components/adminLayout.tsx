@@ -29,7 +29,7 @@ const AdminLayout = ({
       <nav className="fixed top-0 left-0 w-full h-10 flex justify-between items-center bg-black text-sm px-4 z-50">
         <h1></h1>
         <div className="text-slate-200">Welcome {username}!</div>
-        <button className="text-slate-200" onClick={() => signOut()}>
+        <button className="ml-auto text-slate-200" onClick={() => signOut()}>
           Sign out
         </button>
       </nav>
