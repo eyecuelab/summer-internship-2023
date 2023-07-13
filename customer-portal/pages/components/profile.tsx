@@ -8,6 +8,8 @@ import {
 } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
+import { useContext } from "react";
+import SelectedUserContext from "../context/selectedUserContext";
 
 interface Commit {
   name: string;
@@ -37,7 +39,10 @@ const Profile = () => {
   const [isAdmin, setIsAdmin] = useState<string>("false");
   const [username, setUsername] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("details");
+  const selectedUserContext = useContext(SelectedUserContext);
+  const { selectedUser, setSelectedUser } = selectedUserContext;
 
+  //THE BELOW ENDPOINT RETURNS AN EMPTY OBJECT
   useEffect(() => {
     // Ensure id exists and is not an array
     if (id && typeof id === "string") {
@@ -178,7 +183,9 @@ const Profile = () => {
     <AdminDashboard></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
-      <p className="profile-header-font">{username}</p>
+      <p className="profile-header-font">
+        {selectedUser.email || "Default User Name"}
+      </p>   
       <br />
       <div style={messageStyle}>
         <button
@@ -201,7 +208,7 @@ const Profile = () => {
         </button>
         <br />
       </div>
-
+ 
       {renderActiveTab()}
 
       <p className="profile-header-font">Project Commit History</p>

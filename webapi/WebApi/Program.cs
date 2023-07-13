@@ -45,6 +45,7 @@ builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.Require
     .AddEntityFrameworkStores<PostgreSqlContext>()
     .AddDefaultTokenProviders();
 
+//check if .env exists if it does use that, otherwise fall back to what we have now
 var sqlConnectionString = configuration["PostgreSqlConnectionString"];
 builder.Services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));
 builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();

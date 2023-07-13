@@ -30,8 +30,14 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
         const response = await fetch("https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023"); 
         const data = await response.json();
         // Extracting unique authors
-        const uniqueAuthors = Array.from(new Set(data.map((commit: any) => commit.commit.author.name)));
-        setAuthors(uniqueAuthors);
+        const uniqueAuthors = Array.from(new Set(data.map((commit: any) => ({
+          name: commit.commit.author.name,
+          email: commit.commit.author.email,
+        }))
+      ),
+      (author) => author.name
+    );
+    setAuthors(uniqueAuthors);
       } catch (error) {
         console.error('Failed to fetch commits:', error);
       }

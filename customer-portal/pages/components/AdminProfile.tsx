@@ -8,6 +8,7 @@ import {
 } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
+import { Fab } from '@mui/material';
 
 interface Commit {
   name: string;
@@ -152,8 +153,17 @@ const AdminProfile = () => {
             <p className="profile-header-font">Strengths & Responsibilities</p>
             <br />
             <p style={messageStyle}>Frontend Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddFrontendUserTraits /> */}
+            </Fab>
             <p style={messageStyle}>Backend Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddBackendUserTraits /> */}
+            </Fab>
             <p style={messageStyle}>Fullstack Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddFullstackUserTraits /> */}
+            </Fab>
             <br />
           </>
         );
