@@ -56,11 +56,7 @@ export default function AddEntityModule() {
   };
 
   const companyNameStyle = {
-    fontFamily: "Rasa",
-    fontWeight: 600,
-    fontSize: "18px",
-    lineHeight: "40.8px",
-    color: "#404040",
+    ...companyStyle,
   };
 
 

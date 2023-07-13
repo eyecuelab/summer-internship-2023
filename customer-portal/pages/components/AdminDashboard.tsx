@@ -161,18 +161,22 @@ const AdminDashboard = () => {
 
         fetchAllProjectsforEntity();
     }, [currentEntity]);
-
+ 
     return status === "authenticated" ? (
         <AdminLayout
             username={session?.user?.name}
             currentEntity={currentEntity}
             onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
         >
+            <p>Admin Dashboard</p>
+            <br />
             <AddEntityModule />
+            <br />
             <AddProjectModal
                 currentEntity={currentEntity}
                 onSelectedEntity={handleSelectedEntity}
             />
+            <br />
             <p>Current Projects:</p>
             <div>
                 {intialProject.map((projectData) => (
@@ -180,7 +184,7 @@ const AdminDashboard = () => {
                         <div key={projectData.projectId}>
                             <p>Project Name: {projectData.projectName}</p>
                         </div>
-
+                        <br />
                         <ResuableButton
                             onPress={() => {
                                 setCurrentProject(projectData); // Set the current project

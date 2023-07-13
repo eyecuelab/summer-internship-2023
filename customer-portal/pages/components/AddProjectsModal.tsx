@@ -48,9 +48,36 @@ export default function AddProjectModal({
         handleClose();
     };
 
+    const projectStyle = {
+        fontFamily: "Rasa",
+        fontWeight: 600,
+        fontSize: "18px",
+        lineHeight: "40.8px",
+        color: "#404040",
+    };
+    
+    const projectStyleInter = {
+        ...projectStyle,
+        fontWeight: 400,
+        fontSize: "24px",
+    };
+    
+    const closeProjectStyle = {
+        ...projectStyle,
+        color: "#FF0000",
+    };
+    
+    const addProjectStyle = {
+        ...projectStyle
+    };
+    
+    const projectNameStyle = {
+        ...projectStyle,
+    };
+
     return (
         <div>
-            <Button shadow onPress={handleOpen} style={{ color: "black" }}>
+            <Button shadow onPress={handleOpen} style={projectStyle}>
                 Add Project
             </Button>
             <Modal
@@ -60,7 +87,9 @@ export default function AddProjectModal({
                 closeButton
             >
                 <Modal.Header>
-                    <Text id="modal-title" size={18}>
+                    <Text id="modal-title"
+                    style={projectStyleInter}
+                    size={18}>
                         Add Project
                     </Text>
                 </Modal.Header>
@@ -74,15 +103,16 @@ export default function AddProjectModal({
                         placeholder="Project Name"
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
+                        style={projectNameStyle}
                     />
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button flat color="error" onPress={handleClose}>
+                        <Button style={closeProjectStyle} onPress={handleClose}>
                             Close
                         </Button>
                         <Button
-                            style={{ color: "black" }}
+                            style={addProjectStyle}
                             onPress={handleAddProject}
                         >
                             Add
