@@ -62,6 +62,8 @@ const AdminDashboard = () => {
     >([]);
     const currentUser = session?.user?.email;
 
+    console.log("Intial Projects on page load ", intialProject);
+
     const handleSelectedEntity = (selectedEntity: Entity | null) => {
         setCurrentEntity(selectedEntity);
     };
@@ -171,27 +173,72 @@ const AdminDashboard = () => {
     }, [currentEntity]);
 
     useEffect(() => {
-        const fetchAllUsersForProject = async () => {
+        const fetchUsersForProjects = async () => {
             try {
-                const response = await fetch(
-                    `https://localhost:7243/api/projectappuser/getusers/${currentProject?.projectId}`
+                const promises = intialProject.map(async (projectData) => {
+                    const response = await fetch(
+                        `https://localhost:7243/api/projectappuser/getusers/${projectData.projectId}`
+                    );
+                    const projectAppUserData = await response.json();
+
+                    return {
+                        projectId: projectData.projectId,
+                        projectAppUsers: projectAppUserData,
+                    };
+                });
+
+                const projectUserResponses = await Promise.all(promises);
+
+                const updatedUsersForProjects = projectUserResponses.reduce(
+                    (acc: ProjectAppUser[], projectResponse: { projectId: string; projectAppUsers: any }) => {
+                        const { projectId, projectAppUsers } = projectResponse;
+                        if (projectAppUsers.length > 0) {
+                            return [
+                                ...acc,
+                                ...projectAppUsers.map((user: ProjectAppUser) => ({
+                                    ...user,
+                                    projectId
+                                }))
+                            ];
+                        } else {
+                            return acc;
+                        }
+                    },
+                    []
                 );
 
-                const projectAppUserData = await response.json();
-
-                if (projectAppUserData.length > 0) {
-                    setUsersForProject(projectAppUserData);
-                    console.log("default projectAppUsers", projectAppUserData);
-                } else {
-                    return console.log("no projectAppUsers for this Project");
-                }
+                setUsersForProject(updatedUsersForProjects);
+                console.log("usersForProject data:", updatedUsersForProjects);
             } catch (error) {
                 console.error("Failed to transmit user data:", error);
             }
         };
 
-        fetchAllUsersForProject();
+        fetchUsersForProjects();
     }, [intialProject]);
+
+    // useEffect(() => {
+    //     const fetchAllUsersForProject = async () => {
+    //         try {
+    //             const response = await fetch(
+    //                 `https://localhost:7243/api/projectappuser/getusers/${currentProject?.projectId}`
+    //             );
+
+    //             const projectAppUserData = await response.json();
+
+    //             if (projectAppUserData.length > 0) {
+    //                 setUsersForProject(projectAppUserData);
+    //                 console.log("default projectAppUsers", projectAppUserData);
+    //             } else {
+    //                 return console.log("no projectAppUsers for this Project");
+    //             }
+    //         } catch (error) {
+    //             console.error("Failed to transmit user data:", error);
+    //         }
+    //     };
+
+    //     fetchAllUsersForProject();
+    // }, [currentProject]);
 
     return status === "authenticated" ? (
         <AdminLayout
