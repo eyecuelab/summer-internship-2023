@@ -27,12 +27,12 @@ export default function AddProjectModal({
     const handleAddProject = async () => {
         try {
             const url = "https://localhost:7243/api/projects";
-            const payload = {
+            const emailEntityPayload = {
                 EntityId: currentEntity?.entityId,
                 ProjectName: projectName,
             };
 
-            const response = await axios.post(url, payload);
+            const response = await axios.post(url, emailEntityPayload);
 
             // Handle the response data
             console.log(response.data);
@@ -47,6 +47,8 @@ export default function AddProjectModal({
         // Close the modal
         handleClose();
     };
+
+    
 
     return (
         <div>
