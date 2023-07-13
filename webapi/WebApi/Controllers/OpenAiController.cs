@@ -1,13 +1,13 @@
+// Updated OpenAIController class
+
 using Microsoft.AspNetCore.Mvc;
-using WebApi.DataAccess;
-using WebApi.Models;
-using System;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text.Json;
-using Newtonsoft.Json;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration; // Remember to include this for IConfiguration
+using System.Net.Http.Headers;
 
 namespace WebApi.Controllers
 {
@@ -26,26 +26,54 @@ namespace WebApi.Controllers
             _openAiApiKey = _configuration.GetValue<string>("OpenAI:ApiKey");
         }
 
-        // POST: api/OpenAI/Summarize
+        public class OpenAIResponse
+        {
+            public List<Choice> choices { get; set; }
+        }
+
+        public class Choice
+        {
+            public string text { get; set; }
+        }
+
         [HttpPost("Summarize")]
-        public async Task<IActionResult> SummarizeText([FromBody] string text)
+        public async Task<IActionResult> SummarizeText([FromBody] List<string> commitMessages)
         {
             var openAiEndpoint = "https://api.openai.com/v1/engines/text-davinci-003/completions";
             var openAiClient = _clientFactory.CreateClient();
 
-            var prompt = $"Create a short summary of the commit message: {text}";
-            var openAiRequest = new HttpRequestMessage(HttpMethod.Post, openAiEndpoint)
+            openAiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _openAiApiKey);
+            openAiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var prompt = string.Join(". ", commitMessages);
+
+            var openAiRequest = new
             {
-                Headers =
-                {
-                    { "Authorization", $"Bearer {_openAiApiKey}" }, // Use the apiKey from config
-                },
-                Content = new StringContent(JsonConvert.SerializeObject(new { prompt = prompt, max_tokens = 60 }), System.Text.Encoding.UTF8, "application/json")
+                prompt = prompt,
+                max_tokens = 60,
+                temperature = 0.2
             };
 
-            var openAiResponse = await openAiClient.SendAsync(openAiRequest);
-            var json = await openAiResponse.Content.ReadAsStringAsync();
-            return Ok(json);
+            var json = JsonConvert.SerializeObject(openAiRequest);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var openAiResponse = await openAiClient.PostAsync(openAiEndpoint, content);
+            var responseContent = await openAiResponse.Content.ReadAsStringAsync();
+
+            if (openAiResponse.IsSuccessStatusCode)
+            {
+                var response = JsonConvert.DeserializeObject<OpenAIResponse>(responseContent);
+                var summaries = response?.choices?.Select(choice => choice.text).ToList();
+
+                return Ok(summaries);
+            }
+            else
+            {
+                // Handle the case when OpenAI API request was not successful
+                var statusCode = (int)openAiResponse.StatusCode;
+                return StatusCode(statusCode);
+            }
         }
+
     }
 }
