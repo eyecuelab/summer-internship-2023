@@ -191,7 +191,7 @@ const AdminDashboard = () => {
         };
 
         fetchAllUsersForProject();
-    }, [currentProject]);
+    }, [intialProject]);
 
     return status === "authenticated" ? (
         <AdminLayout
