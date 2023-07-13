@@ -74,6 +74,12 @@ const Dashboard = () => {
     }
   }, [currentUser]);
 
+	useEffect(() => {
+		if (isAdmin) {
+			localStorage.setItem('isAdmin', isAdmin);
+		}
+	}, [isAdmin]);
+
   useEffect(() => {
     if (isAdmin === "false") {
       fetch(

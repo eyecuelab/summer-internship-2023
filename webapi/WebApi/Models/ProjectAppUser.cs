@@ -9,6 +9,7 @@ namespace WebApi.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] 
         public string ProjectAppUserId { get; set; }   
         public string ProjectId { get; set; }
+        public string AppUserId { get; set; }
         public string Email { get; set; }
         public Project project { get; set; }
         public AppUser appUser { get; set; }

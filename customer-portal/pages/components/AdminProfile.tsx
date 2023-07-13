@@ -26,7 +26,7 @@ interface CommitResponse {
   };
 }
 
-const Profile = () => {
+const AdminProfile = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data: session, status } = useSession({ required: true });
@@ -42,11 +42,11 @@ const Profile = () => {
     // Ensure id exists and is not an array
     if (id && typeof id === "string") {
       // Fetch the data for this user
-      fetch(`https://localhost:7243/api/ProjectAppUser/getprojs/${id}`)
+      fetch(`https://localhost:7243/api/Users/${id}`)
         .then((response) => response.json())
         .then((data) => {
           setUser(data);
-          setUsername(data.id);
+          setUsername(data.userName);
         })
         .catch((err) => console.error(err));
     }
@@ -219,7 +219,7 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default AdminProfile;
 
 export async function getServerSideProps(
   context: GetSessionParams | undefined
