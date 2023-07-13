@@ -53,9 +53,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("getprojs/{appUserId}")]
-        public IActionResult GetProjectsFromUser(string appUserId)
+        public IActionResult GetProjectsFromUser(string email)
         {
-            var projectsforUser = _context.ProjectAppUsers.Where(proj => proj.AppUserId == appUserId).ToList();
+            var projectsforUser = _context.ProjectAppUsers.Where(proj => proj.Email == email).ToList();
             return Ok(projectsforUser);
         }
     }

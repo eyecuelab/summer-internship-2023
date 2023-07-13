@@ -42,24 +42,28 @@ export default function AddUserModule({
     const handleAddEmailEntity = async () => {
         try {
             const emailUrl = "https://localhost:7243/api/emailentity";
-            const payload = {
+            const emailEntitypayload = {
                 Email: email,
                 EntityId: `${currentEntity?.entityId}`,
             };
     
-            const response = await axios.post(emailUrl, payload);
+            const emailEntityresponse = await axios.post(emailUrl, emailEntitypayload);
             setEmail(email)
             // Handle the response data
             console.log(email);
-            console.log(response);
+            console.log(emailEntityresponse);
+
+
+            const projectAppUserUrl = "https://localhost:7243/api/projectappuser";
+            const ProjectAppUserpayload = {
+                ProjectId: `${currentProject?.projectId}`,
+                Email: email
+            };
+
+            const projectAppUserresponse = await axios.post(projectAppUserUrl, ProjectAppUserpayload);
     
-            // Make a second API call to retrieve users based on the email
-            const usersUrl = `https://localhost:7243/api/users?email=${email}`;
-            const usersResponse = await axios.get(usersUrl);
-    
-            // Handle the users response data
-            const id = usersResponse.data[0].id;
-            console.log("User ID:", id);
+            console.log(email);
+            console.log(projectAppUserresponse);
     
         } catch (error) {
             // Handle error
