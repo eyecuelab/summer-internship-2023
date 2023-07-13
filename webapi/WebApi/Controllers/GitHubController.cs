@@ -123,43 +123,33 @@ namespace WebApi.Controllers
             }
         }
         [HttpPost("summarized-commits/{owner}/{repo}")]
-        public async Task<IActionResult> GetSummarizedCommits(string owner, string repo)
+public async Task<IActionResult> GetSummarizedCommits(string owner, string repo)
+{
+    var commitsResult = await GetListOfCommits(owner, repo);
+    if (commitsResult is OkObjectResult okResult)
+    {
+        var commits = okResult.Value as List<ListOfCommits>;
+
+        if (commits != null)
         {
-            var commitsResult = await GetListOfCommits(owner, repo);
-            if (commitsResult is OkObjectResult okResult)
-            {
-                var commits = okResult.Value as List<ListOfCommits>;
+            var commitMessages = commits.Select(x => x.commit.message).ToList();
+            var openAiController = new OpenAIController(_clientFactory, _configuration);
+            var summarizedCommits = await openAiController.SummarizeText(commitMessages);
 
-                if (commits != null)
-                {
-                    var commitMessages = commits.Select(x => x.commit.message).ToList();
-                    var summarizedCommits = new List<string>();
-
-                    foreach (var commitMessage in commitMessages)
-                    {
-                        var openAiController = new OpenAIController(_clientFactory, _configuration);
-                        var summarizeResult = await openAiController.SummarizeText(commitMessage);
-                        if (summarizeResult is OkObjectResult okSummarizeResult)
-                        {
-                            var summarizedMessage = okSummarizeResult.Value.ToString();
-                            summarizedCommits.Add(summarizedMessage);
-                        }
-                    }
-
-                    return Ok(summarizedCommits);
-                }
-                else
-                {
-                    // Handle the case when the commits list is null
-                    return NotFound("No commits found.");
-                }
-            }
-            else
-            {
-                // Handle the case when the GitHub API request was not successful
-                var statusCode = (commitsResult as StatusCodeResult)?.StatusCode ?? 500;
-                return StatusCode(statusCode);
-            }
+            return Ok(summarizedCommits);
         }
+        else
+        {
+            // Handle the case when the commits list is null
+            return NotFound("No commits found.");
+        }
+    }
+    else
+    {
+        // Handle the case when the GitHub API request was not successful
+        var statusCode = (commitsResult as StatusCodeResult)?.StatusCode ?? 500;
+        return StatusCode(statusCode);
+    }
+}
     }
 }
