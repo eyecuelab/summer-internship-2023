@@ -42,11 +42,11 @@ const Profile = () => {
     // Ensure id exists and is not an array
     if (id && typeof id === "string") {
       // Fetch the data for this user
-      fetch(`https://localhost:7243/api/Users/${id}`)
+      fetch(`https://localhost:7243/api/ProjectAppUser/getprojs/${id}`)
         .then((response) => response.json())
         .then((data) => {
           setUser(data);
-          setUsername(data.userName);
+          setUsername(data.id);
         })
         .catch((err) => console.error(err));
     }

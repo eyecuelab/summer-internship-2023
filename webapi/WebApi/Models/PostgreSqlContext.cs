@@ -126,31 +126,37 @@ namespace WebApi.DataAccess
                         .HasData(
                             new EmailEntity
                             {
+                                EmailEntityId = "1",
                                 Email = "szook7@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             },
                             new EmailEntity
                             {
+                                EmailEntityId = "2",
                                 Email = "lee.justin001126@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             },
                             new EmailEntity
                             {
+                                EmailEntityId = "3",
                                 Email = "erintimlin@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             },
                             new EmailEntity
                             {
+                                EmailEntityId = "4",
                                 Email = "Gronstal.Larson@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             },
                             new EmailEntity
                             {
+                                EmailEntityId = "5",
                                 Email = "b.bakshev@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             },
                             new EmailEntity
                             {
+                                EmailEntityId = "6",
                                 Email = "eliot.lauren@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             }
@@ -176,31 +182,37 @@ namespace WebApi.DataAccess
                     .HasData(            
                         new ProjectAppUser
                         {
+                            ProjectAppUserId = "1",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
                             AppUserId = "1"
                         },
                         new ProjectAppUser
                         {
+                            ProjectAppUserId = "2",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
                             AppUserId = "2"
                         },
                         new ProjectAppUser
                         {
+                            ProjectAppUserId = "3",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
                             AppUserId = "3"
                         },
                         new ProjectAppUser
                         {
+                            ProjectAppUserId = "4",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
                             AppUserId = "4"
                         },
                         new ProjectAppUser
                         {
+                            ProjectAppUserId = "5",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
                             AppUserId = "5"
                         },
                         new ProjectAppUser
                         {
+                            ProjectAppUserId = "6",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
                             AppUserId = "6"
                         }
