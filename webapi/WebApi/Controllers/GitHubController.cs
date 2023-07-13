@@ -141,7 +141,8 @@ namespace WebApi.Controllers
                         var summarizeResult = await openAiController.SummarizeText(commitMessage);
                         if (summarizeResult is OkObjectResult okSummarizeResult)
                         {
-                            summarizedCommits.Add(okSummarizeResult.Value.ToString());
+                            var summarizedMessage = okSummarizeResult.Value.ToString();
+                            summarizedCommits.Add(summarizedMessage);
                         }
                     }
 

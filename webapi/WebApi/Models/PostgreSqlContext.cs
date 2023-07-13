@@ -127,11 +127,13 @@ namespace WebApi.DataAccess
                             new EmailEntity
                             {
                                 EmailEntityId = "1",
+                                EmailEntityId = "1",
                                 Email = "szook7@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             },
                             new EmailEntity
                             {
+                                EmailEntityId = "2",
                                 EmailEntityId = "2",
                                 Email = "lee.justin001126@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
@@ -139,11 +141,13 @@ namespace WebApi.DataAccess
                             new EmailEntity
                             {
                                 EmailEntityId = "3",
+                                EmailEntityId = "3",
                                 Email = "erintimlin@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             },
                             new EmailEntity
                             {
+                                EmailEntityId = "4",
                                 EmailEntityId = "4",
                                 Email = "Gronstal.Larson@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
@@ -151,11 +155,13 @@ namespace WebApi.DataAccess
                             new EmailEntity
                             {
                                 EmailEntityId = "5",
+                                EmailEntityId = "5",
                                 Email = "b.bakshev@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                             },
                             new EmailEntity
                             {
+                                EmailEntityId = "6",
                                 EmailEntityId = "6",
                                 Email = "eliot.lauren@gmail.com",
                                 EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
