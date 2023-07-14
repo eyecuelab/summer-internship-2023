@@ -1,16 +1,37 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Profile from "../components/profile";
 import AdminProfile from "../components/AdminProfile";
+import SelectedUserContext from "../context/selectedUserContext";
+
+interface Author {
+  name: string;
+  email: string;
+}
+
+interface NestedCommit {
+  author: Author;
+  message: string;
+  date: string;
+}
+
+interface Commit {
+  commit: NestedCommit;
+}
+
+interface CommitsByAuthor extends Record<string, Commit[]> {}
 
 const UserProfilePage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState<string>("false");
+  const [commitsByAuthor, setCommitsByAuthor] = useState<CommitsByAuthor>({});
+  const selectedUserContext = useContext(SelectedUserContext);
+  const { selectedUser, setSelectedUser } = selectedUserContext;
 
   useEffect(() => {
-    const storedIsAdmin = localStorage.getItem('isAdmin');
+    const storedIsAdmin = localStorage.getItem("isAdmin");
     if (storedIsAdmin) {
       setIsAdmin(storedIsAdmin);
     }
@@ -27,12 +48,53 @@ const UserProfilePage = () => {
     }
   }, [id]); // Re-run this effect if id changes
 
-  // While the user data is being fetched, show a loading message
+  useEffect(() => {
+    fetch(
+      "https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023"
+    )
+      .then((response) => response.json())
+      .then((json = []) => {
+        const commitsByAuthorTemp: CommitsByAuthor = {};
+
+        json.forEach((commit) => {
+          const authorName = commit.commit.author.name;
+          if (commitsByAuthorTemp[authorName]) {
+            commitsByAuthorTemp[authorName].push(commit);
+          } else {
+            commitsByAuthorTemp[authorName] = [commit];
+          }
+        });
+
+        setCommitsByAuthor(commitsByAuthorTemp);
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    // Ensure id exists and is not an array
+    if (id && typeof id === "string") {
+      // Assuming the first commit of the selected user belongs to them
+      const userCommits = commitsByAuthor[id];
+      if (userCommits && userCommits.length > 0) {
+        const firstCommit = userCommits[0];
+        const userFromCommit = {
+          name: firstCommit.commit.author.name,
+          email: firstCommit.commit.author.email,
+        };
+        setSelectedUser(userFromCommit);
+      }
+    }
+  }, [id, commitsByAuthor, setSelectedUser]);
+
   if (!user) {
     return <div>Loading...</div>;
   }
 
-  return isAdmin === "true" ? <AdminProfile /> : <Profile />;
+  return isAdmin === "true" ? (
+    <AdminProfile selectedUser={selectedUser}/>
+  ) : (
+    <Profile selectedUser={selectedUser} />
+  );
 };
 
 export default UserProfilePage;

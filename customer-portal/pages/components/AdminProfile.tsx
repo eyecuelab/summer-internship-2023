@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import {
   useSession,
@@ -8,6 +8,8 @@ import {
 } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
+import SelectedUserContext from "../context/selectedUserContext";
+import { Fab } from '@mui/material';
 
 interface Commit {
   name: string;
@@ -25,8 +27,14 @@ interface CommitResponse {
     message: string;
   };
 }
+interface ProfileProps {
+  selectedUser: {
+    name: string;
+    email: string;
+  };
+}
 
-const AdminProfile = () => {
+const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const router = useRouter();
   const { id } = router.query;
   const { data: session, status } = useSession({ required: true });
@@ -37,6 +45,8 @@ const AdminProfile = () => {
   const [isAdmin, setIsAdmin] = useState<string>("false");
   const [username, setUsername] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("details");
+  const selectedUserContext = useContext(SelectedUserContext);
+  const { selectedUser, setSelectedUser } = selectedUserContext;
 
   useEffect(() => {
     // Ensure id exists and is not an array
@@ -152,8 +162,17 @@ const AdminProfile = () => {
             <p className="profile-header-font">Strengths & Responsibilities</p>
             <br />
             <p style={messageStyle}>Frontend Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddFrontendUserTraits /> */}
+            </Fab>
             <p style={messageStyle}>Backend Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddBackendUserTraits /> */}
+            </Fab>
             <p style={messageStyle}>Fullstack Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddFullstackUserTraits /> */}
+            </Fab>
             <br />
           </>
         );

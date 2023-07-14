@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import {
   useSession,
@@ -8,6 +8,7 @@ import {
 } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
+import SelectedUserContext from "../context/selectedUserContext";
 
 interface Commit {
   name: string;
@@ -25,8 +26,14 @@ interface CommitResponse {
     message: string;
   };
 }
+interface ProfileProps {
+  selectedUser: {
+    name: string;
+    email: string;
+  };
+}
 
-const Profile = () => {
+const Profile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const router = useRouter();
   const { id } = router.query;
   const { data: session, status } = useSession({ required: true });
@@ -37,6 +44,8 @@ const Profile = () => {
   const [isAdmin, setIsAdmin] = useState<string>("false");
   const [username, setUsername] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("details");
+  const selectedUserContext = useContext(SelectedUserContext);
+  const { selectedUser, setSelectedUser } = selectedUserContext;
 
   useEffect(() => {
     // Ensure id exists and is not an array
@@ -91,10 +100,15 @@ const Profile = () => {
             date: commit.commit.author.date,
           }));
           setApiData(commits);
+          // setSelectedUser({ name: commits[0].name, email: commits[0].email });
         })
         .catch((error) => console.error("Error during fetch:", error));
     }
   }, [isAdmin]);
+
+  useEffect(() => {
+    console.log("selectedUser:", selectedUser);
+  }, [selectedUser]);
 
   const formatDate = (dateString: string): string => {
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -178,7 +192,11 @@ const Profile = () => {
     <AdminDashboard></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
-      <p className="profile-header-font">{username}</p>
+      <p className="profile-header-font">{selectedUser?.name || "User Name"}</p>
+      <div>
+        <h1>{selectedUser.name}</h1>
+        <p>{selectedUser.email}</p>
+      </div>
       <br />
       <div style={messageStyle}>
         <button
