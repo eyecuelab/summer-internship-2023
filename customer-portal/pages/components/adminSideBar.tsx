@@ -56,7 +56,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, currentEntity, onSelectedEntity
           })}
         >
           {!collapsed && (
-            <span className="whitespace-nowrap">Parent Companies</span>
+            <span className="whitespace-nowrap" style={{ fontFamily: "Rasa", fontSize: "20px" }}>Parent Companies</span>
           )}
           <button
             className={cn({
