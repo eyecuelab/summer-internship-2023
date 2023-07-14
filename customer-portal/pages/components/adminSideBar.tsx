@@ -70,18 +70,24 @@ const AdminSidebar = ({ collapsed, setCollapsed, currentEntity, onSelectedEntity
           </button>
         </div>
       </div>
+
       <div className={cn({ "grid place-content-stretch p-4 ": true })}>
         {entityList?.map((item, index) => (
-          <div
-            key={index}
-            className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full"
-            onClick={() => handleEntityClick(item)}
-          >
-            <div className="flex flex-col">
-              <Link href="#" className="text-slate-500 text-sm">
-                {item.companyName}
-              </Link>
+          <div key={index}>
+            <div
+              className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full"
+              onClick={() => handleEntityClick(item)}
+            >
+              <br />
+              <div className="flex flex-col">
+                <Link href="#" className="text-slate-500 text-sm">
+                  <p style={{ fontFamily: "Rasa", fontSize: "20px", margin: 0 }}>
+                    {item.companyName}
+                  </p>
+                </Link>
+              </div>
             </div>
+            <br />
           </div>
         ))}
       </div>
