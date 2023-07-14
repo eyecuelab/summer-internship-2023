@@ -161,6 +161,14 @@ const AdminDashboard = () => {
 
         fetchAllProjectsforEntity();
     }, [currentEntity]);
+
+    const dashStyle = {
+        fontFamily: "Rasa",
+        fontWeight: 400,
+        fontSize: "48px",
+        lineHeight: "67.2px",
+        color: "#404040",
+    };
  
     return status === "authenticated" ? (
         <AdminLayout
@@ -168,7 +176,7 @@ const AdminDashboard = () => {
             currentEntity={currentEntity}
             onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
         >
-            <p>Admin Dashboard</p>
+            <p style={dashStyle}>Admin Dashboard</p>
             <br />
             <AddEntityModule />
             <br />
@@ -191,6 +199,7 @@ const AdminDashboard = () => {
                                 setShowAddUserModule(true); // Show the Add User module
                             }}
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            
                         >
                             Add User to {projectData.projectName}
                         </ResuableButton>

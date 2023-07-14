@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
 import axios from "axios";
+import classNames from "classnames";
 
 export default function AddEntityModule() {
   const [visible, setVisible] = useState(false);
@@ -62,13 +63,24 @@ export default function AddEntityModule() {
 
   return (
     <div>
-      <Button
-        shadow
-        onPress={handler}
-        style={companyStyle}
-      >
-        Add Company
-      </Button>
+    
+    <Button
+      shadow
+      onPress={handler}
+      className="rounded-full"
+      style={{
+                borderRadius: "999px",
+                backgroundColor: "#E6E6E6",
+                color: "#404040",
+                padding: "8px 12px",
+                fontFamily: "Rasa",
+                fontSize: "20px",
+                cursor: "pointer",
+      }}
+    >
+      Add Company
+    </Button>
+      
       <Modal
         closeButton
         aria-labelledby="modal-title"
@@ -109,3 +121,4 @@ export default function AddEntityModule() {
     </div>
   );
 }
+
