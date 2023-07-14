@@ -102,7 +102,9 @@ const AdminDashboard = () => {
         fetch(`https://localhost:7243/api/Users`)
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error(`${response.status}: ${response.statusText}`);
+                    throw new Error(
+                        `${response.status}: ${response.statusText}`
+                    );
                 }
                 return response.json();
             })
@@ -121,7 +123,9 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchAllEntities = async () => {
             try {
-                const response = await fetch(`https://localhost:7243/api/Entities`);
+                const response = await fetch(
+                    `https://localhost:7243/api/Entities`
+                );
 
                 const data = await response.json();
 
@@ -151,7 +155,10 @@ const AdminDashboard = () => {
 
                 if (projectData.length > 0) {
                     setIntialProject(projectData);
-                    console.log("default projects for intial entity", projectData);
+                    console.log(
+                        "default projects for intial entity",
+                        projectData
+                    );
                 } else {
                     return console.log("no projects for this entity");
                 }
@@ -165,13 +172,52 @@ const AdminDashboard = () => {
         fetchAllProjectsforEntity();
     }, [currentEntity]);
 
-    const dashStyle = {
-        fontFamily: "Rasa",
-        fontWeight: 400,
-        fontSize: "48px",
-        lineHeight: "67.2px",
-        color: "#404040",
-    };
+
+//FETCHING USER INFO FROM PROJECTAPPUSER ENDPOINT TO DISPLAY UNDER EACH PROJECT
+    useEffect(() => {
+        const fetchUsersForProjects = async () => {
+            try {
+                const promises = intialProject.map(async (projectData) => {
+                    const response = await fetch(
+                        `https://localhost:7243/api/projectappuser/getusers/${projectData.projectId}`
+                    );
+                    const projectAppUserData = await response.json();
+
+                    return {
+                        projectId: projectData.projectId,
+                        projectAppUsers: projectAppUserData,
+                    };
+                });
+
+                const projectUserResponses = await Promise.all(promises);
+
+                const updatedUsersForProjects = projectUserResponses.reduce(
+                    (acc: ProjectAppUser[], projectResponse: { projectId: string; projectAppUsers: any }) => {
+                        const { projectId, projectAppUsers } = projectResponse;
+                        if (projectAppUsers.length > 0) {
+                            return [
+                                ...acc,
+                                ...projectAppUsers.map((user: ProjectAppUser) => ({
+                                    ...user,
+                                    projectId
+                                }))
+                            ];
+                        } else {
+                            return acc;
+                        }
+                    },
+                    []
+                );
+
+                setUsersForProject(updatedUsersForProjects);
+                console.log("usersForProject data:", updatedUsersForProjects);
+            } catch (error) {
+                console.error("Failed to transmit user data:", error);
+            }
+        };
+
+        fetchUsersForProjects();
+    }, [intialProject]);
 
     return status === "authenticated" ? (
         <AdminLayout
@@ -179,51 +225,43 @@ const AdminDashboard = () => {
             currentEntity={currentEntity}
             onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
         >
-            <p style={dashStyle}>Admin Dashboard</p>
-            <br />
             <AddEntityModule />
-            <br />
             <AddProjectModal
                 currentEntity={currentEntity}
                 onSelectedEntity={handleSelectedEntity}
             />
-            <br />
-            <p
-                style={{
-                    color: "#404040",
-                    padding: "8px 12px",
-                    fontFamily: "Rasa",
-                    textDecoration: "underline",
-                    fontSize: "26px",
-                    fontWeight: "bold",
-                }}
-            >
-                Current Projects
-            </p>
+            <p>Current Projects:</p>
             <div>
                 {intialProject.map((projectData) => (
                     <>
-                        {/* <div key={projectData.projectId}>
-                            <p style=
-                            {{fontFamily: "Rasa",
-                            fontSize: "20px"
-                        }}
-                        >Project Name: {projectData.projectName}</p>
-                        </div> */}
                         <div key={projectData.projectId}>
-                            <p style={{ fontFamily: "Rasa", fontSize: "20px" }}>
-                                <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
-                                {projectData.projectName}
-                            </p>
+                            <p>Project Name: {projectData.projectName}</p>
+                            <p>Current Users For Project:</p>
+                            <div>
+                                {usersForProject
+                                    .filter(
+                                        (user) =>
+                                            user.projectId ===
+                                            projectData.projectId
+                                    )
+                                    .map((user) => (
+                                        <p key={user.projectAppUserId}>
+                                            {user.email}
+                                        </p>
+                                    ))}
+                            </div>
                         </div>
-                        <br />
+                        <br></br>
+
+                        <br></br>
+
                         <ResuableButton
                             onPress={() => {
                                 setCurrentProject(projectData); // Set the current project
                                 setShowAddUserModule(true); // Show the Add User module
                             }}
-                            className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3">
-                    
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        >
                             Add User to {projectData.projectName}
                         </ResuableButton>
                         <br />
