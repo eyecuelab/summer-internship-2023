@@ -48,19 +48,11 @@ export default function AddProjectModal({
         handleClose();
     };
 
+    
+
     return (
         <div>
-            <Button shadow onPress={handleOpen}               
-            style={{
-                borderRadius: "999px",
-                backgroundColor: "#E6E6E6",
-                color: "#404040",
-                padding: "8px 12px",
-                fontFamily: "Rasa",
-                fontSize: "20px",
-                cursor: "pointer",
-            }}
-            >
+            <Button shadow onPress={handleOpen} style={{ color: "black" }}>
                 Add Project
             </Button>
             <Modal
