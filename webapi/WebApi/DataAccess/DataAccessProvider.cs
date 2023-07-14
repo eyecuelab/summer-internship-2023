@@ -118,5 +118,16 @@ namespace WebApi.DataAccess
         {
             throw new NotImplementedException();
         }
+
+        // public string GetAllCommitMessages()
+        // {
+        // var messages = _context.Commits
+        //                             .Select(c => c.message)
+        //                             .ToList();
+
+        // var allMessages = string.Join(". ", messages);
+        
+        // return allMessages;
+        // }
     }
 }
