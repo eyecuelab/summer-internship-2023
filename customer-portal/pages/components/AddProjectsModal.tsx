@@ -71,7 +71,7 @@ export default function AddProjectModal({
             >
                 <Modal.Header>
                     <Text id="modal-title"
-                    style={projectStyleInter}
+                  
                     size={18}>
                         Add Project
                     </Text>
@@ -86,16 +86,16 @@ export default function AddProjectModal({
                         placeholder="Project Name"
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
-                        style={projectNameStyle}
+                       
                     />
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button style={closeProjectStyle} onPress={handleClose}>
+                        <Button  onPress={handleClose}>
                             Close
                         </Button>
                         <Button
-                            style={addProjectStyle}
+                            
                             onPress={handleAddProject}
                         >
                             Add

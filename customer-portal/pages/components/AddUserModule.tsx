@@ -97,7 +97,7 @@ export default function AddUserModule({
 
     return (
         <div>
-            <Button shadow onPress={handler} style={userStyle}>
+            <Button shadow onPress={handler}>
                 Add User
             </Button>
             <Modal
@@ -108,7 +108,7 @@ export default function AddUserModule({
             >
                 <Modal.Header>
                     <Text id="modal-title"
-                    style={userStyleInter}
+                    
                     size={18}>
                         Add User
                     </Text>
@@ -123,12 +123,12 @@ export default function AddUserModule({
                         placeholder="Enter Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        style={userNameStyle}
+                    
                     />
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button style={closeUserStyle} onPress={closeHandler}>
+                        <Button  onPress={closeHandler}>
                             Close
                         </Button>
                         <ResuableButton
