@@ -77,24 +77,6 @@ export default function AddUserModule({
         closeHandler();
     };
 
-    // const handleAddProjectAppUser = async () => {
-    //     try {
-    //         const url = "https://localhost:7243/api/projectappuser";
-    //         const projectAppUserpayload = {
-    //             ProjectId: currentProject?.projectId,
-    //             AppUserId: appUserId,
-    //         };
-
-    //         const response = await axios.post(url, projectAppUserpayload);
-
-    //         // Handle the response data
-    //         console.log(response.data);
-    //     } catch (error) {
-    //         // Handle error
-    //         console.error(error);
-    //     }
-    // };
-
     return (
         <div>
             <Button shadow onPress={handler}>
