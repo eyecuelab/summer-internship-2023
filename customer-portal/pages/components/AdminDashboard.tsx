@@ -92,9 +92,7 @@ const AdminDashboard = () => {
         fetch(`https://localhost:7243/api/Users`)
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error(
-                        `${response.status}: ${response.statusText}`
-                    );
+                    throw new Error(`${response.status}: ${response.statusText}`);
                 }
                 return response.json();
             })
@@ -113,9 +111,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchAllEntities = async () => {
             try {
-                const response = await fetch(
-                    `https://localhost:7243/api/Entities`
-                );
+                const response = await fetch(`https://localhost:7243/api/Entities`);
 
                 const data = await response.json();
 
@@ -145,10 +141,7 @@ const AdminDashboard = () => {
 
                 if (projectData.length > 0) {
                     setIntialProject(projectData);
-                    console.log(
-                        "default projects for intial entity",
-                        projectData
-                    );
+                    console.log("default projects for intial entity", projectData);
                 } else {
                     return console.log("no projects for this entity");
                 }
@@ -169,7 +162,7 @@ const AdminDashboard = () => {
         lineHeight: "67.2px",
         color: "#404040",
     };
- 
+
     return status === "authenticated" ? (
         <AdminLayout
             username={session?.user?.name}
@@ -185,12 +178,33 @@ const AdminDashboard = () => {
                 onSelectedEntity={handleSelectedEntity}
             />
             <br />
-            <p>Current Projects:</p>
+            <p
+                style={{
+                    color: "#404040",
+                    padding: "8px 12px",
+                    fontFamily: "Rasa",
+                    textDecoration: "underline",
+                    fontSize: "26px",
+                    fontWeight: "bold",
+                }}
+            >
+                Current Projects
+            </p>
             <div>
                 {intialProject.map((projectData) => (
                     <>
+                        {/* <div key={projectData.projectId}>
+                            <p style=
+                            {{fontFamily: "Rasa",
+                            fontSize: "20px"
+                        }}
+                        >Project Name: {projectData.projectName}</p>
+                        </div> */}
                         <div key={projectData.projectId}>
-                            <p>Project Name: {projectData.projectName}</p>
+                            <p style={{ fontFamily: "Rasa", fontSize: "20px" }}>
+                                <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
+                                {projectData.projectName}
+                            </p>
                         </div>
                         <br />
                         <ResuableButton
@@ -198,9 +212,8 @@ const AdminDashboard = () => {
                                 setCurrentProject(projectData); // Set the current project
                                 setShowAddUserModule(true); // Show the Add User module
                             }}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            
-                        >
+                            className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3">
+                    
                             Add User to {projectData.projectName}
                         </ResuableButton>
                     </>

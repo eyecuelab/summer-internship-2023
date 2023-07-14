@@ -86,7 +86,8 @@ export default function AddProjectModal({
                 fontFamily: "Rasa",
                 fontSize: "20px",
                 cursor: "pointer",
-            }}>
+            }}
+            >
                 Add Project
             </Button>
             <Modal
