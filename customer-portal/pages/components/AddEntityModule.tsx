@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Modal, Button, Text, Input, Row, Checkbox } from "@nextui-org/react";
 import axios from "axios";
+import classNames from "classnames";
 
 export default function AddEntityModule() {
   const [visible, setVisible] = useState(false);
@@ -32,15 +33,54 @@ export default function AddEntityModule() {
     closeHandler();
   };
 
+  const companyStyle = {
+    fontFamily: "Rasa",
+    fontWeight: 600,
+    fontSize: "18px",
+    lineHeight: "40.8px",
+    color: "#404040",
+  };
+
+  const companyStyleInter = {
+    ...companyStyle,
+    fontWeight: 400,
+    fontSize: "24px",
+  };
+
+  const closeStyle = {
+    ...companyStyle,
+    color: "#FF0000",
+  };
+
+  const addStyle = {
+    ...companyStyle
+  };
+
+  const companyNameStyle = {
+    ...companyStyle,
+  };
+
+
   return (
     <div>
-      <Button
-        shadow
-        onPress={handler}
-        style={{ color: "black" }}
-      >
-        Add Company
-      </Button>
+    
+    <Button
+      shadow
+      onPress={handler}
+      className="rounded-full"
+      style={{
+                borderRadius: "999px",
+                backgroundColor: "#E6E6E6",
+                color: "#404040",
+                padding: "8px 12px",
+                fontFamily: "Rasa",
+                fontSize: "20px",
+                cursor: "pointer",
+      }}
+    >
+      Add Company
+    </Button>
+      
       <Modal
         closeButton
         aria-labelledby="modal-title"
@@ -48,7 +88,7 @@ export default function AddEntityModule() {
         onClose={closeHandler}
       >
         <Modal.Header>
-          <Text id="modal-title" size={18}>
+          <Text id="modal-title" style= {companyStyleInter} size={18}>
             Add Company
           </Text>
         </Modal.Header>
@@ -62,15 +102,16 @@ export default function AddEntityModule() {
             placeholder="Company Name"
             value={companyName}
             onChange={(e) => setCompanyName(e.target.value)}
+            style={companyNameStyle}
           />
         </Modal.Body>
         <Modal.Footer>
           <Row justify="flex-end">
-            <Button flat color="error" onPress={closeHandler}>
+            <Button style={closeStyle} onPress={closeHandler}>
               Close
             </Button>
             <Button 
-              style={{ color: "black" }}
+              style={addStyle}
               onPress={handleAddCompany}>
               Add
             </Button>
@@ -80,3 +121,4 @@ export default function AddEntityModule() {
     </div>
   );
 }
+

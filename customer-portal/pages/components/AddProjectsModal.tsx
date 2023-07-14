@@ -48,11 +48,19 @@ export default function AddProjectModal({
         handleClose();
     };
 
-    
-
     return (
         <div>
-            <Button shadow onPress={handleOpen} style={{ color: "black" }}>
+            <Button shadow onPress={handleOpen}               
+            style={{
+                borderRadius: "999px",
+                backgroundColor: "#E6E6E6",
+                color: "#404040",
+                padding: "8px 12px",
+                fontFamily: "Rasa",
+                fontSize: "20px",
+                cursor: "pointer",
+            }}
+            >
                 Add Project
             </Button>
             <Modal
@@ -62,7 +70,9 @@ export default function AddProjectModal({
                 closeButton
             >
                 <Modal.Header>
-                    <Text id="modal-title" size={18}>
+                    <Text id="modal-title"
+                    style={projectStyleInter}
+                    size={18}>
                         Add Project
                     </Text>
                 </Modal.Header>
@@ -76,15 +86,16 @@ export default function AddProjectModal({
                         placeholder="Project Name"
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
+                        style={projectNameStyle}
                     />
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button flat color="error" onPress={handleClose}>
+                        <Button style={closeProjectStyle} onPress={handleClose}>
                             Close
                         </Button>
                         <Button
-                            style={{ color: "black" }}
+                            style={addProjectStyle}
                             onPress={handleAddProject}
                         >
                             Add

@@ -6,13 +6,21 @@ type ReusableButtonPropsT = ButtonProps & {
     children: React.ReactNode;
 };
 
+const reusableButtonStyle = {
+    fontFamily: "Rasa",
+    fontWeight: 600,
+    fontSize: "18px",
+    lineHeight: "40.8px",
+    color: "#404040",
+};
+
 export default function ResuableButton({
     onPress,
     children,
     ...rest
 }: ReusableButtonPropsT) {
     return (
-        <Button {...rest} style={{ color: "black" }} onPress={onPress}>
+        <Button {...rest} style={reusableButtonStyle} onPress={onPress}>
             {children}
         </Button>
     );
