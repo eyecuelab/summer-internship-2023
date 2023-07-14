@@ -172,8 +172,7 @@ const AdminDashboard = () => {
         fetchAllProjectsforEntity();
     }, [currentEntity]);
 
-
-//FETCHING USER INFO FROM PROJECTAPPUSER ENDPOINT TO DISPLAY UNDER EACH PROJECT
+    //FETCHING USER INFO FROM PROJECTAPPUSER ENDPOINT TO DISPLAY UNDER EACH PROJECT
     useEffect(() => {
         const fetchUsersForProjects = async () => {
             try {
@@ -192,15 +191,23 @@ const AdminDashboard = () => {
                 const projectUserResponses = await Promise.all(promises);
 
                 const updatedUsersForProjects = projectUserResponses.reduce(
-                    (acc: ProjectAppUser[], projectResponse: { projectId: string; projectAppUsers: any }) => {
+                    (
+                        acc: ProjectAppUser[],
+                        projectResponse: {
+                            projectId: string;
+                            projectAppUsers: any;
+                        }
+                    ) => {
                         const { projectId, projectAppUsers } = projectResponse;
                         if (projectAppUsers.length > 0) {
                             return [
                                 ...acc,
-                                ...projectAppUsers.map((user: ProjectAppUser) => ({
-                                    ...user,
-                                    projectId
-                                }))
+                                ...projectAppUsers.map(
+                                    (user: ProjectAppUser) => ({
+                                        ...user,
+                                        projectId,
+                                    })
+                                ),
                             ];
                         } else {
                             return acc;
@@ -219,6 +226,14 @@ const AdminDashboard = () => {
         fetchUsersForProjects();
     }, [intialProject]);
 
+    const dashStyle = {
+        fontFamily: "Rasa",
+        fontWeight: 400,
+        fontSize: "48px",
+        lineHeight: "67.2px",
+        color: "#404040",
+    };
+
     return status === "authenticated" ? (
         <AdminLayout
             username={session?.user?.name}
@@ -235,32 +250,33 @@ const AdminDashboard = () => {
                 {intialProject.map((projectData) => (
                     <>
                         <div key={projectData.projectId}>
-                            <p>Project Name: {projectData.projectName}</p>
-                            <p>Current Users For Project:</p>
-                            <div>
-                                {usersForProject
-                                    .filter(
-                                        (user) =>
-                                            user.projectId ===
-                                            projectData.projectId
-                                    )
-                                    .map((user) => (
-                                        <p key={user.projectAppUserId}>
-                                            {user.email}
-                                        </p>
-                                    ))}
-                            </div>
+                            <p style={{ fontFamily: "Rasa", fontSize: "20px" }}>
+                                <span style={{ fontWeight: "bold" }}>
+                                    Project Name:
+                                </span>{" "}
+                                {projectData.projectName}
+                            </p>
                         </div>
-                        <br></br>
-
-                        <br></br>
+                        <br />
+                        <div>
+                            {usersForProject
+                                .filter(
+                                    (user) =>
+                                        user.projectId === projectData.projectId
+                                )
+                                .map((user) => (
+                                    <p key={user.projectAppUserId}>
+                                        {user.email}
+                                    </p>
+                                ))}
+                        </div>
 
                         <ResuableButton
                             onPress={() => {
                                 setCurrentProject(projectData); // Set the current project
                                 setShowAddUserModule(true); // Show the Add User module
                             }}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3"
                         >
                             Add User to {projectData.projectName}
                         </ResuableButton>
