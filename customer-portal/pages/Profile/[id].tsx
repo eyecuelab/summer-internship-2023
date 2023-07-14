@@ -60,7 +60,7 @@ const UserProfilePage = () => {
       .then((json = []) => {
         const commitsByAuthorTemp: CommitsByAuthor = {};
 
-        json.forEach((commit) => {
+        json.forEach((commit: Commit) => {
           const authorName = commit.commit.author.name;
           if (commitsByAuthorTemp[authorName]) {
             commitsByAuthorTemp[authorName].push(commit);

@@ -5,7 +5,6 @@ import { NextUIProvider } from '@nextui-org/react'
 import '../styles/globals.css'
 import SelectedUserContext from './context/selectedUserContext';
 
-
 function MyApp({ Component, pageProps, session}: AppProps & { session: any }) {
   const [selectedUser, setSelectedUser] = useState({ name: '', email: '' });
   return (
