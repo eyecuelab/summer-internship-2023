@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
 import Profile from "../components/profile";
-import AdminProfile from "../components/AdminProfile";
+import AdminProfile from "../components/adminProfile";
 import SelectedUserContext from "../context/selectedUserContext";
 
 interface Author {
@@ -25,17 +25,21 @@ const UserProfilePage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState<string>("false");
+  // const [isAdmin, setIsAdmin] = useState<string>("false");
+  const [isAdmin, setIsAdmin] = useState<string | null>(null);
   const [commitsByAuthor, setCommitsByAuthor] = useState<CommitsByAuthor>({});
   const selectedUserContext = useContext(SelectedUserContext);
   const { selectedUser, setSelectedUser } = selectedUserContext;
+  const [lastId, setLastId] = useState(null);
 
   useEffect(() => {
     const storedIsAdmin = localStorage.getItem("isAdmin");
     if (storedIsAdmin) {
       setIsAdmin(storedIsAdmin);
     }
-  }, []);
+    setLastId(id);
+  }, [id]);
+
 
   useEffect(() => {
     // Ensure id exists and is not an array
@@ -86,7 +90,7 @@ const UserProfilePage = () => {
     }
   }, [id, commitsByAuthor, setSelectedUser]);
 
-  if (!user) {
+  if (!user && isAdmin === null) {
     return <div>Loading...</div>;
   }
 

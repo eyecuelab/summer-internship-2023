@@ -36,7 +36,7 @@ interface ProfileProps {
 
 const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { email } = router.query;
   const { data: session, status } = useSession({ required: true });
   const [user, setUser] = useState(null);
   const [apiData, setApiData] = useState<Commit[] | null>(null);
@@ -49,10 +49,10 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const { selectedUser, setSelectedUser } = selectedUserContext;
 
   useEffect(() => {
-    // Ensure id exists and is not an array
-    if (id && typeof id === "string") {
+    // Ensure email exists and is not an array
+    if (email && typeof email === "string") {
       // Fetch the data for this user
-      fetch(`https://localhost:7243/api/Users/${id}`)
+      fetch(`https://localhost:7243/api/Users/${email}`)
         .then((response) => response.json())
         .then((data) => {
           setUser(data);
@@ -60,7 +60,7 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
         })
         .catch((err) => console.error(err));
     }
-  }, [id]);
+  }, [email]);
 
   useEffect(() => {
     const fetchCurrentRole = async () => {
