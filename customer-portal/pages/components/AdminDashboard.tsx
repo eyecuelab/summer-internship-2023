@@ -27,6 +27,12 @@ interface Project {
     entityId: string;
 }
 
+interface ProjectAppUser {
+    projectAppUserId: string;
+    projectId: string;
+    email: string;
+}
+
 type Props = {
     currentEntity(entity: Entity): void;
 };
@@ -51,8 +57,12 @@ const AdminDashboard = () => {
     const [intialProject, setIntialProject] = useState<Array<Project>>([]);
     const [currentProject, setCurrentProject] = useState<Project | null>(null);
     const [showAddUserModule, setShowAddUserModule] = useState(false);
-    const [email, setEmail] = useState("");
+    const [usersForProject, setUsersForProject] = useState<
+        Array<ProjectAppUser>
+    >([]);
     const currentUser = session?.user?.email;
+
+    console.log("Intial Projects on page load ", intialProject);
 
     const handleSelectedEntity = (selectedEntity: Entity | null) => {
         setCurrentEntity(selectedEntity);
@@ -216,6 +226,7 @@ const AdminDashboard = () => {
                     
                             Add User to {projectData.projectName}
                         </ResuableButton>
+                        <br />
                     </>
                 ))}
             </div>

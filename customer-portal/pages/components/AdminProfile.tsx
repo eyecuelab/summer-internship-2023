@@ -9,6 +9,7 @@ import {
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import SelectedUserContext from "../context/selectedUserContext";
+import { Fab } from '@mui/material';
 
 interface Commit {
   name: string;
@@ -33,7 +34,7 @@ interface ProfileProps {
   };
 }
 
-const Profile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
+const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const router = useRouter();
   const { id } = router.query;
   const { data: session, status } = useSession({ required: true });
@@ -51,11 +52,11 @@ const Profile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
     // Ensure id exists and is not an array
     if (id && typeof id === "string") {
       // Fetch the data for this user
-      fetch(`https://localhost:7243/api/ProjectAppUser/getprojs/${id}`)
+      fetch(`https://localhost:7243/api/Users/${id}`)
         .then((response) => response.json())
         .then((data) => {
           setUser(data);
-          setUsername(data.id);
+          setUsername(data.userName);
         })
         .catch((err) => console.error(err));
     }
@@ -100,15 +101,10 @@ const Profile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
             date: commit.commit.author.date,
           }));
           setApiData(commits);
-          // setSelectedUser({ name: commits[0].name, email: commits[0].email });
         })
         .catch((error) => console.error("Error during fetch:", error));
     }
   }, [isAdmin]);
-
-  useEffect(() => {
-    console.log("selectedUser:", selectedUser);
-  }, [selectedUser]);
 
   const formatDate = (dateString: string): string => {
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -166,8 +162,17 @@ const Profile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
             <p className="profile-header-font">Strengths & Responsibilities</p>
             <br />
             <p style={messageStyle}>Frontend Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddFrontendUserTraits /> */}
+            </Fab>
             <p style={messageStyle}>Backend Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddBackendUserTraits /> */}
+            </Fab>
             <p style={messageStyle}>Fullstack Development</p>
+            <Fab color="primary" aria-label="add">
+              {/* <AddFullstackUserTraits /> */}
+            </Fab>
             <br />
           </>
         );
@@ -192,11 +197,7 @@ const Profile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
     <AdminDashboard></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
-      <p className="profile-header-font">{selectedUser?.name || "User Name"}</p>
-      <div>
-        <h1>{selectedUser.name}</h1>
-        <p>{selectedUser.email}</p>
-      </div>
+      <p className="profile-header-font">{username}</p>
       <br />
       <div style={messageStyle}>
         <button
@@ -237,7 +238,7 @@ const Profile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   );
 };
 
-export default Profile;
+export default AdminProfile;
 
 export async function getServerSideProps(
   context: GetSessionParams | undefined

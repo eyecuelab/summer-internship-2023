@@ -39,56 +39,61 @@ export default function AddUserModule({
     const handler = () => setShowAddUserModule(true);
     const closeHandler = () => setShowAddUserModule(false);
 
-    const handleAddUser = async () => {
+    const handleAddEmailEntity = async () => {
         try {
-            const url = "https://localhost:7243/api/emailentity";
-            const payload = {
+            const emailUrl = "https://localhost:7243/api/emailentity";
+            const emailEntitypayload = {
                 Email: email,
                 EntityId: `${currentEntity?.entityId}`,
             };
-
-            const response = await axios.post(url, payload);
-
+    
+            const emailEntityresponse = await axios.post(emailUrl, emailEntitypayload);
+            setEmail(email)
             // Handle the response data
-            console.log(response.data);
+            console.log(email);
+            console.log(emailEntityresponse);
+
+
+            const projectAppUserUrl = "https://localhost:7243/api/projectappuser";
+            const ProjectAppUserpayload = {
+                ProjectId: `${currentProject?.projectId}`,
+                Email: email
+            };
+
+            const projectAppUserresponse = await axios.post(projectAppUserUrl, ProjectAppUserpayload);
+    
+            console.log(email);
+            console.log(projectAppUserresponse);
+    
         } catch (error) {
             // Handle error
             console.error(error);
         }
-
+    
         // Reset input field
         setEmail("");
-
+    
         // Close the modal
         closeHandler();
     };
 
-    const userStyle = {
-        fontFamily: "Rasa",
-        fontWeight: 600,
-        fontSize: "18px",
-        lineHeight: "40.8px",
-        color: "#404040",
-    };
-    
-    const userStyleInter = {
-        ...userStyle,
-        fontWeight: 400,
-        fontSize: "24px",
-    };
-    
-    const closeUserStyle = {
-        ...userStyle,
-        color: "#FF0000",
-    };
-    
-    const addUserStyle = {
-        ...userStyle
-    };
-    
-    const userNameStyle = {
-        ...userStyle,
-    };
+    // const handleAddProjectAppUser = async () => {
+    //     try {
+    //         const url = "https://localhost:7243/api/projectappuser";
+    //         const projectAppUserpayload = {
+    //             ProjectId: currentProject?.projectId,
+    //             AppUserId: appUserId,
+    //         };
+
+    //         const response = await axios.post(url, projectAppUserpayload);
+
+    //         // Handle the response data
+    //         console.log(response.data);
+    //     } catch (error) {
+    //         // Handle error
+    //         console.error(error);
+    //     }
+    // };
 
     return (
         <div>
@@ -127,7 +132,8 @@ export default function AddUserModule({
                             Close
                         </Button>
                         <ResuableButton
-                            onPress={handleAddUser}
+                            style={{ color: "black" }}
+                            onPress={handleAddEmailEntity}
                         >
                             Add User
                         </ResuableButton>

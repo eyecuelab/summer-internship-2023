@@ -72,5 +72,31 @@ namespace WebApi.Controllers
             }
         }
 
+        [HttpGet("/api/getsprintnames/{boardId}/{apiKey}/{apiToken}")]
+        public async Task<IActionResult> GetBoardTitles(string boardId, string apiKey, string apiToken)
+        {
+            var url = $"https://api.trello.com/1/boards/{boardId}/lists?key={apiKey}&token={apiToken}";
+
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("Accept", "application/json");
+
+            var client = _clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+
+                // Do something with the attachments JSON, such as returning it in the response
+                return Ok(json);
+            }
+            else
+            {
+                // Handle the case when the API request was not successful
+                // You can return an appropriate response or error message
+                return StatusCode((int)response.StatusCode);
+            }
+        }
     }
 }
