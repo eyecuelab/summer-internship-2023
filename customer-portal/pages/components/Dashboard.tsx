@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
@@ -6,6 +6,7 @@ import axios from "axios";
 import Image from "next/image";
 import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
+import SelectedUserContext from "../context/selectedUserContext";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -45,7 +46,7 @@ const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const currentUser: any = session?.user?.email;
   const [isAdmin, setIsAdmin] = useState<string>("false");
-	const [selectedUser, setSelectedUser] = useState<any>({ name: '', email: '' });
+	const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
   const [selectedAuthor, setSelectedAuthor] = useState<string>("");
 
   useEffect(() => {

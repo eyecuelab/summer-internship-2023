@@ -9,6 +9,6 @@ const defaultContextValue: SelectedUserContextType = {
   setSelectedUser: () => {},
 };
 
-const SelectedUserContext = React.createContext<SelectedUserContextType | undefined>(undefined);
+const SelectedUserContext = React.createContext<SelectedUserContextType>(defaultContextValue);
 
 export default SelectedUserContext;
