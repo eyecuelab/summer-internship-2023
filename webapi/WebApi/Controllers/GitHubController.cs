@@ -42,6 +42,8 @@ namespace WebApi.Controllers
             {
                 var json = await response.Content.ReadAsStringAsync();
                 var commits = JsonConvert.DeserializeObject<List<ListOfCommits>>(json);
+                
+                var allCommitMessages =  new List<string>();
 
                 foreach (var commit in commits)
                 {
@@ -52,10 +54,15 @@ namespace WebApi.Controllers
                     var commitSha = commit.sha;
                     commitInfo.commitSha = commitSha;
 
+                    // Add the commit message to the prompt
+                    allCommitMessages.Add(commitInfo.message);
+
                     _dataAccessProvider.AddAuthor(author);
                     _dataAccessProvider.AddCommit(commitInfo);
 
                 }
+                var openAiController = new OpenAIController(_clientFactory, _configuration);
+                var summarizedCommits = await openAiController.SummarizeText(allCommitMessages);
                 return Ok(commits);
             }
             else
@@ -122,34 +129,34 @@ namespace WebApi.Controllers
                 return StatusCode((int)response.StatusCode);
             }
         }
-        [HttpPost("summarized-commits/{owner}/{repo}")]
-public async Task<IActionResult> GetSummarizedCommits(string owner, string repo)
-{
-    var commitsResult = await GetListOfCommits(owner, repo);
-    if (commitsResult is OkObjectResult okResult)
-    {
-        var commits = okResult.Value as List<ListOfCommits>;
+        // [HttpPost("summarized-commits/{owner}/{repo}")]
+        // public async Task<IActionResult> GetSummarizedCommits(string owner, string repo)
+        // {
+        //     var commitsResult = await GetListOfCommits(owner, repo);
+        //     if (commitsResult is OkObjectResult okResult)
+        //     {
+        //         var commits = okResult.Value as List<ListOfCommits>;
 
-        if (commits != null)
-        {
-            var commitMessages = commits.Select(x => x.commit.message).ToList();
-            var openAiController = new OpenAIController(_clientFactory, _configuration);
-            var summarizedCommits = await openAiController.SummarizeText(commitMessages);
+        //         if (commits != null)
+        //         {
+        //             var commitMessages = commits.Select(x => x.commit.message).ToList();
+        //             var openAiController = new OpenAIController(_clientFactory, _configuration);
+        //             var summarizedCommits = await openAiController.SummarizeText(commitMessages);
 
-            return Ok(summarizedCommits);
-        }
-        else
-        {
-            // Handle the case when the commits list is null
-            return NotFound("No commits found.");
-        }
-    }
-    else
-    {
-        // Handle the case when the GitHub API request was not successful
-        var statusCode = (commitsResult as StatusCodeResult)?.StatusCode ?? 500;
-        return StatusCode(statusCode);
-    }
-}
+        //             return Ok(summarizedCommits);
+        //         }
+        //         else
+        //         {
+        //             // Handle the case when the commits list is null
+        //             return NotFound("No commits found.");
+        //         }
+        //     }
+        //     else
+        //     {
+        //         // Handle the case when the GitHub API request was not successful
+        //         var statusCode = (commitsResult as StatusCodeResult)?.StatusCode ?? 500;
+        //         return StatusCode(statusCode);
+        //     }
+        // }
     }
 }

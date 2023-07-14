@@ -112,17 +112,17 @@ const AdminDashboard = ({ projectAppUsers }) => {
     }
   }, [isAdmin, router]);
 
-  useEffect(() => {
-    fetch(`https://localhost:7243/api/Users`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`${response.status}: ${response.statusText}`);
-        }
-        return response.json();
-      })
-      .then((data) => setUsers(data))
-      .catch((error) => console.error("Error:", error));
-  }, []);
+    useEffect(() => {
+        fetch(`https://localhost:7243/api/Users`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then((data) => setUsers(data))
+            .catch((error) => console.error("Error:", error));
+    }, []);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -131,11 +131,11 @@ const AdminDashboard = ({ projectAppUsers }) => {
     }
   }, [status, session]);
 
-  //FETCHING ENTITES FOR INTIAL STATE AND SETTING IT TO [0]
-  useEffect(() => {
-    const fetchAllEntities = async () => {
-      try {
-        const response = await fetch(`https://localhost:7243/api/Entities`);
+    //FETCHING ENTITES FOR INTIAL STATE AND SETTING IT TO [0]
+    useEffect(() => {
+        const fetchAllEntities = async () => {
+            try {
+                const response = await fetch(`https://localhost:7243/api/Entities`);
 
         const data = await response.json();
 
@@ -163,12 +163,12 @@ const AdminDashboard = ({ projectAppUsers }) => {
 
         const projectData = await response.json();
 
-        if (projectData.length > 0) {
-          setIntialProject(projectData);
-          console.log("default projects for intial entity", projectData);
-        } else {
-          return console.log("no projects for this entity");
-        }
+                if (projectData.length > 0) {
+                    setIntialProject(projectData);
+                    console.log("default projects for intial entity", projectData);
+                } else {
+                    return console.log("no projects for this entity");
+                }
 
         console.log("default projects for intial entity", projectData);
       } catch (error) {
@@ -227,69 +227,85 @@ const AdminDashboard = ({ projectAppUsers }) => {
 
     fetchUsersForProjects();
   }, [intialProject]);
+    const dashStyle = {
+        fontFamily: "Rasa",
+        fontWeight: 400,
+        fontSize: "48px",
+        lineHeight: "67.2px",
+        color: "#404040",
+    };
 
-  return status === "authenticated" ? (
-    <AdminLayout
-      username={session?.user?.name}
-      currentEntity={currentEntity}
-      onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
-    >
-      <AddEntityModule />
-      <AddProjectModal
-        currentEntity={currentEntity}
-        onSelectedEntity={handleSelectedEntity}
-      />
-      <p>Current Projects:</p>
-      <div>
-        {intialProject.map((projectData) => (
-          <>
-            <div key={projectData.projectId}>
-              <p>Project Name: {projectData.projectName}</p>
-              <p>Current Users For Project:</p>
-              <div>
-                {usersForProject
-                  .filter((user) => user.projectId === projectData.projectId)
-                  .map((user) => (
-                    <p key={user.projectAppUserId}>
-                      {user.email}
-                      <Link href={`/AdminProfile/${user.email}`}>
-                        | Link to profile: <a>{user.email}</a>
-                      </Link>
-                    </p>
-                  ))}
-              </div>
-            </div>
-            <br></br>
-
-            <br></br>
-
-            <ResuableButton
-              onPress={() => {
-                setCurrentProject(projectData); // Set the current project
-                setShowAddUserModule(true); // Show the Add User module
-              }}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Add User to {projectData.projectName}
-            </ResuableButton>
+    return status === "authenticated" ? (
+        <AdminLayout
+            username={session?.user?.name}
+            currentEntity={currentEntity}
+            onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
+        >
+            <p style={dashStyle}>Admin Dashboard</p>
             <br />
-          </>
-        ))}
-      </div>
-      {showAddUserModule && (
-        <AddUserModule
-          currentEntity={currentEntity}
-          onSelectedEntity={handleSelectedEntity}
-          currentProject={currentProject}
-          setCurrentProject={setCurrentProject}
-          showAddUserModule={showAddUserModule}
-          setShowAddUserModule={setShowAddUserModule}
-        />
-      )}
-    </AdminLayout>
-  ) : (
-    <div>loading...</div>
-  );
+            <AddEntityModule />
+            <br />
+            <AddProjectModal
+                currentEntity={currentEntity}
+                onSelectedEntity={handleSelectedEntity}
+            />
+            <br />
+            <p
+                style={{
+                    color: "#404040",
+                    padding: "8px 12px",
+                    fontFamily: "Rasa",
+                    textDecoration: "underline",
+                    fontSize: "26px",
+                    fontWeight: "bold",
+                }}
+            >
+                Current Projects
+            </p>
+            <div>
+                {intialProject.map((projectData) => (
+                    <>
+                        {/* <div key={projectData.projectId}>
+                            <p style=
+                            {{fontFamily: "Rasa",
+                            fontSize: "20px"
+                        }}
+                        >Project Name: {projectData.projectName}</p>
+                        </div> */}
+                        <div key={projectData.projectId}>
+                            <p style={{ fontFamily: "Rasa", fontSize: "20px" }}>
+                                <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
+                                {projectData.projectName}
+                            </p>
+                        </div>
+                        <br />
+                        <ResuableButton
+                            onPress={() => {
+                                setCurrentProject(projectData); // Set the current project
+                                setShowAddUserModule(true); // Show the Add User module
+                            }}
+                            className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3">
+                    
+                            Add User to {projectData.projectName}
+                        </ResuableButton>
+                        <br />
+                    </>
+                ))}
+            </div>
+            {showAddUserModule && (
+                <AddUserModule
+                    currentEntity={currentEntity}
+                    onSelectedEntity={handleSelectedEntity}
+                    currentProject={currentProject}
+                    setCurrentProject={setCurrentProject}
+                    showAddUserModule={showAddUserModule}
+                    setShowAddUserModule={setShowAddUserModule}
+                />
+            )}
+        </AdminLayout>
+    ) : (
+        <div>loading...</div>
+    );
 };
 
 export default AdminDashboard;
