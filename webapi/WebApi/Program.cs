@@ -18,36 +18,39 @@ var configuration = builder.Configuration;
 
 DotNetEnv.Env.Load();
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddHttpClient();
-builder.Services.AddSingleton<IConfiguration>(configuration);
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+services.AddHttpClient();
+services.AddSingleton<IConfiguration>(configuration);
 
-builder.Services.AddIdentity<AppUser, IdentityRole>()
+services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<PostgreSqlContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddAuthentication(options =>
+services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 });
 
-builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+services.AddCors(p => p.AddPolicy("corspolicy", build =>
 {
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
-builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddSignInManager()
     .AddEntityFrameworkStores<PostgreSqlContext>()
     .AddDefaultTokenProviders();
 
 var sqlConnectionString = configuration["PostgreSqlConnectionString"];
-builder.Services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));
-builder.Services.AddScoped<IDataAccessProvider, DataAccessProvider>();
+services.AddDbContext<PostgreSqlContext>(options => options.UseNpgsql(sqlConnectionString));
+services.AddScoped<IDataAccessProvider, DataAccessProvider>();
+
+// Disable DateTime Infinity Conversions for Npgsql
+System.AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
 var app = builder.Build();
 

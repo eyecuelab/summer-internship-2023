@@ -36,10 +36,9 @@ namespace WebApi.Controllers
             public string role {get; set;}
             public string content {get; set;}
         }
-        string inputText = "updated the openai code to only make a call once";
 
         [HttpPost("Summarize")]
-        public async Task<IActionResult> SummarizeText([FromBody] List<string> commitMessages)
+        public async Task<string> SummarizeText([FromBody] List<string> commitMessages)
         {
             var openAiEndpoint = "https://api.openai.com/v1/chat/completions";
             var openAiClient = _clientFactory.CreateClient();
@@ -47,13 +46,13 @@ namespace WebApi.Controllers
             openAiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _openAiApiKey);
             openAiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var messages = commitMessages.Select(commitMessage => new { role = "system", content = commitMessage }).ToList();
-            messages.Add(new { role = "user", content = "Summarize the following commit message: " + inputText });
+            var messages = commitMessages.Select(commitMessage => new { role = "system", content = "Summarize the following:" + commitMessage }).ToList();
 
             var openAiRequest = new
             {
                 model = "gpt-3.5-turbo",
-                messages
+                messages,
+                temperature = 0.2,
             };
 
             var json = JsonConvert.SerializeObject(openAiRequest);
@@ -64,20 +63,17 @@ namespace WebApi.Controllers
 
             if (openAiResponse.IsSuccessStatusCode)
             {
-                // Deserialize the JSON response to extract the summary
-
                 var response = JsonConvert.DeserializeObject<dynamic>(responseContent);
                 var summary = response.choices[0].message.content.ToString();
 
-                return Ok(summary);
+                return summary;
             }
             else
             {
                 // Handle the case when OpenAI API request was not successful
                 var statusCode = (int)openAiResponse.StatusCode;
-                return StatusCode(statusCode);
+                throw new Exception($"OpenAI API request failed with status code: {statusCode}");
             }
         }
-
     }
 }
