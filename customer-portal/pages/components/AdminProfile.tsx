@@ -9,8 +9,9 @@ import {
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import SelectedUserContext from "../context/selectedUserContext";
-import { Fab } from "@mui/material";
+import { Fab, FormControl, FormLabel, TextField, Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import { styled } from '@mui/system';
 
 interface Commit {
   name: string;
@@ -113,10 +114,13 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
     setLoading(true);
     const email = `eliot.lauren@gmail.com`;
     fetch(
-      `https://localhost:7243/api/projectappuser/getprojs/${projectAppUserId}?email=${encodeURIComponent(email)}`)
+      `https://localhost:7243/api/projectappuser/getprojs/${projectAppUserId}?email=${encodeURIComponent(
+        email
+      )}`
+    )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);  // <-- Add this
+        console.log(data); // <-- Add this
         setUser(data);
         setUsername(data.username);
         setLoading(false);
@@ -166,6 +170,13 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
     color: "#404040",
   };
 
+  const StyledFormDiv = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  });
+
   const renderActiveTab = () => {
     switch (activeTab) {
       case "details":
@@ -187,20 +198,35 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
             <p className="profile-header-font">Strengths & Responsibilities</p>
             <br />
             <p style={messageStyle}>Frontend Development</p>
-            <Fab size="small" color="gray" aria-label="add">
-              <AddIcon />
-              {/* <AddFrontendUserTraits /> */}
-            </Fab>
+            <FormControl>
+            <StyledFormDiv>
+              <TextField label="Add Frontend Qualities"></TextField>
+              <Fab size="small" color="gray" aria-label="add">
+                <AddIcon />
+                {/* onClick={AddFrontendUserTraits} */}
+              </Fab>
+              </StyledFormDiv>
+            </FormControl>
             <p style={messageStyle}>Backend Development</p>
-            <Fab size="small" color="gray" aria-label="add">
-              <AddIcon />
-              {/* <AddBackendUserTraits /> */}
-            </Fab>
+            <FormControl>
+            <StyledFormDiv>
+              <TextField label="Add Backend Qualities"></TextField>
+              <Fab size="small" color="gray" aria-label="add">
+                <AddIcon />
+                {/* onClick={AddBackendUserTraits} /> */}
+              </Fab>
+              </StyledFormDiv>
+            </FormControl>
             <p style={messageStyle}>Fullstack Development</p>
-            <Fab size="small" color="gray" aria-label="add">
-              <AddIcon />
-              {/* <AddFullstackUserTraits /> */}
-            </Fab>
+            <FormControl>
+              <StyledFormDiv>
+              <TextField label="Add Fullstack Qualities"></TextField>
+              <Fab size="small" color="gray" aria-label="add">
+                <AddIcon />
+                {/* onClick={AddFullstackUserTraits} */}
+              </Fab>
+              </StyledFormDiv>
+            </FormControl>
             <br />
           </>
         );
