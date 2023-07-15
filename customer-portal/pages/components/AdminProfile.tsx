@@ -42,7 +42,7 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const [apiData, setApiData] = useState<Commit[] | null>(null);
   let currentUser: any = session?.user?.email;
   const [role, setRole] = useState<string>("");
-  const [isAdmin, setIsAdmin] = useState<string>("false");
+  const [isAdmin, setIsAdmin] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("details");
   const selectedUserContext = useContext(SelectedUserContext);
@@ -72,7 +72,8 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
           throw new Error("HTTP error, status = " + response.status);
         }
         const roleResponse = await response.text();
-        setIsAdmin(roleResponse);
+
+        setIsAdmin(roleResponse === 'true' ? 'true' : 'false');
       } catch (error) {
         console.error(error);
       }
@@ -193,8 +194,8 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
     }
   };
 
-  return isAdmin === "true" ? (
-    <AdminDashboard></AdminDashboard>
+  return isAdmin === null ? (
+    <div>Loading...</div>
   ) : (
     <Layout username={session?.user?.name}>
       <p className="profile-header-font">{username}</p>
