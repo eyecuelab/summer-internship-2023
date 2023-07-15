@@ -205,7 +205,7 @@ const Dashboard = () => {
   ) : (
     <Layout username={session?.user?.name}>
       <p style={userStyle}>{selectedUser.name || "Default User Name"}</p> 
-      <p style={titleStyle}>Team Lead</p>
+      <p style={titleStyle}>Project Contributor</p>
       <Image
         alt="user picture"
         src={Graphs}
