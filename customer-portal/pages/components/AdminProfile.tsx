@@ -9,7 +9,8 @@ import {
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
 import SelectedUserContext from "../context/selectedUserContext";
-import { Fab } from '@mui/material';
+import { Fab } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 interface Commit {
   name: string;
@@ -36,7 +37,7 @@ interface ProfileProps {
 
 const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const router = useRouter();
-  const { email } = router.query;
+  const { email, projectAppUserId } = router.query;
   const { data: session, status } = useSession({ required: true });
   const [user, setUser] = useState(null);
   const [apiData, setApiData] = useState<Commit[] | null>(null);
@@ -46,6 +47,7 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const [username, setUsername] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("details");
   const selectedUserContext = useContext(SelectedUserContext);
+  const [loading, setLoading] = useState(true);
   const { selectedUser, setSelectedUser } = selectedUserContext;
 
   useEffect(() => {
@@ -73,7 +75,7 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
         }
         const roleResponse = await response.text();
 
-        setIsAdmin(roleResponse === 'true' ? 'true' : 'false');
+        setIsAdmin(roleResponse === "true" ? "true" : "false");
       } catch (error) {
         console.error(error);
       }
@@ -106,6 +108,28 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
         .catch((error) => console.error("Error during fetch:", error));
     }
   }, [isAdmin]);
+
+  useEffect(() => {
+    setLoading(true);
+    const email = `eliot.lauren@gmail.com`;
+    fetch(
+      `https://localhost:7243/api/projectappuser/getprojs/${projectAppUserId}?email=${encodeURIComponent(email)}`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);  // <-- Add this
+        setUser(data);
+        setUsername(data.username);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  }, [projectAppUserId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const formatDate = (dateString: string): string => {
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -163,15 +187,18 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
             <p className="profile-header-font">Strengths & Responsibilities</p>
             <br />
             <p style={messageStyle}>Frontend Development</p>
-            <Fab color="primary" aria-label="add">
+            <Fab size="small" color="gray" aria-label="add">
+              <AddIcon />
               {/* <AddFrontendUserTraits /> */}
             </Fab>
             <p style={messageStyle}>Backend Development</p>
-            <Fab color="primary" aria-label="add">
+            <Fab size="small" color="gray" aria-label="add">
+              <AddIcon />
               {/* <AddBackendUserTraits /> */}
             </Fab>
             <p style={messageStyle}>Fullstack Development</p>
-            <Fab color="primary" aria-label="add">
+            <Fab size="small" color="gray" aria-label="add">
+              <AddIcon />
               {/* <AddFullstackUserTraits /> */}
             </Fab>
             <br />
@@ -198,7 +225,7 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
     <div>Loading...</div>
   ) : (
     <Layout username={session?.user?.name}>
-      <p className="profile-header-font">{username}</p>
+      <p className="profile-header-font">Project Contributor: {email}</p>
       <br />
       <div style={messageStyle}>
         <button

@@ -58,6 +58,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
   const [intialProject, setIntialProject] = useState<Array<Project>>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [showAddUserModule, setShowAddUserModule] = useState(false);
+  const [selectedEmail, setSelectedEmail] = useState<string | null>(null);
   const [usersForProject, setUsersForProject] = useState<Array<ProjectAppUser>>(
     []
   );
@@ -112,19 +113,17 @@ const AdminDashboard = ({ projectAppUsers }) => {
     }
   }, [isAdmin, router]);
 
-    useEffect(() => {
-        fetch(`https://localhost:7243/api/Users`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(
-                        `${response.status}: ${response.statusText}`
-                    );
-                }
-                return response.json();
-            })
-            .then((data) => setUsers(data))
-            .catch((error) => console.error("Error:", error));
-    }, []);
+  useEffect(() => {
+    fetch(`https://localhost:7243/api/Users`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`${response.status}: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then((data) => setUsers(data))
+      .catch((error) => console.error("Error:", error));
+  }, []);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -133,13 +132,11 @@ const AdminDashboard = ({ projectAppUsers }) => {
     }
   }, [status, session]);
 
-    //FETCHING ENTITES FOR INTIAL STATE AND SETTING IT TO [0]
-    useEffect(() => {
-        const fetchAllEntities = async () => {
-            try {
-                const response = await fetch(
-                    `https://localhost:7243/api/Entities`
-                );
+  //FETCHING ENTITES FOR INTIAL STATE AND SETTING IT TO [0]
+  useEffect(() => {
+    const fetchAllEntities = async () => {
+      try {
+        const response = await fetch(`https://localhost:7243/api/Entities`);
 
         const data = await response.json();
 
@@ -167,15 +164,12 @@ const AdminDashboard = ({ projectAppUsers }) => {
 
         const projectData = await response.json();
 
-                if (projectData.length > 0) {
-                    setIntialProject(projectData);
-                    console.log(
-                        "default projects for intial entity",
-                        projectData
-                    );
-                } else {
-                    return console.log("no projects for this entity");
-                }
+        if (projectData.length > 0) {
+          setIntialProject(projectData);
+          console.log("default projects for intial entity", projectData);
+        } else {
+          return console.log("no projects for this entity");
+        }
 
         console.log("default projects for intial entity", projectData);
       } catch (error) {
@@ -183,62 +177,60 @@ const AdminDashboard = ({ projectAppUsers }) => {
       }
     };
 
-        fetchAllProjectsforEntity();
-    }, [currentEntity]);
+    fetchAllProjectsforEntity();
+  }, [currentEntity]);
 
-    //FETCHING USER INFO FROM PROJECTAPPUSER ENDPOINT TO DISPLAY UNDER EACH PROJECT
-    useEffect(() => {
-        const fetchUsersForProjects = async () => {
-            try {
-                const promises = intialProject.map(async (projectData) => {
-                    const response = await fetch(
-                        `https://localhost:7243/api/projectappuser/getusers/${projectData.projectId}`
-                    );
-                    const projectAppUserData = await response.json();
+  //FETCHING USER INFO FROM PROJECTAPPUSER ENDPOINT TO DISPLAY UNDER EACH PROJECT
+  useEffect(() => {
+    const fetchUsersForProjects = async () => {
+      try {
+        const promises = intialProject.map(async (projectData) => {
+          const response = await fetch(
+            `https://localhost:7243/api/projectappuser/getusers/${projectData.projectId}`
+          );
+          const projectAppUserData = await response.json();
 
-                    return {
-                        projectId: projectData.projectId,
-                        projectAppUsers: projectAppUserData,
-                    };
-                });
+          return {
+            projectId: projectData.projectId,
+            projectAppUsers: projectAppUserData,
+          };
+        });
 
-                const projectUserResponses = await Promise.all(promises);
+        const projectUserResponses = await Promise.all(promises);
 
-                const updatedUsersForProjects = projectUserResponses.reduce(
-                    (
-                        acc: ProjectAppUser[],
-                        projectResponse: {
-                            projectId: string;
-                            projectAppUsers: any;
-                        }
-                    ) => {
-                        const { projectId, projectAppUsers } = projectResponse;
-                        if (projectAppUsers.length > 0) {
-                            return [
-                                ...acc,
-                                ...projectAppUsers.map(
-                                    (user: ProjectAppUser) => ({
-                                        ...user,
-                                        projectId,
-                                    })
-                                ),
-                            ];
-                        } else {
-                            return acc;
-                        }
-                    },
-                    []
-                );
-
-                setUsersForProject(updatedUsersForProjects);
-                console.log("usersForProject data:", updatedUsersForProjects);
-            } catch (error) {
-                console.error("Failed to transmit user data:", error);
+        const updatedUsersForProjects = projectUserResponses.reduce(
+          (
+            acc: ProjectAppUser[],
+            projectResponse: {
+              projectId: string;
+              projectAppUsers: any;
             }
-        };
+          ) => {
+            const { projectId, projectAppUsers } = projectResponse;
+            if (projectAppUsers.length > 0) {
+              return [
+                ...acc,
+                ...projectAppUsers.map((user: ProjectAppUser) => ({
+                  ...user,
+                  projectId,
+                })),
+              ];
+            } else {
+              return acc;
+            }
+          },
+          []
+        );
 
-        fetchUsersForProjects();
-    }, [intialProject]);
+        setUsersForProject(updatedUsersForProjects);
+        console.log("usersForProject data:", updatedUsersForProjects);
+      } catch (error) {
+        console.error("Failed to transmit user data:", error);
+      }
+    };
+
+    fetchUsersForProjects();
+  }, [intialProject]);
 
   //FETCHING USER INFO FROM PROJECTAPPUSER ENDPOINT TO DISPLAY UNDER EACH PROJECT
   useEffect(() => {
@@ -288,84 +280,96 @@ const AdminDashboard = ({ projectAppUsers }) => {
 
     fetchUsersForProjects();
   }, [intialProject]);
-    const dashStyle = {
-        fontFamily: "Rasa",
-        fontWeight: 400,
-        fontSize: "48px",
-        lineHeight: "67.2px",
-        color: "#404040",
-    };
+  const dashStyle = {
+    fontFamily: "Rasa",
+    fontWeight: 400,
+    fontSize: "48px",
+    lineHeight: "67.2px",
+    color: "#404040",
+  };
 
-    return status === "authenticated" ? (
-        <AdminLayout
-            username={session?.user?.name}
-            currentEntity={currentEntity}
-            onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
-        >
-            <AddEntityModule />
-            <AddProjectModal
-                currentEntity={currentEntity}
-                onSelectedEntity={handleSelectedEntity}
-            />
-            <p>Current Projects:</p>
+  return status === "authenticated" ? (
+    <AdminLayout
+      username={session?.user?.name}
+      currentEntity={currentEntity}
+      onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
+    >
+      <AddEntityModule />
+      <AddProjectModal
+        currentEntity={currentEntity}
+        onSelectedEntity={handleSelectedEntity}
+      />
+      <p>Current Projects:</p>
+      <div>
+        {intialProject.map((projectData) => (
+          <>
+            <div key={projectData.projectId}>
+              <p style={{ fontFamily: "Rasa", fontSize: "20px" }}>
+                <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
+                {projectData.projectName}
+              </p>
+            </div>
+            <br />
             <div>
-                {intialProject.map((projectData) => (
-                    <>
-                        <div key={projectData.projectId}>
-                            <p style={{ fontFamily: "Rasa", fontSize: "20px" }}>
-                                <span style={{ fontWeight: "bold" }}>
-                                    Project Name:
-                                </span>{" "}
-                                {projectData.projectName}
-                            </p>
-                        </div>
-                        <br />
-                        <div>
-                            {usersForProject
-                                .filter(
-                                    (user) =>
-                                        user.projectId === projectData.projectId
-                                )
-                                .map((user) => (
-                                    <p key={user.projectAppUserId}>
-                                        {user.email}
-                                    </p>
-                                ))}
-                        </div>
-
-                        <ResuableButton
-                            onPress={() => {
-                                setCurrentProject(projectData); // Set the current project
-                                setShowAddUserModule(true); // Show the Add User module
-                            }}
-                            className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3"
-                        >
-                            Add User to {projectData.projectName}
-                        </ResuableButton>
-                        <br />
-                    </>
+              {usersForProject
+                .filter((user) => user.projectId === projectData.projectId)
+                .map((user) => (
+                  <p key={user.projectAppUserId}>
+                    {/* <Link
+                      href={`/AdminProfile/${user.email}`}
+                      as={`/AdminProfile/${user.projectAppUserId}`}
+                      onClick={() => setSelectedEmail(user.email)}
+                    >
+                      {user.email}
+                    </Link> */}
+                    <Link
+                      href={`/AdminProfile/${
+                        user.projectAppUserId
+                      }?email=${encodeURIComponent(user.email)}`}
+                      as={`/AdminProfile/${
+                        user.projectAppUserId
+                      }?email=${encodeURIComponent(user.email)}`}
+                    >
+                      {user.email}
+                    </Link>
+                  </p>
                 ))}
             </div>
-            {showAddUserModule && (
-                <AddUserModule
-                    currentEntity={currentEntity}
-                    onSelectedEntity={handleSelectedEntity}
-                    currentProject={currentProject}
-                    setCurrentProject={setCurrentProject}
-                    showAddUserModule={showAddUserModule}
-                    setShowAddUserModule={setShowAddUserModule}
-                />
-            )}
-        </AdminLayout>
-    ) : (
-        <div>loading...</div>
-    );
+
+            <ResuableButton
+              onPress={() => {
+                setCurrentProject(projectData); // Set the current project
+                setShowAddUserModule(true); // Show the Add User module
+              }}
+              className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3"
+            >
+              Add User to {projectData.projectName}
+            </ResuableButton>
+            <br />
+          </>
+        ))}
+      </div>
+      {showAddUserModule && (
+        <AddUserModule
+          currentEntity={currentEntity}
+          onSelectedEntity={handleSelectedEntity}
+          currentProject={currentProject}
+          setCurrentProject={setCurrentProject}
+          showAddUserModule={showAddUserModule}
+          setShowAddUserModule={setShowAddUserModule}
+        />
+      )}
+    </AdminLayout>
+  ) : (
+    <div>loading...</div>
+  );
 };
 
 export default AdminDashboard;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
+  console.log("Server Side Props Session:", session);
   if (!session) {
     return {
       redirect: {

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
 import Profile from "../components/profile";
-import AdminProfile from "../components/adminProfile";
+import AdminProfile from "../components/AdminProfile";
 import SelectedUserContext from "../context/selectedUserContext";
 
 interface Author {

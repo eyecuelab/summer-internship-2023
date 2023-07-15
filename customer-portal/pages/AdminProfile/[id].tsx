@@ -1,60 +1,51 @@
 import { useRouter } from "next/router";
 import { useEffect, useState, useContext } from "react";
 import Profile from "../components/profile";
-import AdminProfile from "../components/adminProfile";
+import AdminProfile from "../components/AdminProfile";
 import SelectedUserContext from "../context/selectedUserContext";
 
-interface Author {
-  name: string;
-  email: string;
-}
-
-interface NestedCommit {
-  author: Author;
-  message: string;
-  date: string;
-}
-
-interface Commit {
-  commit: NestedCommit;
-}
-
-interface CommitsByAuthor extends Record<string, Commit[]> {}
 
 const AdminProfilePage = () => {
   const router = useRouter();
-  const { email } = router.query;
+  const { id } = router.query;
+  // const userEmail = Array.isArray(email) ? email[0] : email || "";
   const [user, setUser] = useState(null);
-  // const [isAdmin, setIsAdmin] = useState<string>("false");
   const [isAdmin, setIsAdmin] = useState<string | null>(null);
   const selectedUserContext = useContext(SelectedUserContext);
   const { selectedUser, setSelectedUser } = selectedUserContext;
-  const [lastEmail, setLastEmail] = useState(null);
+  const [lastEmail, setLastEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    setLastEmail(email);
-  }, [email]);
+    if (id) {
+      setLastEmail(id);
+    }
+  }, [id]);
 
   useEffect(() => {
     const storedIsAdmin = localStorage.getItem("isAdmin");
     if (storedIsAdmin) {
       setIsAdmin(storedIsAdmin);
     }
-    setLastEmail(email);
-  }, [email]);
-
+    if (id) {
+      setLastEmail(id);
+    }
+  }, [id]);
 
   useEffect(() => {
-    if (email && typeof email === "string") {
-      fetch(`https://localhost:7243/api/ProjectAppUser/getprojs/${email}`)
+    if (id) {
+      fetch(`https://localhost:7243/api/ProjectAppUser/getprojs/${id}`)
         .then((response) => response.json())
-        .then((data) => setUser(data))
+        .then((data) => {
+          console.log('Data received:', data);
+          setUser(data);
+          setSelectedUser(data);
+        })
         .catch((err) => console.error(err));
     }
-  }, [email]);// Re-run this effect if email changes
+  }, [id, setSelectedUser]);
 
   return isAdmin === "true" ? (
-    <AdminProfile selectedUser={selectedUser}/>
+    <AdminProfile selectedUser={selectedUser} />
   ) : (
     <Profile selectedUser={selectedUser} />
   );
