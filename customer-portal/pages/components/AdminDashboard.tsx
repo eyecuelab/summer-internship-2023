@@ -66,7 +66,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
 
   console.log("Intial Projects on page load ", intialProject);
 
-  const handleClick = (email) => {
+  const handleClick = (email: any) => {
     // Fetching user role from server and update local storage
     fetch(`https://localhost:7243/api/Users/VerifyUser?email=${email}`)
       .then((response) => response.text())

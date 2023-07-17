@@ -201,7 +201,7 @@ const Dashboard = () => {
     };
 
   return isAdmin === "true" ? (
-    <AdminDashboard></AdminDashboard>
+    <AdminDashboard projectAppUsers={undefined}></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
       <p style={userStyle}>{selectedUser.name || "Default User Name"}</p> 
