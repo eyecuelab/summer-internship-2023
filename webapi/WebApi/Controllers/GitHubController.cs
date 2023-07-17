@@ -6,24 +6,37 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class GitHubController : ControllerBase
-    {
-        private readonly IHttpClientFactory _clientFactory;
-        private readonly IDataAccessProvider _dataAccessProvider;
-        private readonly IConfiguration _configuration;
+  [Route("api/[controller]")]
+  [ApiController]
+  public class GitHubController : ControllerBase
+  {
+    private readonly IHttpClientFactory _clientFactory;
+    private readonly IDataAccessProvider _dataAccessProvider;
+    private readonly IConfiguration _configuration;
+    private readonly PostgreSqlContext _context;
 
-        public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider, IConfiguration configuration)
-        {
-            _clientFactory = clientFactory;
-            _dataAccessProvider = dataAccessProvider;
-            _configuration = configuration;
-        }
+    public GitHubController(IHttpClientFactory clientFactory, IDataAccessProvider dataAccessProvider, IConfiguration configuration, PostgreSqlContext context)
+    {
+      _clientFactory = clientFactory;
+      _dataAccessProvider = dataAccessProvider;
+      _configuration = configuration;
+      _context = context;
+    }
+
+    // GET ALL COMMITS FOR ONE REPO 
+    [HttpGet("commits/{owner}/{repo}")]
+    public async Task<IActionResult> GetListOfCommits(string owner, string repo)
+    {
+      var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repo}/commits");
+      request.Headers.Add("Accept", "application/vnd.github.v3+json");
+      request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+      var client = _clientFactory.CreateClient();
 
         // GET ALL COMMITS FOR ONE REPO 
         [HttpGet("commits/{owner}/{repo}")]
@@ -71,91 +84,114 @@ namespace WebApi.Controllers
                 return StatusCode((int)response.StatusCode);
             }
 
+      var response = await client.SendAsync(request);
 
+      if (response.IsSuccessStatusCode)
+      {
+        var json = await response.Content.ReadAsStringAsync();
+        var commits = JsonConvert.DeserializeObject<List<ListOfCommits>>(json);
 
-        }
-        // GET LATEST RELEASE FROM A REPO
-        [HttpGet("release/{owner}/{repos}")]
-        public async Task<IActionResult> GetLatestRelease(string owner, string repo)
+        foreach (var commit in commits)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get,
-            $"https://api.github.com/repos/{owner}/{repo}/releases/latest");
-            request.Headers.Add("Accept", "application/vnd.github.v3+json");
-            request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+          // Extract author information from the commit
+          var author = commit.commit.author;
+          var commitInfo = commit.commit;
+          var commitSha = commit.sha;
 
-            var client = _clientFactory.CreateClient();
+          commitInfo.commitSha = commitSha;
+          commitInfo.Date = commit.commit.author.date; // Assign the date directly
 
-            var response = await client.SendAsync(request);
+          _dataAccessProvider.AddAuthor(author);
+          _dataAccessProvider.AddCommit(commitInfo);
 
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
 
-                // Do something with the repositories list, such as returning it in the response
-                return Ok(json);
-            }
-            else
-            {
-                // Handle the case when the API request was not successful
-                // You can return an appropriate response or error message
-                return StatusCode((int)response.StatusCode);
-            }
         }
 
-        [HttpGet("members/{org}")]
-        public async Task<IActionResult> GetOrgMembers(string org)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get,
-            $"https://api.github.com/orgs/{org}/members");
-            request.Headers.Add("Accept", "application/vnd.github.v3+json");
-            request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
-
-            var client = _clientFactory.CreateClient();
-
-            var response = await client.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-
-                // Do something with the repositories list, such as returning it in the response
-                return Ok(json);
-            }
-            else
-            {
-                // Handle the case when the API request was not successful
-                // You can return an appropriate response or error message
-                return StatusCode((int)response.StatusCode);
-            }
-        }
-        // [HttpPost("summarized-commits/{owner}/{repo}")]
-        // public async Task<IActionResult> GetSummarizedCommits(string owner, string repo)
-        // {
-        //     var commitsResult = await GetListOfCommits(owner, repo);
-        //     if (commitsResult is OkObjectResult okResult)
-        //     {
-        //         var commits = okResult.Value as List<ListOfCommits>;
-
-        //         if (commits != null)
-        //         {
-        //             var commitMessages = commits.Select(x => x.commit.message).ToList();
-        //             var openAiController = new OpenAIController(_clientFactory, _configuration);
-        //             var summarizedCommits = await openAiController.SummarizeText(commitMessages);
-
-        //             return Ok(summarizedCommits);
-        //         }
-        //         else
-        //         {
-        //             // Handle the case when the commits list is null
-        //             return NotFound("No commits found.");
-        //         }
-        //     }
-        //     else
-        //     {
-        //         // Handle the case when the GitHub API request was not successful
-        //         var statusCode = (commitsResult as StatusCodeResult)?.StatusCode ?? 500;
-        //         return StatusCode(statusCode);
-        //     }
-        // }
+        return Ok(commits);
+      }
+      else
+      {
+        // Handle the case when the API request was not successful
+        // You can return an appropriate response or error message
+        return StatusCode((int)response.StatusCode);
+      }
     }
+    // GET LATEST RELEASE FROM A REPO
+    [HttpGet("release/{owner}/{repos}")]
+    public async Task<IActionResult> GetLatestRelease(string owner, string repo)
+    {
+      var request = new HttpRequestMessage(HttpMethod.Get,
+      $"https://api.github.com/repos/{owner}/{repo}/releases/latest");
+      request.Headers.Add("Accept", "application/vnd.github.v3+json");
+      request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+      var client = _clientFactory.CreateClient();
+
+      var response = await client.SendAsync(request);
+
+      if (response.IsSuccessStatusCode)
+      {
+        var json = await response.Content.ReadAsStringAsync();
+
+        // Do something with the repositories list, such as returning it in the response
+        return Ok(json);
+      }
+      else
+      {
+        // Handle the case when the API request was not successful
+        // You can return an appropriate response or error message
+        return StatusCode((int)response.StatusCode);
+      }
+    }
+
+    [HttpGet("members/{org}")]
+    public async Task<IActionResult> GetOrgMembers(string org)
+    {
+      var request = new HttpRequestMessage(HttpMethod.Get,
+      $"https://api.github.com/orgs/{org}/members");
+      request.Headers.Add("Accept", "application/vnd.github.v3+json");
+      request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+      var client = _clientFactory.CreateClient();
+
+      var response = await client.SendAsync(request);
+
+      if (response.IsSuccessStatusCode)
+      {
+        var json = await response.Content.ReadAsStringAsync();
+
+        // Do something with the repositories list, such as returning it in the response
+        return Ok(json);
+      }
+      else
+      {
+        // Handle the case when the API request was not successful
+        // You can return an appropriate response or error message
+        return StatusCode((int)response.StatusCode);
+      }
+    }
+
+    [HttpGet("getallcommitsString/{startDate}/{endDate}")]
+    public async Task<IActionResult> GetCommitsByDate(string startDate, string endDate)
+    {
+      DateTime startDateTime, endDateTime;
+
+      if (!DateTime.TryParse(startDate, out startDateTime) || !DateTime.TryParse(endDate, out endDateTime))
+      {
+        return BadRequest("Invalid date format");
+      }
+
+      startDateTime = DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc);
+      endDateTime = DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc);
+
+      var commits = await _context.Commits
+          .Where(c => c.Date >= startDateTime && c.Date <= endDateTime)
+          .Select(c => c.message)
+          .ToListAsync();
+
+      string concatenatedCommits = string.Join(". ", commits);
+
+      return Ok(concatenatedCommits);
+    }
+  }
 }
