@@ -77,27 +77,9 @@ export default function AddUserModule({
         closeHandler();
     };
 
-    // const handleAddProjectAppUser = async () => {
-    //     try {
-    //         const url = "https://localhost:7243/api/projectappuser";
-    //         const projectAppUserpayload = {
-    //             ProjectId: currentProject?.projectId,
-    //             AppUserId: appUserId,
-    //         };
-
-    //         const response = await axios.post(url, projectAppUserpayload);
-
-    //         // Handle the response data
-    //         console.log(response.data);
-    //     } catch (error) {
-    //         // Handle error
-    //         console.error(error);
-    //     }
-    // };
-
     return (
         <div>
-            <Button shadow onPress={handler} style={{ color: "black" }}>
+            <Button shadow onPress={handler}>
                 Add User
             </Button>
             <Modal
@@ -107,7 +89,9 @@ export default function AddUserModule({
                 onClose={closeHandler}
             >
                 <Modal.Header>
-                    <Text id="modal-title" size={18}>
+                    <Text id="modal-title"
+                    
+                    size={18}>
                         Add User
                     </Text>
                 </Modal.Header>
@@ -121,11 +105,12 @@ export default function AddUserModule({
                         placeholder="Enter Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                    
                     />
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button flat color="error" onPress={closeHandler}>
+                        <Button  onPress={closeHandler}>
                             Close
                         </Button>
                         <ResuableButton

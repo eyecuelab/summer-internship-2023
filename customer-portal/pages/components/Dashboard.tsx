@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
@@ -6,9 +6,12 @@ import axios from "axios";
 import Image from "next/image";
 import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
+import SelectedUserContext from "../context/selectedUserContext";
+// import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
   name: string;
+	email: string;
   message: string;
   date: string;
   releaseNotes: string;
@@ -43,8 +46,8 @@ const Dashboard = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const currentUser: any = session?.user?.email;
   const [isAdmin, setIsAdmin] = useState<string>("false");
+	const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
   const [selectedAuthor, setSelectedAuthor] = useState<string>("");
-  const [selectedUser, setSelectedUser] = useState<string>("");
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -105,12 +108,26 @@ const Dashboard = () => {
     }
   }, [isAdmin]);
 
+	useEffect(() => {
+		if (apiData.length > 0) {
+			setSelectedUser({
+				name: apiData[0].name,
+				email: apiData[0].email,
+			});
+		}
+	}, [apiData]);
+
   // Adding a function to get author by date
-  const getAuthorByDate = (date: string): string => {
-    // Find the commit made on the given date and return the author's name
-    const commit = apiData.find((commit) => formatDate(commit.date) === date);
-    return commit?.name || ""; // If the commit is found, return the name, otherwise return empty string
-  };
+	const getAuthorByDate = (date: string): any => {
+		const commit = apiData.find((commit) => formatDate(commit.date) === date);
+		return commit
+			? {
+					name: commit.name,
+					email: commit.email,
+				}
+			: { name: '', email: '' }; 
+	};
+	
 
   //Bandaid fix for a typescript overload function thing? Talk to Erin About it
   const formatDate = (dateString: string): string => {
@@ -161,7 +178,7 @@ const Dashboard = () => {
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDate(event.target.value);
-    setSelectedAuthor(getAuthorByDate(event.target.value)); // set the selected author's name
+    setSelectedUser(getAuthorByDate(event.target.value)); // set the selected author's name
   };
 
   const uniqueDates = Array.from(
@@ -184,11 +201,11 @@ const Dashboard = () => {
     };
 
   return isAdmin === "true" ? (
-    <AdminDashboard></AdminDashboard>
+    <AdminDashboard projectAppUsers={undefined}></AdminDashboard>
   ) : (
     <Layout username={session?.user?.name}>
-      <p style={userStyle}>{selectedAuthor || "Default User Name"}</p> 
-      <p style={titleStyle}>Team Lead</p>
+      <p style={userStyle}>{selectedUser.name || "Default User Name"}</p> 
+      <p style={titleStyle}>Project Contributor</p>
       <Image
         alt="user picture"
         src={Graphs}

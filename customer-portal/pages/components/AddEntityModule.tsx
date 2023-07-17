@@ -37,9 +37,18 @@ export default function AddEntityModule() {
       <Button
         shadow
         onPress={handler}
-        style={{ color: "black" }}
+        style={{
+            borderRadius: "999px",
+            backgroundColor: "#E6E6E6",
+            color: "#404040",
+            padding: "8px 12px",
+            fontFamily: "Rasa",
+            fontSize: "20px",
+            cursor: "pointer",
+        }}
       >
         Add Company
+        
       </Button>
       <Modal
         closeButton
@@ -75,6 +84,7 @@ export default function AddEntityModule() {
               Add
             </Button>
           </Row>
+          
         </Modal.Footer>
       </Modal>
     </div>

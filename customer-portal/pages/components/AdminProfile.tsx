@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import {
   useSession,
@@ -8,6 +8,10 @@ import {
 } from "next-auth/react";
 import Layout from "./layout";
 import AdminDashboard from "./AdminDashboard";
+import SelectedUserContext from "../context/selectedUserContext";
+import { Fab, FormControl, FormLabel, TextField, Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { styled } from '@mui/system';
 
 interface Commit {
   name: string;
@@ -25,24 +29,33 @@ interface CommitResponse {
     message: string;
   };
 }
+interface ProfileProps {
+  selectedUser: {
+    name: string;
+    email: string;
+  };
+}
 
-const AdminProfile = () => {
+const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
   const router = useRouter();
-  const { id } = router.query;
+  const { email, projectAppUserId } = router.query;
   const { data: session, status } = useSession({ required: true });
   const [user, setUser] = useState(null);
   const [apiData, setApiData] = useState<Commit[] | null>(null);
   let currentUser: any = session?.user?.email;
   const [role, setRole] = useState<string>("");
-  const [isAdmin, setIsAdmin] = useState<string>("false");
+  const [isAdmin, setIsAdmin] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("details");
+  const selectedUserContext = useContext(SelectedUserContext);
+  const [loading, setLoading] = useState(true);
+  const { selectedUser, setSelectedUser } = selectedUserContext;
 
   useEffect(() => {
-    // Ensure id exists and is not an array
-    if (id && typeof id === "string") {
+    // Ensure email exists and is not an array
+    if (email && typeof email === "string") {
       // Fetch the data for this user
-      fetch(`https://localhost:7243/api/Users/${id}`)
+      fetch(`https://localhost:7243/api/Users/${email}`)
         .then((response) => response.json())
         .then((data) => {
           setUser(data);
@@ -50,7 +63,7 @@ const AdminProfile = () => {
         })
         .catch((err) => console.error(err));
     }
-  }, [id]);
+  }, [email]);
 
   useEffect(() => {
     const fetchCurrentRole = async () => {
@@ -62,7 +75,8 @@ const AdminProfile = () => {
           throw new Error("HTTP error, status = " + response.status);
         }
         const roleResponse = await response.text();
-        setIsAdmin(roleResponse);
+
+        setIsAdmin(roleResponse === "true" ? "true" : "false");
       } catch (error) {
         console.error(error);
       }
@@ -95,6 +109,31 @@ const AdminProfile = () => {
         .catch((error) => console.error("Error during fetch:", error));
     }
   }, [isAdmin]);
+
+  useEffect(() => {
+    setLoading(true);
+    const email = `eliot.lauren@gmail.com`;
+    fetch(
+      `https://localhost:7243/api/projectappuser/getprojs/${projectAppUserId}?email=${encodeURIComponent(
+        email
+      )}`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data); // <-- Add this
+        setUser(data);
+        setUsername(data.username);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error(error);
+        setLoading(false);
+      });
+  }, [projectAppUserId]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   const formatDate = (dateString: string): string => {
     const options = { month: "long", day: "numeric", year: "numeric" };
@@ -131,6 +170,13 @@ const AdminProfile = () => {
     color: "#404040",
   };
 
+  const StyledFormDiv = styled('div')({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  });
+
   const renderActiveTab = () => {
     switch (activeTab) {
       case "details":
@@ -152,8 +198,35 @@ const AdminProfile = () => {
             <p className="profile-header-font">Strengths & Responsibilities</p>
             <br />
             <p style={messageStyle}>Frontend Development</p>
+            <FormControl>
+            <StyledFormDiv>
+              <TextField label="Add Frontend Qualities"></TextField>
+              <Fab size="small" color="gray" aria-label="add">
+                <AddIcon />
+                {/* onClick={AddFrontendUserTraits} */}
+              </Fab>
+              </StyledFormDiv>
+            </FormControl>
             <p style={messageStyle}>Backend Development</p>
+            <FormControl>
+            <StyledFormDiv>
+              <TextField label="Add Backend Qualities"></TextField>
+              <Fab size="small" color="gray" aria-label="add">
+                <AddIcon />
+                {/* onClick={AddBackendUserTraits} /> */}
+              </Fab>
+              </StyledFormDiv>
+            </FormControl>
             <p style={messageStyle}>Fullstack Development</p>
+            <FormControl>
+              <StyledFormDiv>
+              <TextField label="Add Fullstack Qualities"></TextField>
+              <Fab size="small" color="gray" aria-label="add">
+                <AddIcon />
+                {/* onClick={AddFullstackUserTraits} */}
+              </Fab>
+              </StyledFormDiv>
+            </FormControl>
             <br />
           </>
         );
@@ -174,11 +247,11 @@ const AdminProfile = () => {
     }
   };
 
-  return isAdmin === "true" ? (
-    <AdminDashboard></AdminDashboard>
+  return isAdmin === null ? (
+    <div>Loading...</div>
   ) : (
     <Layout username={session?.user?.name}>
-      <p className="profile-header-font">{username}</p>
+      <p className="profile-header-font">Project Contributor: {email}</p>
       <br />
       <div style={messageStyle}>
         <button
