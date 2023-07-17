@@ -25,17 +25,21 @@ const UserProfilePage = () => {
   const router = useRouter();
   const { id } = router.query;
   const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState<string>("false");
+  // const [isAdmin, setIsAdmin] = useState<string>("false");
+  const [isAdmin, setIsAdmin] = useState<string | null>(null);
   const [commitsByAuthor, setCommitsByAuthor] = useState<CommitsByAuthor>({});
   const selectedUserContext = useContext(SelectedUserContext);
   const { selectedUser, setSelectedUser } = selectedUserContext;
+  const [lastId, setLastId] = useState(null);
 
   useEffect(() => {
     const storedIsAdmin = localStorage.getItem("isAdmin");
     if (storedIsAdmin) {
       setIsAdmin(storedIsAdmin);
     }
-  }, []);
+    setLastId(id);
+  }, [id]);
+
 
   useEffect(() => {
     // Ensure id exists and is not an array
@@ -56,7 +60,7 @@ const UserProfilePage = () => {
       .then((json = []) => {
         const commitsByAuthorTemp: CommitsByAuthor = {};
 
-        json.forEach((commit) => {
+        json.forEach((commit: Commit) => {
           const authorName = commit.commit.author.name;
           if (commitsByAuthorTemp[authorName]) {
             commitsByAuthorTemp[authorName].push(commit);
@@ -86,7 +90,7 @@ const UserProfilePage = () => {
     }
   }, [id, commitsByAuthor, setSelectedUser]);
 
-  if (!user) {
+  if (!user && isAdmin === null) {
     return <div>Loading...</div>;
   }
 

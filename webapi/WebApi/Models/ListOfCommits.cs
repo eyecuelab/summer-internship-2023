@@ -25,6 +25,7 @@ namespace WebApi.Models
         public Author author { get; set; }
         public Committer committer { get; set; }
         public string message { get; set; }
+        public DateTime Date { get; set; }
         public int comment_count { get; set; }
     }
 

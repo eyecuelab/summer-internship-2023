@@ -48,34 +48,6 @@ export default function AddProjectModal({
         handleClose();
     };
 
-    const projectStyle = {
-        fontFamily: "Rasa",
-        fontWeight: 600,
-        fontSize: "18px",
-        lineHeight: "40.8px",
-        color: "#404040",
-    };
-
-    const projectStyleInter = {
-        ...projectStyle,
-        fontWeight: 400,
-        fontSize: "24px",
-    };
-
-    const closeProjectStyle = {
-        ...projectStyle,
-        color: "#FF0000",
-    };
-
-    const addProjectStyle = {
-        ...projectStyle
-    };
-
-    const projectNameStyle = {
-        ...projectStyle,
-    };
-
-
     return (
         <div>
             <Button shadow onPress={handleOpen}
@@ -114,16 +86,14 @@ export default function AddProjectModal({
                         placeholder="Project Name"
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
-                        style={projectNameStyle}
                     />
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button style={closeProjectStyle} onPress={handleClose}>
+                        <Button onPress={handleClose}>
                             Close
                         </Button>
                         <Button
-                            style={addProjectStyle}
                             onPress={handleAddProject}
                         >
                             Add

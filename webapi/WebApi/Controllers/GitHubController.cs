@@ -30,8 +30,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetListOfCommits(string owner, string repo)
         {
             var request = new HttpRequestMessage(HttpMethod.Get,
-            $"https://api.github.com/repos/{owner}/{repo}/commits");
-            request.Headers.Add("Accept", "application/vnd.github.v3+json");
+            $"https://api.github.com/repos/{owner}/{repo}/commits?since=2023-07-1&until=2023-07-14&per_page=150");
             request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
 
             var client = _clientFactory.CreateClient();
