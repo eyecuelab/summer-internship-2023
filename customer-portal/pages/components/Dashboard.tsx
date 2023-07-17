@@ -7,6 +7,7 @@ import Image from "next/image";
 import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
 import SelectedUserContext from "../context/selectedUserContext";
+import ReleaseNotes from "./ReleaseNotes";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -48,6 +49,8 @@ const Dashboard = () => {
   const [isAdmin, setIsAdmin] = useState<string>("false");
 	const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
   const [selectedAuthor, setSelectedAuthor] = useState<string>("");
+  const [releaseNotes, setReleaseNotes] = useState<string>("");
+  
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -127,6 +130,21 @@ const Dashboard = () => {
 				}
 			: { name: '', email: '' }; 
 	};
+
+  useEffect(() => {
+    const fetchReleaseNotes = async () => {
+      try {
+        const response = await axios.post(`http://localhost:7243/api/OpenAI/SummarizeCommitsByDates/${selectedDate}/${selectedDate}`);
+        setReleaseNotes(response.data);
+      } catch (error) {
+        console.error("Failed to fetch release notes:", error);
+      }
+    };
+  
+    if (selectedDate) {
+      fetchReleaseNotes();
+    }
+  }, [selectedDate]);  
 	
 
   //Bandaid fix for a typescript overload function thing? Talk to Erin About it
@@ -200,66 +218,67 @@ const Dashboard = () => {
       ));
     };
 
-  return isAdmin === "true" ? (
-    <AdminDashboard projectAppUsers={undefined}></AdminDashboard>
-  ) : (
-    <Layout username={session?.user?.name}>
-      <p style={userStyle}>{selectedUser.name || "Default User Name"}</p> 
-      <p style={titleStyle}>Project Contributor</p>
-      <Image
-        alt="user picture"
-        src={Graphs}
-        width={890}
-        height={147}
-      />
-      <br />
-      <br />
-
-      <select
-        value={selectedDate}
-        onChange={handleDateChange}
-        style={{
-          marginLeft: "auto",
-          fontFamily: "Open Sans",
-          float: "right",
-          fontWeight: 600,
-          fontSize: "16px",
-          lineHeight: "25.6px",
-          color: "#404040",
-          backgroundColor: "#F7F7F8",
-          padding: "5px 10px",
-          border: "none",
-          outline: "none",
-          boxShadow: "none",
-          width: "254px",
-          height: "35px",
-        }}
-      >
-        <option value="">All Dates</option>
-        {uniqueDates.map((date, index) => (
-          <option key={index} value={date}>
-            {date}
-          </option>
-        ))}
-      </select>
-
-      {selectedDate ? (
-        <>
-          <p style={dateStyle}>{formatDate(selectedDate)}</p>
-          {renderCommits(filteredData)}
-        </>
-      ) : (
-        uniqueDates.map((date, index) => (
+    return isAdmin === "true" ? (
+      <AdminDashboard projectAppUsers={undefined}></AdminDashboard>
+    ) : (
+      <Layout username={session?.user?.name}>
+        <p style={userStyle}>{selectedUser.name || "Default User Name"}</p> 
+        <p style={titleStyle}>Project Contributor</p>
+        <Image
+          alt="user picture"
+          src={Graphs}
+          width={890}
+          height={147}
+        />
+        <br />
+        <br />
+    
+        <select
+          value={selectedDate}
+          onChange={handleDateChange}
+          style={{
+            marginLeft: "auto",
+            fontFamily: "Open Sans",
+            float: "right",
+            fontWeight: 600,
+            fontSize: "16px",
+            lineHeight: "25.6px",
+            color: "#404040",
+            backgroundColor: "#F7F7F8",
+            padding: "5px 10px",
+            border: "none",
+            outline: "none",
+            boxShadow: "none",
+            width: "254px",
+            height: "35px",
+          }}
+        >
+          <option value="">All Dates</option>
+          {uniqueDates.map((date, index) => (
+            <option key={index} value={date}>
+              {date}
+            </option>
+          ))}
+        </select>
+    
+        {selectedDate && (
+          <div>
+            <p style={dateStyle}>{formatDate(selectedDate)}</p>
+            {renderCommits(filteredData)}
+            <ReleaseNotes startDate={selectedDate} endDate={selectedDate} />
+          </div>
+        )}
+    
+        {!selectedDate && uniqueDates.map((date, index) => (
           <div key={index}>
             <p style={dateStyle}>{date}</p>
             {renderCommits(
               apiData.filter((commit) => formatDate(commit.date) === date)
             )}
           </div>
-        ))
-      )}
-    </Layout>
-  );
+        ))}
+      </Layout>
+    );
 };
 
 export default Dashboard;
