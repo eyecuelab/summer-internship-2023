@@ -157,7 +157,7 @@ export default function AddUserModule({
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button  onPress={closeHandler}>
+                        <Button style={closeUserStyle} onPress={closeHandler}>
                             Close
                         </Button>
                         <ResuableButton
