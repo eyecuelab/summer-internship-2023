@@ -48,18 +48,46 @@ export default function AddProjectModal({
         handleClose();
     };
 
+    const projectStyle = {
+        fontFamily: "Rasa",
+        fontWeight: 600,
+        fontSize: "18px",
+        lineHeight: "40.8px",
+        color: "#404040",
+    };
+
+    const projectStyleInter = {
+        ...projectStyle,
+        fontWeight: 400,
+        fontSize: "24px",
+    };
+
+    const closeProjectStyle = {
+        ...projectStyle,
+        color: "#FF0000",
+    };
+
+    const addProjectStyle = {
+        ...projectStyle
+    };
+
+    const projectNameStyle = {
+        ...projectStyle,
+    };
+
+
     return (
         <div>
-            <Button shadow onPress={handleOpen}               
-            style={{
-                borderRadius: "999px",
-                backgroundColor: "#E6E6E6",
-                color: "#404040",
-                padding: "8px 12px",
-                fontFamily: "Rasa",
-                fontSize: "20px",
-                cursor: "pointer",
-            }}
+            <Button shadow onPress={handleOpen}
+                style={{
+                    borderRadius: "999px",
+                    backgroundColor: "#E6E6E6",
+                    color: "#404040",
+                    padding: "8px 12px",
+                    fontFamily: "Rasa",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                }}
             >
                 Add Project
             </Button>
@@ -71,8 +99,8 @@ export default function AddProjectModal({
             >
                 <Modal.Header>
                     <Text id="modal-title"
-                    style={projectStyleInter}
-                    size={18}>
+                        style={projectStyleInter}
+                        size={18}>
                         Add Project
                     </Text>
                 </Modal.Header>
