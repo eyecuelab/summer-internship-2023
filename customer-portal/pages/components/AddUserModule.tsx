@@ -151,6 +151,7 @@ export default function AddUserModule({
                         size="lg"
                         placeholder="Enter Email"
                         value={email}
+                        style={userNameStyle}
                         onChange={(e) => setEmail(e.target.value)}
                     
                     />
