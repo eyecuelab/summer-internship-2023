@@ -295,10 +295,12 @@ const AdminDashboard = ({ projectAppUsers }) => {
       onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
     >
       <AddEntityModule />
+      <br></br>
       <AddProjectModal
         currentEntity={currentEntity}
         onSelectedEntity={handleSelectedEntity}
       />
+<br></br>
       <p>Current Projects:</p>
       <div>
         {intialProject.map((projectData) => (
