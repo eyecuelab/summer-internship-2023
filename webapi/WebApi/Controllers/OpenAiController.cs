@@ -102,8 +102,8 @@ public async Task<IActionResult> SummarizeText(string startDate, string endDate)
         {
             // Handle the case when OpenAI API request was not successful
             var statusCode = (int)openAiResponse.StatusCode;
-    Console.WriteLine($"OpenAI API request failed with status code: {statusCode}, response: {responseContent}");
-    return StatusCode(statusCode, $"OpenAI API request failed with status code: {statusCode}");
+            Console.WriteLine($"OpenAI API request failed with status code: {statusCode}, response: {responseContent}");
+            return StatusCode(statusCode, $"OpenAI API request failed with status code: {statusCode}");
         }
     }
     catch (Exception ex)
