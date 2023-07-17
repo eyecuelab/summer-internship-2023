@@ -64,6 +64,8 @@ public async Task<IActionResult> SummarizeText(string startDate, string endDate)
             .ToListAsync();
 
         string concatenatedCommits = string.Join(". ", commits);
+        // Remove lines containing "Merge pull request" and "Sz/api"
+        concatenatedCommits = string.Join(". ", commits.Where(c => !c.Contains("Merge pull request") && !c.Contains("Sz/api")));
 
         var openAiEndpoint = "https://api.openai.com/v1/chat/completions";
         var openAiClient = _clientFactory.CreateClient();
@@ -79,7 +81,7 @@ public async Task<IActionResult> SummarizeText(string startDate, string endDate)
     messages = new[]
     {
         new { role = "system", content = "You are a helpful assistant that summarizes software changes into release notes." },
-        new { role = "user", content = $"Please generate release notes for the following changes but do not include the `Merge pull request`: {concatenatedCommits}" },
+        new { role = "user", content = $"Please generate release notes for the following changes`: {concatenatedCommits}" },
     },
     temperature = 0.2,
 };
