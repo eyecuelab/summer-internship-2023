@@ -280,12 +280,14 @@ const AdminDashboard = ({ projectAppUsers }) => {
 
     fetchUsersForProjects();
   }, [intialProject]);
+
   const dashStyle = {
     fontFamily: "Rasa",
-    fontWeight: 400,
-    fontSize: "48px",
+    fontWeight: 600,
+    fontSize: "42px",
     lineHeight: "67.2px",
     color: "#404040",
+    textDecoration: "underline",
   };
 
   return status === "authenticated" ? (
@@ -301,7 +303,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
         onSelectedEntity={handleSelectedEntity}
       />
 <br></br>
-      <p>Current Projects:</p>
+      <p style={dashStyle}>Current Projects</p>
       <div>
         {intialProject.map((projectData) => (
           <>

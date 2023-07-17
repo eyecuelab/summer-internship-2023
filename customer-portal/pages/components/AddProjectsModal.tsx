@@ -27,12 +27,12 @@ export default function AddProjectModal({
     const handleAddProject = async () => {
         try {
             const url = "https://localhost:7243/api/projects";
-            const emailEntityPayload = {
+            const payload = {
                 EntityId: currentEntity?.entityId,
                 ProjectName: projectName,
             };
 
-            const response = await axios.post(url, emailEntityPayload);
+            const response = await axios.post(url, payload);
 
             // Handle the response data
             console.log(response.data);
@@ -46,6 +46,33 @@ export default function AddProjectModal({
 
         // Close the modal
         handleClose();
+    };
+
+    const projectStyle = {
+        fontFamily: "Rasa",
+        fontWeight: 600,
+        fontSize: "18px",
+        lineHeight: "40.8px",
+        color: "#404040",
+    };
+    
+    const projectStyleInter = {
+        ...projectStyle,
+        fontWeight: 400,
+        fontSize: "24px",
+    };
+    
+    const closeProjectStyle = {
+        ...projectStyle,
+        color: "#FF0000",
+    };
+    
+    const addProjectStyle = {
+        ...projectStyle
+    };
+    
+    const projectNameStyle = {
+        ...projectStyle,
     };
 
     return (
@@ -71,6 +98,7 @@ export default function AddProjectModal({
             >
                 <Modal.Header>
                     <Text id="modal-title"
+                    style={projectStyleInter}
                     size={18}>
                         Add Project
                     </Text>
@@ -85,14 +113,16 @@ export default function AddProjectModal({
                         placeholder="Project Name"
                         value={projectName}
                         onChange={(e) => setProjectName(e.target.value)}
+                        style={projectNameStyle}
                     />
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button onPress={handleClose}>
+                        <Button style={closeProjectStyle} onPress={handleClose}>
                             Close
                         </Button>
                         <Button
+                            style={addProjectStyle}
                             onPress={handleAddProject}
                         >
                             Add

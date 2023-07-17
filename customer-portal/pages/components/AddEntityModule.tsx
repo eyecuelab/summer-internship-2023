@@ -32,8 +32,45 @@ export default function AddEntityModule() {
     closeHandler();
   };
 
+  const companyStyle = {
+    fontFamily: "Rasa",
+    fontWeight: 600,
+    fontSize: "18px",
+    lineHeight: "40.8px",
+    color: "#404040",
+};
+
+const companyStyleInter = {
+    ...companyStyle,
+    fontWeight: 400,
+    fontSize: "24px",
+};
+
+const closeCompanyStyle = {
+    ...companyStyle,
+    color: "#FF0000",
+};
+
+const addCompanyStyle = {
+    ...companyStyle
+};
+
+const companyNameStyle = {
+    ...companyStyle,
+    
+};
+
+const adminDashStyle = {
+    ...companyStyle,
+    fontSize: "48px",
+    fontWeight: "400"
+}
+
   return (
     <div>
+      <p style ={adminDashStyle}>Admin Dashboard</p>
+      <br />
+      <br />
       <Button
         shadow
         onPress={handler}
@@ -57,7 +94,7 @@ export default function AddEntityModule() {
         onClose={closeHandler}
       >
         <Modal.Header>
-          <Text id="modal-title" size={18}>
+          <Text id="modal-title" style = {companyStyleInter} size={18}>
             Add Company
           </Text>
         </Modal.Header>
@@ -70,16 +107,17 @@ export default function AddEntityModule() {
             size="lg"
             placeholder="Company Name"
             value={companyName}
+            style={companyNameStyle}
             onChange={(e) => setCompanyName(e.target.value)}
           />
         </Modal.Body>
         <Modal.Footer>
           <Row justify="flex-end">
-            <Button flat color="error" onPress={closeHandler}>
+            <Button style={closeCompanyStyle} onPress={closeHandler}>
               Close
             </Button>
             <Button 
-              style={{ color: "black" }}
+              style={ addCompanyStyle }
               onPress={handleAddCompany}>
               Add
             </Button>

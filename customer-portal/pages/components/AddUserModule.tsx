@@ -33,8 +33,8 @@ export default function AddUserModule({
 }: AddUserModuleProps) {
     const [email, setEmail] = useState("");
 
-    console.log("current project in usermodule ",currentProject)
-    console.log("current entity in usermodule ", currentEntity)
+    console.log("current project in usermodule ", currentProject);
+    console.log("current entity in usermodule ", currentEntity);
 
     const handler = () => setShowAddUserModule(true);
     const closeHandler = () => setShowAddUserModule(false);
@@ -46,35 +46,84 @@ export default function AddUserModule({
                 Email: email,
                 EntityId: `${currentEntity?.entityId}`,
             };
-    
-            const emailEntityresponse = await axios.post(emailUrl, emailEntitypayload);
-            setEmail(email)
+
+            const emailEntityresponse = await axios.post(
+                emailUrl,
+                emailEntitypayload
+            );
+            setEmail(email);
             // Handle the response data
             console.log(email);
             console.log(emailEntityresponse);
 
-
             const projectAppUserUrl = "https://localhost:7243/api/projectappuser";
             const ProjectAppUserpayload = {
                 ProjectId: `${currentProject?.projectId}`,
-                Email: email
+                Email: email,
             };
 
-            const projectAppUserresponse = await axios.post(projectAppUserUrl, ProjectAppUserpayload);
-    
+            const projectAppUserresponse = await axios.post(
+                projectAppUserUrl,
+                ProjectAppUserpayload
+            );
+
             console.log(email);
             console.log(projectAppUserresponse);
-    
         } catch (error) {
             // Handle error
             console.error(error);
         }
-    
+
         // Reset input field
         setEmail("");
-    
+
         // Close the modal
         closeHandler();
+    };
+
+    // const handleAddProjectAppUser = async () => {
+    //     try {
+    //         const url = "https://localhost:7243/api/projectappuser";
+    //         const projectAppUserpayload = {
+    //             ProjectId: currentProject?.projectId,
+    //             AppUserId: appUserId,
+    //         };
+
+    //         const response = await axios.post(url, projectAppUserpayload);
+
+    //         // Handle the response data
+    //         console.log(response.data);
+    //     } catch (error) {
+    //         // Handle error
+    //         console.error(error);
+    //     }
+    // };
+
+    const userStyle = {
+        fontFamily: "Rasa",
+        fontWeight: 600,
+        fontSize: "18px",
+        lineHeight: "40.8px",
+        color: "#404040",
+    };
+
+    const userStyleInter = {
+        ...userStyle,
+        fontWeight: 400,
+        fontSize: "24px",
+    };
+
+    const closeUserStyle = {
+        ...userStyle,
+        color: "#FF0000",
+    };
+
+    // const addUserStyle = {
+    //     ...userStyle,
+    // };
+
+    const userNameStyle = {
+        ...userStyle,
     };
 
     return (
@@ -89,9 +138,7 @@ export default function AddUserModule({
                 onClose={closeHandler}
             >
                 <Modal.Header>
-                    <Text id="modal-title"
-                    
-                    size={18}>
+                    <Text id="modal-title" style={userStyleInter} size={18}>
                         Add User
                     </Text>
                 </Modal.Header>
@@ -110,7 +157,7 @@ export default function AddUserModule({
                 </Modal.Body>
                 <Modal.Footer>
                     <Row justify="flex-end">
-                        <Button  onPress={closeHandler}>
+                        <Button style={closeUserStyle} onPress={closeHandler}>
                             Close
                         </Button>
                         <ResuableButton
