@@ -3,7 +3,7 @@ using WebApi.DataAccess;
 using WebApi.Models;
 using System;
 using Newtonsoft.Json.Linq;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApi.Controllers
 {
@@ -82,6 +82,14 @@ namespace WebApi.Controllers
             }
         }
 
+        [HttpGet("sprints")]
+        public async Task<IActionResult> GetSprints()
+        {
+            var sprints = await _context.Sprints.ToListAsync();
+            return Ok(sprints);
+        }
+
+
         [HttpPost("/api/getsprintnames/{boardId}/{apiKey}/{apiToken}")]
         public async Task<IActionResult> GetBoardTitles(string boardId, string apiKey, string apiToken)
         {
@@ -104,7 +112,7 @@ namespace WebApi.Controllers
                 // Filter and extract sprint information
                 var sprints = sprintData
                     .Where(obj => obj["name"].Value<string>().StartsWith("Sprint-"))
-                    .Select(obj => new Models.Sprint 
+                    .Select(obj => new Models.Sprint
                     {
                         Number = obj["name"].Value<string>().Split(' ')[0],
                         Date = DateTime.ParseExact(obj["name"].Value<string>().Split(' ')[1], "MM/dd/yy", null).ToUniversalTime(),
