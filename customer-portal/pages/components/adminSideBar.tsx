@@ -6,6 +6,7 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import AddEntityModule from "./AddEntityModule";
 
 type Props = {
   collapsed: boolean;
@@ -90,6 +91,7 @@ const AdminSidebar = ({ collapsed, setCollapsed, currentEntity, onSelectedEntity
             <br />
           </div>
         ))}
+        <AddEntityModule />
       </div>
     </div>
   );

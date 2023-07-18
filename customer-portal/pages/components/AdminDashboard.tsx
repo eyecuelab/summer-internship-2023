@@ -284,11 +284,20 @@ const AdminDashboard = ({ projectAppUsers }) => {
   const dashStyle = {
     fontFamily: "Rasa",
     fontWeight: 600,
-    fontSize: "42px",
+    fontSize: "36px",
     lineHeight: "67.2px",
     color: "#404040",
     textDecoration: "underline",
   };
+
+  const headerStyle = {
+    ...dashStyle,
+    fontWeight: 400,
+    fontSize: "48px",
+    lineHeight: "67.2px",
+    color: "#404040",
+    textDecoration: "none",
+  }
 
   return status === "authenticated" ? (
     <AdminLayout
@@ -296,14 +305,17 @@ const AdminDashboard = ({ projectAppUsers }) => {
       currentEntity={currentEntity}
       onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
     >
-      <AddEntityModule />
       <br></br>
-      <AddProjectModal
+      <p style = {headerStyle}>Admin Portal </p>
+      <br></br>
+      <p style={dashStyle}>Current Projects</p>
+
+
+      {/* <AddProjectModal
         currentEntity={currentEntity}
         onSelectedEntity={handleSelectedEntity}
-      />
+      /> */}
 <br></br>
-      <p style={dashStyle}>Current Projects</p>
       <div>
         {intialProject.map((projectData) => (
           <>
@@ -363,6 +375,10 @@ const AdminDashboard = ({ projectAppUsers }) => {
           setShowAddUserModule={setShowAddUserModule}
         />
       )}
+            <AddProjectModal
+        currentEntity={currentEntity}
+        onSelectedEntity={handleSelectedEntity}
+      />
     </AdminLayout>
   ) : (
     <div>loading...</div>
