@@ -1,5 +1,3 @@
-
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -78,10 +76,48 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("responses")]
-        public async Task<IActionResult> GetResponses()
+        public async Task<IActionResult> GetResponses([FromQuery] string startDate, [FromQuery] string endDate)
         {
-            var responses = await _context.Responses.ToListAsync();
-            return Ok(responses);
+            try
+            {
+                if (string.IsNullOrEmpty(startDate) || string.IsNullOrEmpty(endDate))
+                {
+                    return BadRequest("Both startDate and endDate must be provided");
+                }
+
+                DateTime startDateTime;
+                DateTime endDateTime;
+
+                string format = "yyyy-MM-dd";
+
+                if (!DateTime.TryParseExact(startDate, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out startDateTime)
+                    || !DateTime.TryParseExact(endDate, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out endDateTime))
+                {
+                    return BadRequest("Invalid date format");
+                }
+
+                startDateTime = DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc);
+                endDateTime = DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc);
+
+                var responses = await _context.Responses
+                    .Where(r => r.StartDate >= startDateTime && r.EndDate <= endDateTime)
+                    .ToListAsync();
+
+                return Ok(responses);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                Console.WriteLine($"Error in GetResponses: {ex.Message}");
+
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                }
+
+                // Return a 500 Internal Server Error status code along with a custom message
+                return StatusCode(500, "An error occurred while processing your request. Please try again later.");
+            }
         }
 
         [HttpPost("SummarizeCommitsByDates/{startDate}/{endDate}")]
@@ -139,7 +175,9 @@ namespace WebApi.Controllers
 
                     var summaryResponse = new Response
                     {
-                        ResponseText = summary
+                        ResponseText = summary,
+                        StartDate = startDateTime,
+                        EndDate = endDateTime,
                     };
 
                     _context.Responses.Add(summaryResponse);

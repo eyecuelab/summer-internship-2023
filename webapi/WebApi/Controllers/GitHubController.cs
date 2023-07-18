@@ -32,7 +32,7 @@ namespace WebApi.Controllers
         [HttpGet("commits/{owner}/{repo}")]
         public async Task<IActionResult> GetListOfCommits(string owner, string repo)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repo}/commits?per_page=100&page=4");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repo}/commits?per_page=100&page=2");
             request.Headers.Add("Accept", "application/vnd.github.v3+json");
             request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
 
@@ -68,13 +68,14 @@ namespace WebApi.Controllers
                 return StatusCode((int)response.StatusCode);
             }
         }
-        //GET ALL COMMITS IN COMMITS TABLE
+
+        // GET ALL COMMITS IN COMMITS TABLE
         [HttpGet("dbcommits")]
         public async Task<IActionResult> GetCommits()
         {
             var dbCommits = await _context.Commits
-    .Include(c => c.author) // Eagerly load the Author data
-    .ToListAsync();
+                .Include(c => c.author) // Eagerly load the Author data
+                .ToListAsync();
 
             return Ok(dbCommits);
         }
@@ -85,8 +86,6 @@ namespace WebApi.Controllers
             var dbAuthors = await _context.Authors.ToListAsync();
             return Ok(dbAuthors);
         }
-
-
 
         // GET LATEST RELEASE FROM A REPO
         [HttpGet("release/{owner}/{repo}")]
