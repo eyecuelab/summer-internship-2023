@@ -111,6 +111,18 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Responses",
+                columns: table => new
+                {
+                    ResponseId = table.Column<string>(type: "text", nullable: false),
+                    ResponseText = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Responses", x => x.ResponseId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sprints",
                 columns: table => new
                 {
@@ -329,12 +341,12 @@ namespace WebApi.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "IsAdmin", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1", 0, "44d7cbec-8c14-4952-b1b4-aca01b3f5313", "szook7@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "SZOOK7@GMAIL.COM", "SZOOK7@GMAIL.COM", "AQAAAAEAACcQAAAAEKK3QO+4ONyvhinZakXH9SLKnNck4ZYTLFkcGV7BRDdVq/s2fFLkl3OYS2UoZJzwQg==", null, false, "", false, "szook7@gmail.com" },
-                    { "2", 0, "c7c3bb4b-20d3-4c12-87bd-48b710cd9351", "lee.justin001126@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "LEE.JUSTIN001126@GMAIL.COM", "LEE.JUSTIN001126@GMAIL.COM", "AQAAAAEAACcQAAAAEJHaMpQAF+HORm2rSvCCFADf7nYJkH4OXBvNzjfgvnc3mCngSZ3hb94uicHjnGKq3A==", null, false, "", false, "lee.justin001126@gmail.com" },
-                    { "3", 0, "d6f9cd37-988a-41b4-8cd6-d4a2e7e0b840", "erintimlin@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "ERINTIMLIN@GMAIL.COM", "ERINTIMLIN@GMAIL.COM", "AQAAAAEAACcQAAAAEIB3KbGXrJB9QenRtzkufgGVlPD3iLGBPD62f9gBeQxWBti+c+b0CvpNzQta5VXVDA==", null, false, "", false, "erintimlin@gmail.com" },
-                    { "4", 0, "2d9b23f1-384f-467c-a5fa-a0168c05072c", "gronstal.larson@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAEPcvhllJxWdD+siSTXCsVANypvLmxI3qI7wq/lgOmfvrDPiS2jm7QFb7MTlY0UTkfg==", null, false, "", false, "Gronstal.Larson@gmail.com" },
-                    { "5", 0, "f5bd79de-96bc-44e9-88d9-be5ade7a9959", "b.bakshev@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "B.BAKSHEV@GMAIL.COM", "B.BAKSHEV@GMAIL.COM", "AQAAAAEAACcQAAAAEInsm5xW68hrXN/gLi7gNVPcSiTvkjPlt734b7b3f3JLr6ETbTC1spcsz5hzzQeB5w==", null, false, "", false, "b.bakshev@gmail.com" },
-                    { "6", 0, "b9aee73f-1998-4e7e-9f38-3054ebce53ea", "eliot.lauren@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "ELIOT.LAUREN@GMAIL.COM", "ELIOT.LAUREN@GMAIL.COM", "AQAAAAEAACcQAAAAEOLUmRy+7z+Xfcdm54h/Q8o7RIghGZvhv5HKXvYOy+Wma3mgFzeSRn1OE3vqdMHxKA==", null, false, "", false, "eliot.lauren@gmail.com" }
+                    { "1", 0, "d3c37ae6-8bbd-406e-9593-e28646250b53", "szook7@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "SZOOK7@GMAIL.COM", "SZOOK7@GMAIL.COM", "AQAAAAEAACcQAAAAEG2oMNw79XiVPcsydb/r2uTWC8e6x6UVvf6ri2yL9yP00tIAWwh1kJefZo4peSzxKA==", null, false, "", false, "szook7@gmail.com" },
+                    { "2", 0, "e7805f27-5ae5-4317-9fe5-cff0cb9d2e1e", "lee.justin001126@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "LEE.JUSTIN001126@GMAIL.COM", "LEE.JUSTIN001126@GMAIL.COM", "AQAAAAEAACcQAAAAEJPXjB3+6mA2ehRKUnw6xW92SdLH3XGJYuCIPFO5NRFnWilxWGEjfp4LrYGGLy0SCQ==", null, false, "", false, "lee.justin001126@gmail.com" },
+                    { "3", 0, "7b608a77-f65d-4325-adb4-1b0382cb2043", "erintimlin@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "ERINTIMLIN@GMAIL.COM", "ERINTIMLIN@GMAIL.COM", "AQAAAAEAACcQAAAAEN03qDAYd6eWb7anICv4fYwSmTNROMt9QrorAJboXLvKYgljoMtW8/LewaEzsyr5HA==", null, false, "", false, "erintimlin@gmail.com" },
+                    { "4", 0, "f5d02e4c-b0bb-489f-834a-c221e013b7ec", "gronstal.larson@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAECoPmj9/x318Rgfbql8oBExOG49Ap8lqGe7PgVtxvP1nHJ8Qig7CX6WZ8ovVhpLFrg==", null, false, "", false, "Gronstal.Larson@gmail.com" },
+                    { "5", 0, "60c7dde0-8768-4f09-b355-56c14e8e4184", "b.bakshev@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "B.BAKSHEV@GMAIL.COM", "B.BAKSHEV@GMAIL.COM", "AQAAAAEAACcQAAAAEM3s8OKHBNvmtHQu9ePChn5FSnl+PSkYmdTYxqWuRn6ivdMwaxrPq7TrhJhZH/qmcA==", null, false, "", false, "b.bakshev@gmail.com" },
+                    { "6", 0, "e1f2900d-c1d9-4bd1-9dbf-1bf0b0d54b39", "eliot.lauren@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "ELIOT.LAUREN@GMAIL.COM", "ELIOT.LAUREN@GMAIL.COM", "AQAAAAEAACcQAAAAECvkxVWDb5fAfiixE9w809ieTYk8uuklVd+/7nWGSEIkRBXBiWIo/DgQUeRLSVeYZg==", null, false, "", false, "eliot.lauren@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -480,6 +492,9 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectAppUsers");
+
+            migrationBuilder.DropTable(
+                name: "Responses");
 
             migrationBuilder.DropTable(
                 name: "Sprints");
