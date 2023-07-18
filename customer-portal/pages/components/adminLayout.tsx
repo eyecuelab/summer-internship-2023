@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import classNames from "classnames";
 import AdminSidebar from "./adminSideBar";
 import { signOut } from "next-auth/react";
+import AddEntityModule from "./AddEntityModule";
 
 interface LayoutProps {
   username: string | undefined | null;
