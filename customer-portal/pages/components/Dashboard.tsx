@@ -49,6 +49,8 @@ const Dashboard = () => {
     const [isAdmin, setIsAdmin] = useState<string>("false");
     const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
     const [selectedAuthor, setSelectedAuthor] = useState<string>("");
+    const [sprints, setSprints] = useState([]);
+
 
     useEffect(() => {
         if (status === "authenticated") {
@@ -112,6 +114,20 @@ const Dashboard = () => {
                 .catch((error) => console.error("Error during fetch:", error));
         }
     }, [isAdmin]);
+
+    useEffect(() => {
+        async function fetchData() {
+          try {
+            const response = await fetch('https://localhost:7243/api/Trello/sprints');
+            const data = await response.json();
+            console.log(data);
+            setSprints(data);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        }
+        fetchData();
+      }, []);
 
     useEffect(() => {
         if (apiData.length > 0) {
