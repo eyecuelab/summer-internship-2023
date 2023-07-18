@@ -39,7 +39,7 @@ namespace WebApi.DataAccess
                             PasswordHash = hasher.HashPassword(null, "Password1!"),
                             SecurityStamp = string.Empty,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
-                            IsAdmin = true
+                            IsAdmin = false
                         },
                         new AppUser
                         {
