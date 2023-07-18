@@ -5,8 +5,6 @@ const ReleaseNotes: React.FC = () => {
   const [releaseNotes, setReleaseNotes] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
-  const [date, setDate] = useState<string>("");
-
 
   // Functions to handle date input changes
   const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,24 +13,31 @@ const ReleaseNotes: React.FC = () => {
 
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEndDate(event.target.value);
-    console.log(event.target.value);
   };
 
   // Function to handle button click
   const handleReleaseNotesClick = async () => {
-    console.log(startDate, endDate);
     if (startDate !== "" && endDate !== "") {
       try {
-        const response = await axios.get(`http://localhost:7243/api/OpenAI/SummarizeCommitsByDates`, { params: { startDate: startDate, endDate: endDate } });
-        setReleaseNotes(response.data);
+        const formattedStartDate = new Date(startDate).toISOString().split("T")[0];
+        const formattedEndDate = new Date(endDate).toISOString().split("T")[0];
+
+        const response = await axios.get("https://localhost:7243/api/OpenAI/responses");
+        if (response.data && Array.isArray(response.data)) {
+          const filteredResponse = response.data.find(
+            (item: any) => item.startDate.startsWith(formattedStartDate) && item.endDate.startsWith(formattedEndDate)
+          );
+          if (filteredResponse) {
+            setReleaseNotes(filteredResponse.responseText);
+          } else {
+            setReleaseNotes("No release notes found for the selected dates.");
+          }
+        }
       } catch (error) {
-        console.error("Failed to fetch release notes:", error);
+        console.log("Error fetching data:", error);
       }
-    } else {
-      console.error("Start date or end date is not set");
     }
   };
-  
 
   return (
     <div>
