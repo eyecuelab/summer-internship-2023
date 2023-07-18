@@ -294,9 +294,17 @@ const AdminDashboard = ({ projectAppUsers }) => {
     ...dashStyle,
     fontWeight: 400,
     fontSize: "48px",
-    lineHeight: "67.2px",
-    color: "#404040",
     textDecoration: "none",
+  }
+
+  const userListStyle = {
+    ...dashStyle,
+    fontFamily: "Rasa",
+    fontWeight: 400,
+    fontSize: "22px",
+    lineHeight: "40.8px",
+    color: "#404040",
+    textDecoration: "none", 
   }
 
   return status === "authenticated" ? (
@@ -320,7 +328,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
         {intialProject.map((projectData) => (
           <>
             <div key={projectData.projectId}>
-              <p style={{ fontFamily: "Rasa", fontSize: "20px" }}>
+              <p style={{ fontFamily: "Rasa", fontSize: "30px" }}>
                 <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
                 {projectData.projectName}
               </p>
@@ -330,7 +338,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
               {usersForProject
                 .filter((user) => user.projectId === projectData.projectId)
                 .map((user) => (
-                  <p key={user.projectAppUserId}>
+                  <p style = {userListStyle} key={user.projectAppUserId}>
                     {/* <Link
                       href={`/AdminProfile/${user.email}`}
                       as={`/AdminProfile/${user.projectAppUserId}`}
@@ -350,6 +358,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
                     </Link>
                   </p>
                 ))}
+                <br />
             </div>
 
             <ResuableButton
