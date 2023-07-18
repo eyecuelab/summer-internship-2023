@@ -12,7 +12,6 @@ import ReleaseNotes from "./ReleaseNotes";
 
 interface Commit {
     name: string;
-    email: string;
     message: string;
     date: string;
     releaseNotes: string;
@@ -49,35 +48,42 @@ const Dashboard = () => {
     const [isAdmin, setIsAdmin] = useState<string>("false");
     const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
     const [selectedAuthor, setSelectedAuthor] = useState<string>("");
-    const [releaseNotes, setReleaseNotes] = useState<string>("");
+
+    // useEffect(() => {
+    //     if (status === "authenticated") {
+    //         register(session);
+    //         console.log("session:", session);
+    //     }
+    // }, [status, session]);
 
     useEffect(() => {
         if (status === "authenticated") {
-            register(session);
-            console.log("session:", session);
-        }
-    }, [status, session]);
+            const fetchCurrentRole = async () => {
+                try {
+                    const response = await fetch(
+                        `https://localhost:7243/api/Users/VerifyUser?email=${currentUser}`
+                    );
+                    if (!response.ok) {
+                        throw new Error(
+                            "HTTP error, status = " + response.status
+                        );
+                    }
+                    const roleResponse = await response.text();
 
-    useEffect(() => {
-        const fetchCurrentRole = async () => {
-            try {
-                const response = await fetch(
-                    `https://localhost:7243/api/Users/VerifyUser?email=${currentUser}`
-                );
-                if (!response.ok) {
-                    throw new Error("HTTP error, status = " + response.status);
+                    if (roleResponse === "Not Registered") {
+                        register(session);
+                    } else {
+                      setIsAdmin(roleResponse);
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-                const roleResponse = await response.text();
-                setIsAdmin(roleResponse);
-            } catch (error) {
-                console.error(error);
+            };
+            if (currentUser) {
+                fetchCurrentRole();
             }
-        };
-
-        if (currentUser) {
-            fetchCurrentRole();
         }
-    }, [currentUser]);
+    }, [currentUser, status, session]);
 
     useEffect(() => {
         if (isAdmin) {
@@ -290,3 +296,6 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+function fetchCurrentRole() {
+    throw new Error("Function not implemented.");
+}
