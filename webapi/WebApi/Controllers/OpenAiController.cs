@@ -1,15 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Net.Http.Headers;
-using WebApi.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using WebApi.Models;
+using WebApi.DataAccess;
 using System.Linq;
 using System;
 
@@ -74,49 +76,49 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("responses")]
-public async Task<IActionResult> GetResponses([FromQuery] string startDate, [FromQuery] string endDate)
-{
-    try
-    {
-        if (string.IsNullOrEmpty(startDate) || string.IsNullOrEmpty(endDate))
+        public async Task<IActionResult> GetResponses([FromQuery] string startDate, [FromQuery] string endDate)
         {
-            return BadRequest("Both startDate and endDate must be provided");
+            try
+            {
+                if (string.IsNullOrEmpty(startDate) || string.IsNullOrEmpty(endDate))
+                {
+                    return BadRequest("Both startDate and endDate must be provided");
+                }
+
+                DateTime startDateTime;
+                DateTime endDateTime;
+
+                string format = "yyyy-MM-dd";
+
+                if (!DateTime.TryParseExact(startDate, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out startDateTime)
+                    || !DateTime.TryParseExact(endDate, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out endDateTime))
+                {
+                    return BadRequest("Invalid date format");
+                }
+
+                startDateTime = DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc);
+                endDateTime = DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc);
+
+                var responses = await _context.Responses
+                    .Where(r => r.StartDate >= startDateTime && r.EndDate <= endDateTime)
+                    .ToListAsync();
+
+                return Ok(responses);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                Console.WriteLine($"Error in GetResponses: {ex.Message}");
+
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                }
+
+                // Return a 500 Internal Server Error status code along with a custom message
+                return StatusCode(500, "An error occurred while processing your request. Please try again later.");
+            }
         }
-
-        DateTime startDateTime;
-        DateTime endDateTime;
-
-        string format = "yyyy-MM-dd";
-
-        if (!DateTime.TryParseExact(startDate, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out startDateTime)
-            || !DateTime.TryParseExact(endDate, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out endDateTime))
-        {
-            return BadRequest("Invalid date format");
-        }
-
-        startDateTime = DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc);
-        endDateTime = DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc);
-
-        var responses = await _context.Responses
-            .Where(r => r.StartDate >= startDateTime && r.EndDate <= endDateTime)
-            .ToListAsync();
-
-        return Ok(responses);
-    }
-    catch (Exception ex)
-    {
-        // Log the exception details
-        Console.WriteLine($"Error in GetResponses: {ex.Message}");
-
-        if (ex.InnerException != null)
-        {
-            Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
-        }
-
-        // Return a 500 Internal Server Error status code along with a custom message
-        return StatusCode(500, "An error occurred while processing your request. Please try again later.");
-    }
-}
 
         [HttpPost("SummarizeCommitsByDates/{startDate}/{endDate}")]
         public async Task<IActionResult> SummarizeText(string startDate, string endDate)
@@ -167,22 +169,22 @@ public async Task<IActionResult> GetResponses([FromQuery] string startDate, [Fro
                 var responseContent = await openAiResponse.Content.ReadAsStringAsync();
 
                 if (openAiResponse.IsSuccessStatusCode)
-{
-    var response = JsonConvert.DeserializeObject<dynamic>(responseContent);
-    var summary = response.choices[0].message.content.ToString();
+                {
+                    var response = JsonConvert.DeserializeObject<dynamic>(responseContent);
+                    var summary = response.choices[0].message.content.ToString();
 
-    var summaryResponse = new Response
-    {
-        ResponseText = summary,
-        StartDate = startDateTime, // add this
-        EndDate = endDateTime, // add this
-    };
+                    var summaryResponse = new Response
+                    {
+                        ResponseText = summary,
+                        StartDate = startDateTime,
+                        EndDate = endDateTime,
+                    };
 
-    _context.Responses.Add(summaryResponse);
-    await _context.SaveChangesAsync();
+                    _context.Responses.Add(summaryResponse);
+                    await _context.SaveChangesAsync();
 
-    return Ok(summary);
-}
+                    return Ok(summary);
+                }
                 else
                 {
                     // Handle the case when OpenAI API request was not successful
@@ -205,5 +207,7 @@ public async Task<IActionResult> GetResponses([FromQuery] string startDate, [Fro
                 return StatusCode(500, "An error occurred while processing your request. Please try again later.");
             }
         }
+
+        // Rest of the code, including the Choice and Message classes and the FilterAndCleanCommits method, remains the same.
     }
 }
