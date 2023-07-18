@@ -11,6 +11,7 @@ import ReleaseNotes from "./ReleaseNotes";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
+    email: string;
     name: string;
     message: string;
     date: string;
@@ -109,6 +110,7 @@ const Dashboard = () => {
                         name: commit.commit.author.name,
                         message: commit.commit.message,
                         date: commit.commit.author.date,
+                        email: commit.commit.author.email,
                         releaseNotes: "",
                     }));
 
@@ -135,7 +137,6 @@ const Dashboard = () => {
         return commit
             ? {
                   name: commit.name,
-                  email: commit.email,
               }
             : { name: "", email: "" };
     };
