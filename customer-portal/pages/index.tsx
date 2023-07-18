@@ -1,7 +1,17 @@
 import { Container, Navbar, Text, Grid, Col, Image } from "@nextui-org/react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/router';
+
+
 
 export default function Home() {
+  const { data: session, status } = useSession({ required: false });
+  const router = useRouter();
+
+  if(session) {
+    router.push('components/Dashboard')
+  }
   return (
     <Container>
       <Navbar isCompact variant={"static"}>

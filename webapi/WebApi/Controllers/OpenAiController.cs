@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using WebApi.Models;
 using WebApi.DataAccess;
+using System.Linq;
+using System;
 
 namespace WebApi.Controllers
 {
@@ -34,11 +36,17 @@ namespace WebApi.Controllers
             _context = context;
         }
 
-        public class Choice
+        [Serializable]
+        public class OpenAIResponse
+        {
+            public Choice[] choices { get; set; }
+        }
 
+        public class Choice
         {
             public string text { get; set; }
         }
+
         public class Message
         {
             public string role { get; set; }
@@ -92,20 +100,17 @@ namespace WebApi.Controllers
                     return BadRequest("Invalid date format");
                 }
 
+                startDateTime = DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc);
+                endDateTime = DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc);
+
                 var commits = await _context.Commits
                     .Where(c => c.Date >= startDateTime && c.Date <= endDateTime)
                     .Select(c => c.message)
                     .ToListAsync();
 
-                string concatenatedCommits = string.Join(". ", commits);
-
-                // Remove lines containing "Merge pull request" and "Sz/api"
-                concatenatedCommits = string.Join(". ", commits.Where(c => !c.Contains("Merge pull request") && !c.Contains("Sz/api")));
-
+                string cleanedCommits = FilterAndCleanCommits(commits);
                 var openAiEndpoint = "https://api.openai.com/v1/chat/completions";
                 var openAiClient = _clientFactory.CreateClient();
-
-                string cleanedCommits = FilterAndCleanCommits(commits);
 
                 var openAiRequest = new
                 {
@@ -113,7 +118,7 @@ namespace WebApi.Controllers
                     messages = new[]
                     {
                         new { role = "system", content = "You are an advanced AI assistant, capable of interpreting software changes from commit messages, categorizing them into broad areas like 'New Features', 'Improvements', 'Bug Fixes', 'UI changes', etc. Your goal is to generate a summarized, user-friendly version of these updates as release notes, intended for both technical and non-technical audiences." },
-                        new { role = "user", content = $"Here are the commit messages: {concatenatedCommits}. Please categorize and summarize these into release notes." },
+                        new { role = "user", content = $"Here are the commit messages: {cleanedCommits}. Please categorize and summarize these into release notes." },
                     },
                     temperature = 0.2,
                 };
