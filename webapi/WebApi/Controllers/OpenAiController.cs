@@ -44,6 +44,30 @@ namespace WebApi.Controllers
       public string content { get; set; }
     }
 
+    private string FilterAndCleanCommits(IEnumerable<string> commits)
+{
+    var filteredCommits = new List<string>();
+
+    foreach (var commit in commits)
+    {
+        // Ignore if commit message is a merge or contains the term 'Sz/api'
+        if (commit.Contains("Merge pull request") || commit.Contains("Sz/api"))
+            continue;
+
+        // Ignore if it is the common message about repeated merges
+        if (commit.Contains("Merging to work off the new new"))
+            continue;
+
+        // If commit message is about updated styling and we already have one such commit, ignore
+        if (commit.Contains("Updated styling") && filteredCommits.Any(c => c.Contains("Updated styling")))
+            continue;
+
+        filteredCommits.Add(commit);
+    }
+
+    return string.Join(". ", filteredCommits);
+}
+
     [HttpPost("SummarizeCommitsByDates/{startDate}/{endDate}")]
     public async Task<IActionResult> SummarizeText(string startDate, string endDate)
     {
@@ -69,8 +93,6 @@ namespace WebApi.Controllers
                 .ToListAsync();
 
             string concatenatedCommits = string.Join(". ", commits);
-            // Remove lines containing "Merge pull request" and "Sz/api"
-            concatenatedCommits = string.Join(". ", commits.Where(c => !c.Contains("Merge pull request") && !c.Contains("Sz/api")));
 
             var openAiEndpoint = "https://api.openai.com/v1/chat/completions";
             var openAiClient = _clientFactory.CreateClient();
@@ -79,18 +101,19 @@ namespace WebApi.Controllers
             openAiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _openAiApiKey);
             openAiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+            
+            string cleanedCommits = FilterAndCleanCommits(commits);
 
             var openAiRequest = new
-    {
-        model = "gpt-3.5-turbo",
-        messages = new[]
-        {
-            new { role = "system", content = "You are a helpful assistant that summarizes software changes into release notes." },
-            new { role = "user", content = $"Please generate release notes for the following changes`: {concatenatedCommits}" },
-        },
-        temperature = 0.2,
-    };
-
+            {
+                model = "gpt-3.5-turbo",
+                messages = new[]
+                {
+                    new { role = "system", content = "You are an advanced AI assistant, capable of interpreting software changes from commit messages, categorizing them into broad areas like 'New Features', 'Improvements', 'Bug Fixes', 'UI changes', etc. Your goal is to generate a summarized, user-friendly version of these updates as release notes, intended for both technical and non-technical audiences." },
+                    new { role = "user", content = $"Here are the commit messages: {concatenatedCommits}. Please categorize and summarize these into release notes." },
+                },
+                temperature = 0.2,
+            };
 
             var json = JsonConvert.SerializeObject(openAiRequest);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
