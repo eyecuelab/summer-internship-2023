@@ -12,7 +12,7 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    [Migration("20230718204425_intial")]
+    [Migration("20230718211851_intial")]
     partial class intial
     {
         /// <inheritdoc />
@@ -232,7 +232,7 @@ namespace WebApi.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "44d7cbec-8c14-4952-b1b4-aca01b3f5313",
+                            ConcurrencyStamp = "d3c37ae6-8bbd-406e-9593-e28646250b53",
                             Email = "szook7@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -240,7 +240,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SZOOK7@GMAIL.COM",
                             NormalizedUserName = "SZOOK7@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKK3QO+4ONyvhinZakXH9SLKnNck4ZYTLFkcGV7BRDdVq/s2fFLkl3OYS2UoZJzwQg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEG2oMNw79XiVPcsydb/r2uTWC8e6x6UVvf6ri2yL9yP00tIAWwh1kJefZo4peSzxKA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -250,7 +250,7 @@ namespace WebApi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c7c3bb4b-20d3-4c12-87bd-48b710cd9351",
+                            ConcurrencyStamp = "e7805f27-5ae5-4317-9fe5-cff0cb9d2e1e",
                             Email = "lee.justin001126@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -258,7 +258,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "LEE.JUSTIN001126@GMAIL.COM",
                             NormalizedUserName = "LEE.JUSTIN001126@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJHaMpQAF+HORm2rSvCCFADf7nYJkH4OXBvNzjfgvnc3mCngSZ3hb94uicHjnGKq3A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJPXjB3+6mA2ehRKUnw6xW92SdLH3XGJYuCIPFO5NRFnWilxWGEjfp4LrYGGLy0SCQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -268,7 +268,7 @@ namespace WebApi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d6f9cd37-988a-41b4-8cd6-d4a2e7e0b840",
+                            ConcurrencyStamp = "7b608a77-f65d-4325-adb4-1b0382cb2043",
                             Email = "erintimlin@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -276,7 +276,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ERINTIMLIN@GMAIL.COM",
                             NormalizedUserName = "ERINTIMLIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIB3KbGXrJB9QenRtzkufgGVlPD3iLGBPD62f9gBeQxWBti+c+b0CvpNzQta5VXVDA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN03qDAYd6eWb7anICv4fYwSmTNROMt9QrorAJboXLvKYgljoMtW8/LewaEzsyr5HA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -286,7 +286,7 @@ namespace WebApi.Migrations
                         {
                             Id = "4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2d9b23f1-384f-467c-a5fa-a0168c05072c",
+                            ConcurrencyStamp = "f5d02e4c-b0bb-489f-834a-c221e013b7ec",
                             Email = "gronstal.larson@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -294,7 +294,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "GRONSTAL.LARSON@GMAIL.COM",
                             NormalizedUserName = "GRONSTAL.LARSON@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPcvhllJxWdD+siSTXCsVANypvLmxI3qI7wq/lgOmfvrDPiS2jm7QFb7MTlY0UTkfg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECoPmj9/x318Rgfbql8oBExOG49Ap8lqGe7PgVtxvP1nHJ8Qig7CX6WZ8ovVhpLFrg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -304,7 +304,7 @@ namespace WebApi.Migrations
                         {
                             Id = "5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f5bd79de-96bc-44e9-88d9-be5ade7a9959",
+                            ConcurrencyStamp = "60c7dde0-8768-4f09-b355-56c14e8e4184",
                             Email = "b.bakshev@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -312,7 +312,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "B.BAKSHEV@GMAIL.COM",
                             NormalizedUserName = "B.BAKSHEV@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEInsm5xW68hrXN/gLi7gNVPcSiTvkjPlt734b7b3f3JLr6ETbTC1spcsz5hzzQeB5w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM3s8OKHBNvmtHQu9ePChn5FSnl+PSkYmdTYxqWuRn6ivdMwaxrPq7TrhJhZH/qmcA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -322,7 +322,7 @@ namespace WebApi.Migrations
                         {
                             Id = "6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b9aee73f-1998-4e7e-9f38-3054ebce53ea",
+                            ConcurrencyStamp = "e1f2900d-c1d9-4bd1-9dbf-1bf0b0d54b39",
                             Email = "eliot.lauren@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -330,7 +330,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ELIOT.LAUREN@GMAIL.COM",
                             NormalizedUserName = "ELIOT.LAUREN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOLUmRy+7z+Xfcdm54h/Q8o7RIghGZvhv5HKXvYOy+Wma3mgFzeSRn1OE3vqdMHxKA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECvkxVWDb5fAfiixE9w809ieTYk8uuklVd+/7nWGSEIkRBXBiWIo/DgQUeRLSVeYZg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -617,6 +617,20 @@ namespace WebApi.Migrations
                             Email = "eliot.lauren@gmail.com",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683"
                         });
+                });
+
+            modelBuilder.Entity("WebApi.Models.Response", b =>
+                {
+                    b.Property<string>("ResponseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResponseText")
+                        .HasColumnType("text");
+
+                    b.HasKey("ResponseId");
+
+                    b.ToTable("Responses");
                 });
 
             modelBuilder.Entity("WebApi.Models.Sprint", b =>
