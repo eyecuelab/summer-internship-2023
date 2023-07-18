@@ -10,6 +10,8 @@ using WebApi.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using WebApi.Models;
+using System.Linq;
+using System;
 
 namespace WebApi.Controllers
 {
@@ -29,51 +31,46 @@ namespace WebApi.Controllers
             _openAiApiKey = _configuration.GetValue<string>("OpenAI:ApiKey");
             _context = context;
         }
+
         [Serializable]
         public class OpenAIResponse
         {
             public Choice[] choices { get; set; }
         }
 
-
-    private string FilterAndCleanCommits(IEnumerable<string> commits)
-{
-    var filteredCommits = new List<string>();
-
-    foreach (var commit in commits)
-    {
-        // Ignore if commit message is a merge or contains the term 'Sz/api'
-        if (commit.Contains("Merge pull request") || commit.Contains("Sz/api"))
-            continue;
-
-        // Ignore if it is the common message about repeated merges
-        if (commit.Contains("Merging to work off the new new"))
-            continue;
-
-        // If commit message is about updated styling and we already have one such commit, ignore
-        if (commit.Contains("Updated styling") && filteredCommits.Any(c => c.Contains("Updated styling")))
-            continue;
-
-        filteredCommits.Add(commit);
-    }
-
-    return string.Join(". ", filteredCommits);
-}
-
-    [HttpPost("SummarizeCommitsByDates/{startDate}/{endDate}")]
-    public async Task<IActionResult> SummarizeText(string startDate, string endDate)
-    {
-        try
-
         public class Choice
-
         {
             public string text { get; set; }
         }
+
         public class Message
         {
             public string role { get; set; }
             public string content { get; set; }
+        }
+
+        private string FilterAndCleanCommits(IEnumerable<string> commits)
+        {
+            var filteredCommits = new List<string>();
+
+            foreach (var commit in commits)
+            {
+                // Ignore if commit message is a merge or contains the term 'Sz/api'
+                if (commit.Contains("Merge pull request") || commit.Contains("Sz/api"))
+                    continue;
+
+                // Ignore if it is the common message about repeated merges
+                if (commit.Contains("Merging to work off the new new"))
+                    continue;
+
+                // If commit message is about updated styling and we already have one such commit, ignore
+                if (commit.Contains("Updated styling") && filteredCommits.Any(c => c.Contains("Updated styling")))
+                    continue;
+
+                filteredCommits.Add(commit);
+            }
+
+            return string.Join(". ", filteredCommits);
         }
 
         [HttpGet("responses")]
@@ -82,7 +79,6 @@ namespace WebApi.Controllers
             var responses = await _context.Responses.ToListAsync();
             return Ok(responses);
         }
-
 
         [HttpPost("SummarizeCommitsByDates/{startDate}/{endDate}")]
         public async Task<IActionResult> SummarizeText(string startDate, string endDate)
@@ -100,44 +96,31 @@ namespace WebApi.Controllers
                     return BadRequest("Invalid date format");
                 }
 
-
-            string concatenatedCommits = string.Join(". ", commits);
-            
                 startDateTime = DateTime.SpecifyKind(startDateTime, DateTimeKind.Utc);
                 endDateTime = DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc);
-
 
                 var commits = await _context.Commits
                     .Where(c => c.Date >= startDateTime && c.Date <= endDateTime)
                     .Select(c => c.message)
                     .ToListAsync();
 
-                string concatenatedCommits = string.Join(". ", commits);
-                // Remove lines containing "Merge pull request" and "Sz/api"
-                concatenatedCommits = string.Join(". ", commits.Where(c => !c.Contains("Merge pull request") && !c.Contains("Sz/api")));
-
+                string cleanedCommits = FilterAndCleanCommits(commits);
                 var openAiEndpoint = "https://api.openai.com/v1/chat/completions";
                 var openAiClient = _clientFactory.CreateClient();
 
-            
-            string cleanedCommits = FilterAndCleanCommits(commits);
-
-            var openAiRequest = new
-            {
-                model = "gpt-3.5-turbo",
-                messages = new[]
+                var openAiRequest = new
                 {
-                    new { role = "system", content = "You are an advanced AI assistant, capable of interpreting software changes from commit messages, categorizing them into broad areas like 'New Features', 'Improvements', 'Bug Fixes', 'UI changes', etc. Your goal is to generate a summarized, user-friendly version of these updates as release notes, intended for both technical and non-technical audiences." },
-                    new { role = "user", content = $"Here are the commit messages: {concatenatedCommits}. Please categorize and summarize these into release notes." },
-                },
-                temperature = 0.2,
-            };
+                    model = "gpt-3.5-turbo",
+                    messages = new[]
+                    {
+                        new { role = "system", content = "You are an advanced AI assistant, capable of interpreting software changes from commit messages, categorizing them into broad areas like 'New Features', 'Improvements', 'Bug Fixes', 'UI changes', etc. Your goal is to generate a summarized, user-friendly version of these updates as release notes, intended for both technical and non-technical audiences." },
+                        new { role = "user", content = $"Here are the commit messages: {cleanedCommits}. Please categorize and summarize these into release notes." },
+                    },
+                    temperature = 0.2,
+                };
 
                 openAiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _openAiApiKey);
                 openAiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-
-                
 
                 var json = JsonConvert.SerializeObject(openAiRequest);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -156,7 +139,7 @@ namespace WebApi.Controllers
                     };
 
                     _context.Responses.Add(summaryResponse);
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
 
 
                     return Ok(summary);
