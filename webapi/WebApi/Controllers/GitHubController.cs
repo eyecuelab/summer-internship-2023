@@ -68,13 +68,25 @@ namespace WebApi.Controllers
                 return StatusCode((int)response.StatusCode);
             }
         }
-
+        //GET ALL COMMITS IN COMMITS TABLE
         [HttpGet("dbcommits")]
         public async Task<IActionResult> GetCommits()
         {
-            var dbCommits = await _context.Commits.ToListAsync();
+            var dbCommits = await _context.Commits
+    .Include(c => c.author) // Eagerly load the Author data
+    .ToListAsync();
+
             return Ok(dbCommits);
         }
+
+        [HttpGet("dbauthors")]
+        public async Task<IActionResult> GetAuthors()
+        {
+            var dbAuthors = await _context.Authors.ToListAsync();
+            return Ok(dbAuthors);
+        }
+
+
 
         // GET LATEST RELEASE FROM A REPO
         [HttpGet("release/{owner}/{repo}")]
