@@ -11,24 +11,15 @@ import ReleaseNotes from "./ReleaseNotes";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
-    email: string;
-    name: string;
     message: string;
     date: string;
     releaseNotes: string;
-}
-
-interface CommitResponse {
-    commit: {
-        author: {
-            name: string;
-            email: string;
-            date: string;
-        };
-        message: string;
+    author: {
+        name: string;
+        email: string;
+        date: string;
     };
 }
-
 async function register(session: any) {
     try {
         await axios.post(
@@ -43,7 +34,7 @@ async function register(session: any) {
 
 const Dashboard = () => {
     const { data: session, status } = useSession({ required: true });
-    const [apiData, setApiData] = useState<Commit[]>([]);
+    const [apiCommitData, setApiCommitData] = useState<Commit[]>([]);
     const [selectedDate, setSelectedDate] = useState<string>("");
     const currentUser: any = session?.user?.email;
     const [isAdmin, setIsAdmin] = useState<string>("false");
@@ -67,7 +58,7 @@ const Dashboard = () => {
                     if (roleResponse === "Not Registered") {
                         register(session);
                     } else {
-                      setIsAdmin(roleResponse);
+                        setIsAdmin(roleResponse);
                     }
                 } catch (error) {
                     console.error(error);
@@ -87,9 +78,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (isAdmin === "false") {
-            fetch(
-                "https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023"
-            )
+            fetch("https://localhost:7243/api/GitHub/dbcommits")
                 .then((response) => {
                     if (!response.ok) {
                         throw new Error(
@@ -98,38 +87,41 @@ const Dashboard = () => {
                     }
                     return response.json();
                 })
-                .then((json: CommitResponse[]) => {
+                .then((json: Commit[]) => {
                     const commits = json.map((commit) => ({
-                        name: commit.commit.author.name,
-                        message: commit.commit.message,
-                        date: commit.commit.author.date,
-                        email: commit.commit.author.email,
+                        message: commit.message,
+                        date: commit.date,
                         releaseNotes: "",
+                        author: {
+                            name: commit.author.name,
+                            email: commit.author.email,
+                            date: commit.author.date,
+                        },
                     }));
 
-                    setApiData(commits);
+                    setApiCommitData(commits);
                 })
                 .catch((error) => console.error("Error during fetch:", error));
         }
     }, [isAdmin]);
 
     useEffect(() => {
-        if (apiData.length > 0) {
+        if (apiCommitData.length > 0) {
             setSelectedUser({
-                name: apiData[0].name,
-                email: apiData[0].email,
+                name: apiCommitData[0].author.name,
+                email: apiCommitData[0].author.email,
             });
         }
-    }, [apiData]);
+    }, [apiCommitData]);
 
     // Adding a function to get author by date
     const getAuthorByDate = (date: string): any => {
-        const commit = apiData.find(
+        const commit = apiCommitData.find(
             (commit) => formatDate(commit.date) === date
         );
         return commit
             ? {
-                  name: commit.name,
+                  name: commit.author.name,
               }
             : { name: "", email: "" };
     };
@@ -204,17 +196,19 @@ const Dashboard = () => {
     };
 
     const uniqueDates = Array.from(
-        new Set(apiData.map((commit) => formatDate(commit.date)))
+        new Set(apiCommitData.map((commit) => formatDate(commit.date)))
     );
 
     const filteredData = selectedDate
-        ? apiData.filter((commit) => selectedDate === formatDate(commit.date))
-        : apiData;
+        ? apiCommitData.filter(
+              (commit) => selectedDate === formatDate(commit.date)
+          )
+        : apiCommitData;
 
     const renderCommits = (commits: Commit[]) => {
         return commits.map((commit, index) => (
             <div key={index}>
-                <p style={nameStyle}>{commit.name}</p>
+                <p style={nameStyle}>{commit.author.name}</p>
                 <p style={messageStyle}>{commit.message}</p>
                 <p style={messageStyle}>
                     Release Notes: {commit.releaseNotes}
@@ -279,7 +273,7 @@ const Dashboard = () => {
                     <div key={index}>
                         <p style={dateStyle}>{date}</p>
                         {renderCommits(
-                            apiData.filter(
+                            apiCommitData.filter(
                                 (commit) => formatDate(commit.date) === date
                             )
                         )}
