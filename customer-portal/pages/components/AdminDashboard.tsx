@@ -303,8 +303,8 @@ const AdminDashboard = ({ projectAppUsers }) => {
     fontWeight: 400,
     fontSize: "22px",
     lineHeight: "40.8px",
-    color: "#404040",
-    textDecoration: "none",
+    color: "#0000EE",
+    textDecoration: "underline",
   }
 
   return status === "authenticated" ? (
