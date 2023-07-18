@@ -18,10 +18,12 @@ namespace WebApi.Controllers
         }
 
         private readonly IHttpClientFactory _clientFactory;
+        private readonly PostgreSqlContext _context;
 
-        public TrelloController(IHttpClientFactory clientFactory)
+        public TrelloController(IHttpClientFactory clientFactory, PostgreSqlContext context)
         {
             _clientFactory = clientFactory;
+            _context = context;
         }
         // Get Entire trello board
         [HttpGet("board/{boardId}/{apikey}/{apitoken}")]
@@ -80,48 +82,54 @@ namespace WebApi.Controllers
             }
         }
 
-[HttpGet("/api/getsprintnames/{boardId}/{apiKey}/{apiToken}")]
-public async Task<IActionResult> GetBoardTitles(string boardId, string apiKey, string apiToken)
-{
-    var url = $"https://api.trello.com/1/boards/{boardId}/lists?key={apiKey}&token={apiToken}";
-
-    var request = new HttpRequestMessage(HttpMethod.Get, url);
-    request.Headers.Add("Accept", "application/json");
-
-    var client = _clientFactory.CreateClient();
-
-    var response = await client.SendAsync(request);
-
-    if (response.IsSuccessStatusCode)
+        [HttpPost("/api/getsprintnames/{boardId}/{apiKey}/{apiToken}")]
+        public async Task<IActionResult> GetBoardTitles(string boardId, string apiKey, string apiToken)
         {
-            var json = await response.Content.ReadAsStringAsync();
+            var url = $"https://api.trello.com/1/boards/{boardId}/lists?key={apiKey}&token={apiToken}";
 
-            // Deserialize the JSON into a JArray
-            var sprintData = JArray.Parse(json);
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("Accept", "application/json");
 
-            // Filter and extract sprint information
-            var sprints = sprintData
-                .Where(obj => obj["name"].Value<string>().StartsWith("Sprint-"))
-                .Select(obj => new Sprint
+            var client = _clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+
+                // Deserialize the JSON into a JArray
+                var sprintData = JArray.Parse(json);
+
+                // Filter and extract sprint information
+                var sprints = sprintData
+                    .Where(obj => obj["name"].Value<string>().StartsWith("Sprint-"))
+                    .Select(obj => new Models.Sprint 
+                    {
+                        Number = obj["name"].Value<string>().Split(' ')[0],
+                        Date = DateTime.ParseExact(obj["name"].Value<string>().Split(' ')[1], "MM/dd/yy", null).ToUniversalTime(),
+                        Name = string.Join(' ', obj["name"].Value<string>().Split(' ').Skip(2))
+                    })
+                    .ToList();
+
+                // Sort the sprints by date
+                sprints = sprints.OrderBy(s => s.Date).ToList();
+
+                foreach (var sprint in sprints)
                 {
-                    Number = obj["name"].Value<string>().Split(' ')[0],
-                    Date = DateTime.ParseExact(obj["name"].Value<string>().Split(' ')[1], "MM/dd/yy", null),
-                    Name = string.Join(' ', obj["name"].Value<string>().Split(' ').Skip(2))
-                })
-                .ToList();
+                    _context.Sprints.Add(sprint);
+                }
+                _context.SaveChanges();
 
-            // Sort the sprints by date
-            sprints = sprints.OrderBy(s => s.Date).ToList();
-
-            // Return the sorted and filtered sprints as JSON
-            return Ok(sprints);
+                // Return the sorted and filtered sprints as JSON
+                return Ok(sprints);
+            }
+            else
+            {
+                // Handle the case when the API request was not successful
+                // You can return an appropriate response or error message
+                return StatusCode((int)response.StatusCode);
+            }
         }
-        else
-        {
-            // Handle the case when the API request was not successful
-            // You can return an appropriate response or error message
-            return StatusCode((int)response.StatusCode);
-        }
-    }
     }
 }
