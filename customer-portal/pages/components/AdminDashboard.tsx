@@ -304,7 +304,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
     fontSize: "22px",
     lineHeight: "40.8px",
     color: "#404040",
-    textDecoration: "none", 
+    textDecoration: "none",
   }
 
   return status === "authenticated" ? (
@@ -314,7 +314,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
       onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
     >
       <br></br>
-      <p style = {headerStyle}>Admin Portal </p>
+      <p style={headerStyle}>Admin Portal </p>
       <br></br>
       <p style={dashStyle}>Current Projects</p>
 
@@ -323,56 +323,47 @@ const AdminDashboard = ({ projectAppUsers }) => {
         currentEntity={currentEntity}
         onSelectedEntity={handleSelectedEntity}
       /> */}
-<br></br>
+      <br></br>
       <div>
-        {intialProject.map((projectData) => (
-          <>
-            <div key={projectData.projectId}>
-              <p style={{ fontFamily: "Rasa", fontSize: "30px" }}>
-                <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
-                {projectData.projectName}
-              </p>
-            </div>
-            <br />
-            <div>
-              {usersForProject
-                .filter((user) => user.projectId === projectData.projectId)
-                .map((user) => (
-                  <p style = {userListStyle} key={user.projectAppUserId}>
-                    {/* <Link
-                      href={`/AdminProfile/${user.email}`}
-                      as={`/AdminProfile/${user.projectAppUserId}`}
-                      onClick={() => setSelectedEmail(user.email)}
-                    >
-                      {user.email}
-                    </Link> */}
-                    <Link
-                      href={`/AdminProfile/${
-                        user.projectAppUserId
-                      }?email=${encodeURIComponent(user.email)}`}
-                      as={`/AdminProfile/${
-                        user.projectAppUserId
-                      }?email=${encodeURIComponent(user.email)}`}
-                    >
-                      {user.email}
-                    </Link>
-                  </p>
-                ))}
-                <br />
-            </div>
+      {intialProject.map((projectData) => (
+  <div key={projectData.projectId} className="mb-8">
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <p style={{ fontFamily: "Rasa", fontSize: "30px" }}>
+        <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
+        {projectData.projectName}
+      </p>
 
-            <ResuableButton
-              onPress={() => {
-                setCurrentProject(projectData); // Set the current project
-                setShowAddUserModule(true); // Show the Add User module
-              }}
-              className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3"
+      <p style={{ fontFamily: "Rasa", fontSize: "28px", textDecoration: "underline" }}>Users</p>
+      {usersForProject
+        .filter((user) => user.projectId === projectData.projectId)
+        .map((user) => (
+          <p style={userListStyle} key={user.projectAppUserId}>
+            <Link
+              href={`/AdminProfile/${user.projectAppUserId
+                }?email=${encodeURIComponent(user.email)}`}
+              as={`/AdminProfile/${user.projectAppUserId
+                }?email=${encodeURIComponent(user.email)}`}
             >
-              Add User to {projectData.projectName}
-            </ResuableButton>
-            <br />
-          </>
+              {user.email}
+            </Link>
+          </p>
         ))}
+      <br />
+
+      <ResuableButton
+        onPress={() => {
+          setCurrentProject(projectData); // Set the current project
+          setShowAddUserModule(true); // Show the Add User module
+        }}
+        className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3"
+      >
+        Add User to {projectData.projectName}
+      </ResuableButton>
+      <br />
+    </div>
+  </div>
+))}
+
       </div>
       {showAddUserModule && (
         <AddUserModule
@@ -384,7 +375,7 @@ const AdminDashboard = ({ projectAppUsers }) => {
           setShowAddUserModule={setShowAddUserModule}
         />
       )}
-            <AddProjectModal
+      <AddProjectModal
         currentEntity={currentEntity}
         onSelectedEntity={handleSelectedEntity}
       />
