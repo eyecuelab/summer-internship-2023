@@ -7,9 +7,11 @@ import Image from "next/image";
 import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
 import SelectedUserContext from "../context/selectedUserContext";
+import ReleaseNotes from "./ReleaseNotes";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
+    email: string;
     name: string;
     message: string;
     date: string;
@@ -108,6 +110,7 @@ const Dashboard = () => {
                         name: commit.commit.author.name,
                         message: commit.commit.message,
                         date: commit.commit.author.date,
+                        email: commit.commit.author.email,
                         releaseNotes: "",
                     }));
 
@@ -134,10 +137,26 @@ const Dashboard = () => {
         return commit
             ? {
                   name: commit.name,
-                  email: commit.email,
               }
             : { name: "", email: "" };
     };
+
+    useEffect(() => {
+        const fetchReleaseNotes = async () => {
+            try {
+                const response = await axios.post(
+                    `http://localhost:7243/api/OpenAI/SummarizeCommitsByDates/${selectedDate}/${selectedDate}`
+                );
+                setReleaseNotes(response.data);
+            } catch (error) {
+                console.error("Failed to fetch release notes:", error);
+            }
+        };
+
+        if (selectedDate) {
+            fetchReleaseNotes();
+        }
+    }, [selectedDate]);
 
     //Bandaid fix for a typescript overload function thing? Talk to Erin About it
     const formatDate = (dateString: string): string => {
@@ -214,7 +233,7 @@ const Dashboard = () => {
     };
 
     return isAdmin === "true" ? (
-        <AdminDashboard projectAppUsers={undefined}></AdminDashboard>
+        <AdminDashboard></AdminDashboard>
     ) : (
         <Layout username={session?.user?.name}>
             <p style={userStyle}>{selectedUser.name || "Default User Name"}</p>
@@ -251,12 +270,18 @@ const Dashboard = () => {
                 ))}
             </select>
 
-            {selectedDate ? (
-                <>
+            {selectedDate && (
+                <div>
                     <p style={dateStyle}>{formatDate(selectedDate)}</p>
                     {renderCommits(filteredData)}
-                </>
-            ) : (
+                    <ReleaseNotes
+                        startDate={selectedDate}
+                        endDate={selectedDate}
+                    />
+                </div>
+            )}
+
+            {!selectedDate &&
                 uniqueDates.map((date, index) => (
                     <div key={index}>
                         <p style={dateStyle}>{date}</p>
@@ -266,8 +291,7 @@ const Dashboard = () => {
                             )
                         )}
                     </div>
-                ))
-            )}
+                ))}
         </Layout>
     );
 };
