@@ -53,10 +53,7 @@ namespace WebApi.Controllers
 
             if (existingUser != null)
             {
-                return StatusCode(
-                    StatusCodes.Status500InternalServerError,
-                    new UserResponse { Status = "Error", Message = "User already exists!" }
-                );
+                return Ok();
             }
             else if (_context.emailEntities.Any(e => e.Email == appUser.Email))
             {

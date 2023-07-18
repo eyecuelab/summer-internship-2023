@@ -49,7 +49,7 @@ async function register(session: Session | null) {
   }
 }
 
-const AdminDashboard = ({ projectAppUsers }) => {
+const AdminDashboard = () => {
   const { data: session, status } = useSession({ required: true });
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [users, setUsers] = useState<User[]>([]);
