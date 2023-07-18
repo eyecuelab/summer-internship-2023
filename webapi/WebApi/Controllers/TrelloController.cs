@@ -2,12 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using WebApi.DataAccess;
 using WebApi.Models;
 using System;
+using Newtonsoft.Json.Linq;
+
 
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
     public class TrelloController : ControllerBase
     {
+        public class Sprint
+        {
+            public string Number { get; set; }
+            public DateTime Date { get; set; }
+            public string Name { get; set; }
+        }
 
         private readonly IHttpClientFactory _clientFactory;
 
@@ -72,31 +80,48 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("/api/getsprintnames/{boardId}/{apiKey}/{apiToken}")]
-        public async Task<IActionResult> GetBoardTitles(string boardId, string apiKey, string apiToken)
+[HttpGet("/api/getsprintnames/{boardId}/{apiKey}/{apiToken}")]
+public async Task<IActionResult> GetBoardTitles(string boardId, string apiKey, string apiToken)
+{
+    var url = $"https://api.trello.com/1/boards/{boardId}/lists?key={apiKey}&token={apiToken}";
+
+    var request = new HttpRequestMessage(HttpMethod.Get, url);
+    request.Headers.Add("Accept", "application/json");
+
+    var client = _clientFactory.CreateClient();
+
+    var response = await client.SendAsync(request);
+
+    if (response.IsSuccessStatusCode)
         {
-            var url = $"https://api.trello.com/1/boards/{boardId}/lists?key={apiKey}&token={apiToken}";
+            var json = await response.Content.ReadAsStringAsync();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, url);
-            request.Headers.Add("Accept", "application/json");
+            // Deserialize the JSON into a JArray
+            var sprintData = JArray.Parse(json);
 
-            var client = _clientFactory.CreateClient();
+            // Filter and extract sprint information
+            var sprints = sprintData
+                .Where(obj => obj["name"].Value<string>().StartsWith("Sprint-"))
+                .Select(obj => new Sprint
+                {
+                    Number = obj["name"].Value<string>().Split(' ')[0],
+                    Date = DateTime.ParseExact(obj["name"].Value<string>().Split(' ')[1], "MM/dd/yy", null),
+                    Name = string.Join(' ', obj["name"].Value<string>().Split(' ').Skip(2))
+                })
+                .ToList();
 
-            var response = await client.SendAsync(request);
+            // Sort the sprints by date
+            sprints = sprints.OrderBy(s => s.Date).ToList();
 
-            if (response.IsSuccessStatusCode)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-
-                // Do something with the attachments JSON, such as returning it in the response
-                return Ok(json);
-            }
-            else
-            {
-                // Handle the case when the API request was not successful
-                // You can return an appropriate response or error message
-                return StatusCode((int)response.StatusCode);
-            }
+            // Return the sorted and filtered sprints as JSON
+            return Ok(sprints);
         }
+        else
+        {
+            // Handle the case when the API request was not successful
+            // You can return an appropriate response or error message
+            return StatusCode((int)response.StatusCode);
+        }
+    }
     }
 }
