@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class @new : Migration
+    public partial class intial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -108,6 +108,32 @@ namespace WebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Projects", x => x.ProjectId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Responses",
+                columns: table => new
+                {
+                    ResponseId = table.Column<string>(type: "text", nullable: false),
+                    ResponseText = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Responses", x => x.ResponseId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sprints",
+                columns: table => new
+                {
+                    TrelloSprintId = table.Column<string>(type: "text", nullable: false),
+                    Number = table.Column<string>(type: "text", nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sprints", x => x.TrelloSprintId);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,6 +252,7 @@ namespace WebApi.Migrations
                     authorId = table.Column<int>(type: "integer", nullable: true),
                     committerId = table.Column<int>(type: "integer", nullable: true),
                     message = table.Column<string>(type: "text", nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     comment_count = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -274,15 +301,15 @@ namespace WebApi.Migrations
                 {
                     ProjectAppUserId = table.Column<string>(type: "text", nullable: false),
                     ProjectId = table.Column<string>(type: "text", nullable: true),
-                    AppUserId = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "text", nullable: true)
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    appUserId = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProjectAppUsers", x => x.ProjectAppUserId);
                     table.ForeignKey(
-                        name: "FK_ProjectAppUsers_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_ProjectAppUsers_AspNetUsers_appUserId",
+                        column: x => x.appUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -314,12 +341,12 @@ namespace WebApi.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "IsAdmin", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1", 0, "347b5d5b-7f0b-45e8-b6a6-62d36f539b9e", "szook7@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "SZOOK7@GMAIL.COM", "SZOOK7@GMAIL.COM", "AQAAAAEAACcQAAAAEFSXnPoQSKTuMgOJM7o6g+6Tyz/BETL3sFQkgQ9XoOy6q745wJnX3kKRtd9DQyo4Rg==", null, false, "", false, "szook7@gmail.com" },
-                    { "2", 0, "57e9c37c-c6fb-4963-bb58-d1b32afd66e7", "lee.justin001126@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "LEE.JUSTIN001126@GMAIL.COM", "LEE.JUSTIN001126@GMAIL.COM", "AQAAAAEAACcQAAAAENEtuU0egKy5Lhv3eipEX5Kj9mxS64H+aU2QLo4VBOtXkNnI0fm4vD9inuo0UAqcVw==", null, false, "", false, "lee.justin001126@gmail.com" },
-                    { "3", 0, "18ee4c9a-6ddd-4e57-9254-fd3b716b4f25", "erintimlin@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "ERINTIMLIN@GMAIL.COM", "ERINTIMLIN@GMAIL.COM", "AQAAAAEAACcQAAAAEIz8MKGOtw/c75eGaFPkh+H6B328OXqlCgw0gX0KiKxqiU2Ub6p3rxlSZHa3TtuYww==", null, false, "", false, "erintimlin@gmail.com" },
-                    { "4", 0, "5ad854b3-7031-4aec-972e-6897f296e552", "gronstal.larson@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAED9/duNgMTSdvleZf3qL4Qgp9sFH86yXVgTIpK2fzBphovlRQ2m2fcNZxZi2n+G3iQ==", null, false, "", false, "Gronstal.Larson@gmail.com" },
-                    { "5", 0, "7afe8791-34cf-4bf7-990a-73be46540ace", "b.bakshev@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "B.BAKSHEV@GMAIL.COM", "B.BAKSHEV@GMAIL.COM", "AQAAAAEAACcQAAAAEIUa74di7qSIMUIcZyowgtdFB+kZJsP6pdU0fcxzaAKwD7XlX3D7ZfeuY7lQyGGJyQ==", null, false, "", false, "b.bakshev@gmail.com" },
-                    { "6", 0, "e1f2f98d-eb2d-4919-91bd-3745e5d96a51", "eliot.lauren@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "ELIOT.LAUREN@GMAIL.COM", "ELIOT.LAUREN@GMAIL.COM", "AQAAAAEAACcQAAAAEBjUtvvriqUcpMkydP77D12jI0Cc3KIjdMOgeD0ZjAmOS79vlhww7r0vGv3ZF5GG2Q==", null, false, "", false, "eliot.lauren@gmail.com" }
+                    { "1", 0, "d3c37ae6-8bbd-406e-9593-e28646250b53", "szook7@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "SZOOK7@GMAIL.COM", "SZOOK7@GMAIL.COM", "AQAAAAEAACcQAAAAEG2oMNw79XiVPcsydb/r2uTWC8e6x6UVvf6ri2yL9yP00tIAWwh1kJefZo4peSzxKA==", null, false, "", false, "szook7@gmail.com" },
+                    { "2", 0, "e7805f27-5ae5-4317-9fe5-cff0cb9d2e1e", "lee.justin001126@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "LEE.JUSTIN001126@GMAIL.COM", "LEE.JUSTIN001126@GMAIL.COM", "AQAAAAEAACcQAAAAEJPXjB3+6mA2ehRKUnw6xW92SdLH3XGJYuCIPFO5NRFnWilxWGEjfp4LrYGGLy0SCQ==", null, false, "", false, "lee.justin001126@gmail.com" },
+                    { "3", 0, "7b608a77-f65d-4325-adb4-1b0382cb2043", "erintimlin@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "ERINTIMLIN@GMAIL.COM", "ERINTIMLIN@GMAIL.COM", "AQAAAAEAACcQAAAAEN03qDAYd6eWb7anICv4fYwSmTNROMt9QrorAJboXLvKYgljoMtW8/LewaEzsyr5HA==", null, false, "", false, "erintimlin@gmail.com" },
+                    { "4", 0, "f5d02e4c-b0bb-489f-834a-c221e013b7ec", "gronstal.larson@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAECoPmj9/x318Rgfbql8oBExOG49Ap8lqGe7PgVtxvP1nHJ8Qig7CX6WZ8ovVhpLFrg==", null, false, "", false, "Gronstal.Larson@gmail.com" },
+                    { "5", 0, "60c7dde0-8768-4f09-b355-56c14e8e4184", "b.bakshev@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "B.BAKSHEV@GMAIL.COM", "B.BAKSHEV@GMAIL.COM", "AQAAAAEAACcQAAAAEM3s8OKHBNvmtHQu9ePChn5FSnl+PSkYmdTYxqWuRn6ivdMwaxrPq7TrhJhZH/qmcA==", null, false, "", false, "b.bakshev@gmail.com" },
+                    { "6", 0, "e1f2900d-c1d9-4bd1-9dbf-1bf0b0d54b39", "eliot.lauren@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "ELIOT.LAUREN@GMAIL.COM", "ELIOT.LAUREN@GMAIL.COM", "AQAAAAEAACcQAAAAECvkxVWDb5fAfiixE9w809ieTYk8uuklVd+/7nWGSEIkRBXBiWIo/DgQUeRLSVeYZg==", null, false, "", false, "eliot.lauren@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -342,15 +369,15 @@ namespace WebApi.Migrations
 
             migrationBuilder.InsertData(
                 table: "ProjectAppUsers",
-                columns: new[] { "ProjectAppUserId", "AppUserId", "Email", "ProjectId" },
+                columns: new[] { "ProjectAppUserId", "Email", "ProjectId", "appUserId" },
                 values: new object[,]
                 {
-                    { "1", null, "szook7@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683" },
-                    { "2", null, "lee.justin001126@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683" },
-                    { "3", null, "erintimlin@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683" },
-                    { "4", null, "Gronstal.Larson@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683" },
-                    { "5", null, "b.bakshev@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683" },
-                    { "6", null, "eliot.lauren@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683" }
+                    { "1", "szook7@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683", null },
+                    { "2", "lee.justin001126@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683", null },
+                    { "3", "erintimlin@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683", null },
+                    { "4", "Gronstal.Larson@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683", null },
+                    { "5", "b.bakshev@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683", null },
+                    { "6", "eliot.lauren@gmail.com", "9bf535b3-cf39-4374-8fbe-51a96bcef683", null }
                 });
 
             migrationBuilder.InsertData(
@@ -429,9 +456,9 @@ namespace WebApi.Migrations
                 column: "commitId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectAppUsers_AppUserId",
+                name: "IX_ProjectAppUsers_appUserId",
                 table: "ProjectAppUsers",
-                column: "AppUserId");
+                column: "appUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectAppUsers_ProjectId",
@@ -465,6 +492,12 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectAppUsers");
+
+            migrationBuilder.DropTable(
+                name: "Responses");
+
+            migrationBuilder.DropTable(
+                name: "Sprints");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

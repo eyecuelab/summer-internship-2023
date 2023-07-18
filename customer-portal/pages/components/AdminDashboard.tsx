@@ -49,7 +49,7 @@ async function register(session: Session | null) {
   }
 }
 
-const AdminDashboard = ({ projectAppUsers }) => {
+const AdminDashboard = () => {
   const { data: session, status } = useSession({ required: true });
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [users, setUsers] = useState<User[]>([]);
@@ -284,11 +284,28 @@ const AdminDashboard = ({ projectAppUsers }) => {
   const dashStyle = {
     fontFamily: "Rasa",
     fontWeight: 600,
-    fontSize: "42px",
+    fontSize: "36px",
     lineHeight: "67.2px",
     color: "#404040",
     textDecoration: "underline",
   };
+
+  const headerStyle = {
+    ...dashStyle,
+    fontWeight: 400,
+    fontSize: "48px",
+    textDecoration: "none",
+  }
+
+  const userListStyle = {
+    ...dashStyle,
+    fontFamily: "Rasa",
+    fontWeight: 400,
+    fontSize: "22px",
+    lineHeight: "40.8px",
+    color: "#0000EE",
+    textDecoration: "underline",
+  }
 
   return status === "authenticated" ? (
     <AdminLayout
@@ -296,62 +313,57 @@ const AdminDashboard = ({ projectAppUsers }) => {
       currentEntity={currentEntity}
       onSelectedEntity={handleSelectedEntity} // Pass the callback function as a prop
     >
-      <AddEntityModule />
       <br></br>
-      <AddProjectModal
+      <p style={headerStyle}>Admin Portal </p>
+      <br></br>
+      <p style={dashStyle}>Current Projects</p>
+
+
+      {/* <AddProjectModal
         currentEntity={currentEntity}
         onSelectedEntity={handleSelectedEntity}
-      />
-<br></br>
-      <p style={dashStyle}>Current Projects</p>
+      /> */}
+      <br></br>
       <div>
-        {intialProject.map((projectData) => (
-          <>
-            <div key={projectData.projectId}>
-              <p style={{ fontFamily: "Rasa", fontSize: "20px" }}>
-                <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
-                {projectData.projectName}
-              </p>
-            </div>
-            <br />
-            <div>
-              {usersForProject
-                .filter((user) => user.projectId === projectData.projectId)
-                .map((user) => (
-                  <p key={user.projectAppUserId}>
-                    {/* <Link
-                      href={`/AdminProfile/${user.email}`}
-                      as={`/AdminProfile/${user.projectAppUserId}`}
-                      onClick={() => setSelectedEmail(user.email)}
-                    >
-                      {user.email}
-                    </Link> */}
-                    <Link
-                      href={`/AdminProfile/${
-                        user.projectAppUserId
-                      }?email=${encodeURIComponent(user.email)}`}
-                      as={`/AdminProfile/${
-                        user.projectAppUserId
-                      }?email=${encodeURIComponent(user.email)}`}
-                    >
-                      {user.email}
-                    </Link>
-                  </p>
-                ))}
-            </div>
+      {intialProject.map((projectData) => (
+  <div key={projectData.projectId} className="mb-8">
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <p style={{ fontFamily: "Rasa", fontSize: "30px" }}>
+        <span style={{ fontWeight: "bold" }}>Project Name:</span>{" "}
+        {projectData.projectName}
+      </p>
 
-            <ResuableButton
-              onPress={() => {
-                setCurrentProject(projectData); // Set the current project
-                setShowAddUserModule(true); // Show the Add User module
-              }}
-              className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3"
+      <p style={{ fontFamily: "Rasa", fontSize: "28px", textDecoration: "underline" }}>Users</p>
+      {usersForProject
+        .filter((user) => user.projectId === projectData.projectId)
+        .map((user) => (
+          <p style={userListStyle} key={user.projectAppUserId}>
+            <Link
+              href={`/AdminProfile/${user.projectAppUserId
+                }?email=${encodeURIComponent(user.email)}`}
+              as={`/AdminProfile/${user.projectAppUserId
+                }?email=${encodeURIComponent(user.email)}`}
             >
-              Add User to {projectData.projectName}
-            </ResuableButton>
-            <br />
-          </>
+              {user.email}
+            </Link>
+          </p>
         ))}
+      <br />
+
+      <ResuableButton
+        onPress={() => {
+          setCurrentProject(projectData); // Set the current project
+          setShowAddUserModule(true); // Show the Add User module
+        }}
+        className="flex gap-4 items-center h-11 overflow-hidden bg-gray-200 hover:bg-gray-400 rounded-full mb-4 pl-3"
+      >
+        Add User to {projectData.projectName}
+      </ResuableButton>
+      <br />
+    </div>
+  </div>
+))}
+
       </div>
       {showAddUserModule && (
         <AddUserModule
@@ -363,6 +375,10 @@ const AdminDashboard = ({ projectAppUsers }) => {
           setShowAddUserModule={setShowAddUserModule}
         />
       )}
+      <AddProjectModal
+        currentEntity={currentEntity}
+        onSelectedEntity={handleSelectedEntity}
+      />
     </AdminLayout>
   ) : (
     <div>loading...</div>

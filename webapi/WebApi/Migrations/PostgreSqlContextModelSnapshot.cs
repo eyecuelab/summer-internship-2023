@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApi.DataAccess;
@@ -12,11 +11,9 @@ using WebApi.DataAccess;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(PostgreSqlContext))]
-    [Migration("20230714222430_new")]
-    partial class @new
+    partial class PostgreSqlContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,15 +229,15 @@ namespace WebApi.Migrations
                         {
                             Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "347b5d5b-7f0b-45e8-b6a6-62d36f539b9e",
+                            ConcurrencyStamp = "d3c37ae6-8bbd-406e-9593-e28646250b53",
                             Email = "szook7@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
-                            IsAdmin = true,
+                            IsAdmin = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "SZOOK7@GMAIL.COM",
                             NormalizedUserName = "SZOOK7@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFSXnPoQSKTuMgOJM7o6g+6Tyz/BETL3sFQkgQ9XoOy6q745wJnX3kKRtd9DQyo4Rg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEG2oMNw79XiVPcsydb/r2uTWC8e6x6UVvf6ri2yL9yP00tIAWwh1kJefZo4peSzxKA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -250,7 +247,7 @@ namespace WebApi.Migrations
                         {
                             Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "57e9c37c-c6fb-4963-bb58-d1b32afd66e7",
+                            ConcurrencyStamp = "e7805f27-5ae5-4317-9fe5-cff0cb9d2e1e",
                             Email = "lee.justin001126@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -258,7 +255,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "LEE.JUSTIN001126@GMAIL.COM",
                             NormalizedUserName = "LEE.JUSTIN001126@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAENEtuU0egKy5Lhv3eipEX5Kj9mxS64H+aU2QLo4VBOtXkNnI0fm4vD9inuo0UAqcVw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJPXjB3+6mA2ehRKUnw6xW92SdLH3XGJYuCIPFO5NRFnWilxWGEjfp4LrYGGLy0SCQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -268,7 +265,7 @@ namespace WebApi.Migrations
                         {
                             Id = "3",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "18ee4c9a-6ddd-4e57-9254-fd3b716b4f25",
+                            ConcurrencyStamp = "7b608a77-f65d-4325-adb4-1b0382cb2043",
                             Email = "erintimlin@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -276,7 +273,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ERINTIMLIN@GMAIL.COM",
                             NormalizedUserName = "ERINTIMLIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIz8MKGOtw/c75eGaFPkh+H6B328OXqlCgw0gX0KiKxqiU2Ub6p3rxlSZHa3TtuYww==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN03qDAYd6eWb7anICv4fYwSmTNROMt9QrorAJboXLvKYgljoMtW8/LewaEzsyr5HA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -286,7 +283,7 @@ namespace WebApi.Migrations
                         {
                             Id = "4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5ad854b3-7031-4aec-972e-6897f296e552",
+                            ConcurrencyStamp = "f5d02e4c-b0bb-489f-834a-c221e013b7ec",
                             Email = "gronstal.larson@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -294,7 +291,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "GRONSTAL.LARSON@GMAIL.COM",
                             NormalizedUserName = "GRONSTAL.LARSON@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAED9/duNgMTSdvleZf3qL4Qgp9sFH86yXVgTIpK2fzBphovlRQ2m2fcNZxZi2n+G3iQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECoPmj9/x318Rgfbql8oBExOG49Ap8lqGe7PgVtxvP1nHJ8Qig7CX6WZ8ovVhpLFrg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -304,7 +301,7 @@ namespace WebApi.Migrations
                         {
                             Id = "5",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7afe8791-34cf-4bf7-990a-73be46540ace",
+                            ConcurrencyStamp = "60c7dde0-8768-4f09-b355-56c14e8e4184",
                             Email = "b.bakshev@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -312,7 +309,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "B.BAKSHEV@GMAIL.COM",
                             NormalizedUserName = "B.BAKSHEV@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIUa74di7qSIMUIcZyowgtdFB+kZJsP6pdU0fcxzaAKwD7XlX3D7ZfeuY7lQyGGJyQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM3s8OKHBNvmtHQu9ePChn5FSnl+PSkYmdTYxqWuRn6ivdMwaxrPq7TrhJhZH/qmcA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -322,7 +319,7 @@ namespace WebApi.Migrations
                         {
                             Id = "6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e1f2f98d-eb2d-4919-91bd-3745e5d96a51",
+                            ConcurrencyStamp = "e1f2900d-c1d9-4bd1-9dbf-1bf0b0d54b39",
                             Email = "eliot.lauren@gmail.com",
                             EmailConfirmed = true,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
@@ -330,7 +327,7 @@ namespace WebApi.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ELIOT.LAUREN@GMAIL.COM",
                             NormalizedUserName = "ELIOT.LAUREN@GMAIL.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBjUtvvriqUcpMkydP77D12jI0Cc3KIjdMOgeD0ZjAmOS79vlhww7r0vGv3ZF5GG2Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECvkxVWDb5fAfiixE9w809ieTYk8uuklVd+/7nWGSEIkRBXBiWIo/DgQUeRLSVeYZg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -367,6 +364,9 @@ namespace WebApi.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("authorId")
                         .HasColumnType("integer");
@@ -560,20 +560,20 @@ namespace WebApi.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
-                    b.Property<string>("AppUserId")
-                        .HasColumnType("text");
-
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
                     b.Property<string>("ProjectId")
                         .HasColumnType("text");
 
+                    b.Property<string>("appUserId")
+                        .HasColumnType("text");
+
                     b.HasKey("ProjectAppUserId");
 
-                    b.HasIndex("AppUserId");
-
                     b.HasIndex("ProjectId");
+
+                    b.HasIndex("appUserId");
 
                     b.ToTable("ProjectAppUsers");
 
@@ -614,6 +614,40 @@ namespace WebApi.Migrations
                             Email = "eliot.lauren@gmail.com",
                             ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683"
                         });
+                });
+
+            modelBuilder.Entity("WebApi.Models.Response", b =>
+                {
+                    b.Property<string>("ResponseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResponseText")
+                        .HasColumnType("text");
+
+                    b.HasKey("ResponseId");
+
+                    b.ToTable("Responses");
+                });
+
+            modelBuilder.Entity("WebApi.Models.Sprint", b =>
+                {
+                    b.Property<string>("TrelloSprintId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Number")
+                        .HasColumnType("text");
+
+                    b.HasKey("TrelloSprintId");
+
+                    b.ToTable("Sprints");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -710,13 +744,13 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Models.ProjectAppUser", b =>
                 {
-                    b.HasOne("WebApi.Models.AppUser", "appUser")
-                        .WithMany("ProjectAppUsers")
-                        .HasForeignKey("AppUserId");
-
                     b.HasOne("WebApi.Models.Project", "project")
                         .WithMany("ProjectAppUsers")
                         .HasForeignKey("ProjectId");
+
+                    b.HasOne("WebApi.Models.AppUser", "appUser")
+                        .WithMany("ProjectAppUsers")
+                        .HasForeignKey("appUserId");
 
                     b.Navigation("appUser");
 
