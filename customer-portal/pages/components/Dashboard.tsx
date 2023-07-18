@@ -50,13 +50,6 @@ const Dashboard = () => {
     const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
     const [selectedAuthor, setSelectedAuthor] = useState<string>("");
 
-    // useEffect(() => {
-    //     if (status === "authenticated") {
-    //         register(session);
-    //         console.log("session:", session);
-    //     }
-    // }, [status, session]);
-
     useEffect(() => {
         if (status === "authenticated") {
             const fetchCurrentRole = async () => {
