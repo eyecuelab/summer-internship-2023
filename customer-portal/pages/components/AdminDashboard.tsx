@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import useRouter from "next/router";
 import AdminLayout from "./adminLayout";
 import { Session } from "next-auth";
 import { GetServerSidePropsContext } from "next";
