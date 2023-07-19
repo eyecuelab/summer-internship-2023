@@ -8,6 +8,7 @@ import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
 import SelectedUserContext from "../context/selectedUserContext";
 import ReleaseNotes from "./ReleaseNotes";
+import SprintDateDropdown from "./TrelloDropDown";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -39,6 +40,11 @@ const Dashboard = () => {
   const [isAdmin, setIsAdmin] = useState<string>("false");
   const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
   const [selectedAuthor, setSelectedAuthor] = useState<string>("");
+  const handleGetSprints = (startDate: string, endDate: string) => {
+    // Your logic to handle the API call or any other action based on selected start and end dates
+    console.log('Selected start date:', startDate);
+    console.log('Selected end date:', endDate);
+  };
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -201,7 +207,7 @@ const Dashboard = () => {
       <Image alt="user picture" src={Graphs} width={890} height={147} />
       <br />
       <br />
-
+      <SprintDateDropdown onGetSprints={handleGetSprints} />
       <ReleaseNotes /> {/* Add ReleaseNotes here */}
 
       <select

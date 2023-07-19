@@ -90,7 +90,7 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpPost("/api/getsprintnames/{boardId}/{apiKey}/{apiToken}")]
+[HttpPost("/api/getsprintnames/{boardId}/{apiKey}/{apiToken}")]
         public async Task<IActionResult> GetBoardTitles(string boardId, string apiKey, string apiToken)
         {
             var url = $"https://api.trello.com/1/boards/{boardId}/lists?key={apiKey}&token={apiToken}";
@@ -109,20 +109,47 @@ namespace WebApi.Controllers
                 // Deserialize the JSON into a JArray
                 var sprintData = JArray.Parse(json);
 
-                // Filter and extract sprint information
-                var sprints = sprintData
-                    .Where(obj => obj["name"].Value<string>().StartsWith("Sprint-"))
-                    .Select(obj => new Models.Sprint
+                // Initialize a list to store the extracted sprints
+                var sprints = new List<Models.Sprint>();
+
+                foreach (var obj in sprintData)
+                {
+                    string name = obj["name"].Value<string>();
+
+                    if (name.StartsWith("Sprint-"))
                     {
-                        Number = obj["name"].Value<string>().Split(' ')[0],
-                        Date = DateTime.ParseExact(obj["name"].Value<string>().Split(' ')[1], "MM/dd/yy", null).ToUniversalTime(),
-                        Name = string.Join(' ', obj["name"].Value<string>().Split(' ').Skip(2))
-                    })
-                    .ToList();
+                        // Extract the sprint number
+                        string sprintNumber = name.Split(' ')[0].Replace("Sprint-", "");
 
-                // Sort the sprints by date
-                sprints = sprints.OrderBy(s => s.Date).ToList();
+                        // Extract the start and end date strings
+                        string dateRange = name.Split(' ')[1];
+                        string startDateString = dateRange.Split('-')[0];
+                        string endDateString = dateRange.Split('-')[1];
 
+                        // Parse the start and end dates using custom date format
+                        DateTime startDate = DateTime.ParseExact(startDateString, "MM/dd/yy", null).ToUniversalTime();
+                        DateTime endDate = DateTime.ParseExact(endDateString, "MM/dd/yy", null).ToUniversalTime();
+
+                        // Extract the sprint name without the sprint number and date range
+                        string sprintName = string.Join(' ', name.Split(' ').Skip(2));
+
+                        // Create the sprint object and add it to the list
+                        var sprint = new Models.Sprint
+                        {
+                            Number = sprintNumber,
+                            StartDate = startDate,
+                            EndDate = endDate,
+                            Name = sprintName
+                        };
+
+                        sprints.Add(sprint);
+                    }
+                }
+
+                // Sort the sprints by start date
+                sprints = sprints.OrderBy(s => s.StartDate).ToList();
+
+                // Save the sorted and filtered sprints to the database
                 foreach (var sprint in sprints)
                 {
                     _context.Sprints.Add(sprint);
