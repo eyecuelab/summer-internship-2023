@@ -10,6 +10,16 @@ import { useRouter } from "next/router";
 import ProfileSidebar from "./ProfileSidebar";
 import SelectedUserContext from "../context/selectedUserContext";
 
+interface Commit {
+    message: string;
+    date: string;
+    author: {
+      name: string;
+      email: string;
+      date: string;
+    };
+  }
+
 // 👇 props to get and set the collapsed state from parent component
 type Props = {
   collapsed: boolean;
@@ -30,16 +40,16 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
     const fetchCommits = async () => {
       try {
         const response = await fetch(
-          "https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023"
+          "https://localhost:7243/api/GitHub/dbcommits"
         );
         const data = await response.json();
         // Extracting unique authors
-        const authorArray = data.map((commit: any) => ({
-          name: commit.commit.author.name,
-          email: commit.commit.author.email,
+        const authorArray = data.map((Commit: { author: { name: any; email: any; }; }) => ({
+          name: Commit.author.name,
+          email: Commit.author.email,
         }));
         const uniqueAuthors = authorArray.filter(
-          (author, index, self) =>
+          (author: { name: string; email: string; }, index: any, self: any[]) =>
             index ===
             self.findIndex(
               (a) => a.name === author.name && a.email === author.email
@@ -53,7 +63,7 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
     fetchCommits();
   }, []);
 
-  const handleAuthorClick = (author) => {
+  const handleAuthorClick = (author: { name: string; email: string; }) => {
     setSelectedUser({
       name: author.name,
       email: author.email,
@@ -61,7 +71,7 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
     router.push(`/Profile/${author.name}`);
   };
   
-  const handleToggleUserClick = (user) => {
+  const handleToggleUserClick = (user: { id: any; }) => {
     router.push(`/profile/${user.id}`);
   }
   
