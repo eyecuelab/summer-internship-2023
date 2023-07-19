@@ -114,7 +114,7 @@ const Sidebar = ({ collapsed, setCollapsed }: Props) => {
                     {author.name}
                   </Link>
                   <span className="text-slate-500 text-sm">
-                    {author.email}
+                    {/* {author.email} */}
                   </span>
                 </div>
                 </div>

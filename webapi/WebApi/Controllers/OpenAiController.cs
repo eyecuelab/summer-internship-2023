@@ -100,8 +100,8 @@ namespace WebApi.Controllers
                 endDateTime = DateTime.SpecifyKind(endDateTime, DateTimeKind.Utc);
 
                 var responses = await _context.Responses
-                    .Where(r => r.StartDate >= startDateTime && r.EndDate <= endDateTime)
-                    .ToListAsync();
+                              .Where(r => r.StartDate >= startDateTime && r.EndDate >= endDateTime)
+                              .ToListAsync();
 
                 return Ok(responses);
             }

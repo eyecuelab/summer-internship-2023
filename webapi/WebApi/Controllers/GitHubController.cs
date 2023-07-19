@@ -75,6 +75,7 @@ namespace WebApi.Controllers
         {
             var dbCommits = await _context.Commits
                 .Include(c => c.author) // Eagerly load the Author data
+                .Where(c => !c.message.Contains("Merge pull request")) // Ignore merge commits
                 .ToListAsync();
 
             return Ok(dbCommits);
