@@ -8,7 +8,6 @@ import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
 import SelectedUserContext from "../context/selectedUserContext";
 import ReleaseNotes from "./ReleaseNotes";
-import SprintDateDropdown from "./TrelloSprintDropDown";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -33,15 +32,13 @@ async function register(session: any) {
 }
 
 const Dashboard = () => {
-    const { data: session, status } = useSession({ required: true });
-    const [apiData, setApiData] = useState<Commit[]>([]);
-    const [selectedDate, setSelectedDate] = useState<string>("");
-    const currentUser: any = session?.user?.email;
-    const [isAdmin, setIsAdmin] = useState<string>("false");
-    const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
-    const [selectedAuthor, setSelectedAuthor] = useState<string>("");
-    const [sprints, setSprints] = useState([]);
-
+  const { data: session, status } = useSession({ required: true });
+  const [apiCommitData, setApiCommitData] = useState<Commit[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const currentUser: any = session?.user?.email;
+  const [isAdmin, setIsAdmin] = useState<string>("false");
+  const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
+  const [selectedAuthor, setSelectedAuthor] = useState<string>("");
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -111,14 +108,8 @@ const Dashboard = () => {
       });
     }
   }, [apiCommitData]);
-  
-  useEffect(() => {
-        if (apiData.length > 0) {
-            setSelectedUser({
-                name: apiData[0].name,
-                email: apiData[0].email,
-            });
-          
+
+  // Adding a function to get author by date
   const getAuthorByDate = (date: string): any => {
     const commit = apiCommitData.find(
       (commit) => formatDate(commit.date) === date
@@ -164,15 +155,6 @@ const Dashboard = () => {
     color: "#888888",
   };
 
-
-    //Styling 
-    const dateStyle = {
-        fontFamily: "Rasa",
-        fontWeight: 600,
-        fontSize: "24px",
-        lineHeight: "40.8px",
-        color: "#404040",
-    };
   const nameStyle = {
     ...messageStyle,
     fontStyle: "italic",
@@ -219,8 +201,44 @@ const Dashboard = () => {
       <Image alt="user picture" src={Graphs} width={890} height={147} />
       <br />
       <br />
-         <SprintDateDropdown options={sprints} />
+
       <ReleaseNotes /> {/* Add ReleaseNotes here */}
+
+      <select
+        value={selectedDate}
+        onChange={handleDateChange}
+        style={{
+          marginLeft: "auto",
+          fontFamily: "Open Sans",
+          float: "right",
+          fontWeight: 600,
+          fontSize: "16px",
+          lineHeight: "25.6px",
+          color: "#404040",
+          backgroundColor: "#F7F7F8",
+          padding: "5px 10px",
+          border: "none",
+          outline: "none",
+          boxShadow: "none",
+          width: "254px",
+          height: "35px",
+        }}
+      >
+        <option value="">All Dates</option>
+        {uniqueDates.map((date, index) => (
+          <option key={index} value={date}>
+            {date}
+          </option>
+        ))}
+      </select>
+
+      {selectedDate && (
+        <div>
+          <p style={dateStyle}>{formatDate(selectedDate)}</p>
+          {renderCommits(filteredData)}
+        </div>
+      )}
+
       {!selectedDate &&
         uniqueDates.map((date, index) => (
           <div key={index}>
