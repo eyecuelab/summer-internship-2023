@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
-import { formatDate } from "./TrelloSprint";
+
+type ReleaseNote = {
+  endDate: string;
+  responseId: string;
+  responseText: string;
+  startDate: string;
+};
 
 interface Commit {
   message: string;
@@ -18,10 +24,8 @@ interface ReleaseNotesProps {
   setLatestCommits: (commits: Commit[]) => void;
 }
 
-const ReleaseNotes = ({ latestCommits, setLatestCommits }: ReleaseNotesProps) => {
-  const [sections, setSections] = useState<Array<string>>([]);
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
+const ReleaseNotes: React.FC<ReleaseNotesProps> = ({ startDate, endDate, latestCommits, setLatestCommits }) => {
+  const [sections, setSections] = useState<string[]>([]);
 
   const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setStartDate(event.target.value);
@@ -125,9 +129,7 @@ const ReleaseNotes = ({ latestCommits, setLatestCommits }: ReleaseNotesProps) =>
 
       <div className="prose max-w-none mt-4">
         {sections.length > 0 ? (
-          sections.map((section, index) => (
-            <ReactMarkdown key={index} children={section} />
-          ))
+          sections.map((section, index) => <ReactMarkdown key={index} children={section} />)
         ) : (
           <p>No release notes for the selected dates.</p>
         )}
