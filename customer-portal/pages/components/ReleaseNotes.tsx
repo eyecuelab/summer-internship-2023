@@ -1,11 +1,26 @@
 import React, { useState } from "react";
 import axios from "axios";
-import ReactMarkdown from 'react-markdown';
 
-const ReleaseNotes: React.FC = () => {
+interface Commit {
+    message: string;
+    date: string;
+    author: {
+      name: string;
+      email: string;
+      date: string;
+    };
+  }
+
+  interface ReleaseNotesProps {
+    latestCommits: Commit[];
+    setLatestCommits: (commits: Commit[]) => void;
+  }
+
+  const ReleaseNotes = ({ latestCommits, setLatestCommits }: ReleaseNotesProps) => {
   const [sections, setSections] = useState<Array<string>>([]);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+
 
   const handleStartDateChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -16,6 +31,35 @@ const ReleaseNotes: React.FC = () => {
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEndDate(event.target.value);
   };
+
+  const handleGetLatestCommits = async () => {
+    try {
+      const response = await fetch("https://localhost:7243/api/GitHub/commits/eyecuelab/summer-internship-2023");
+      if (!response.ok) {
+        throw new Error("HTTP error, status = " + response.status);
+      }
+      const json = await response.json();
+      const commits = json.map((commit: { message: any; date: any; author: { name: any; email: any; date: any; }; }) => ({
+        message: commit.message,
+        date: commit.date,
+        releaseNotes: "",
+        author: {
+          name: commit.author.name,
+          email: commit.author.email,
+          date: commit.author.date,
+        },
+      }));
+      setLatestCommits(commits);
+      // Pass the commits to the parent component
+      if (setLatestCommits) {
+        setLatestCommits(commits);
+      }
+    } catch (error) {
+      console.error("Error during fetch:", error);
+    }
+  };
+  
+
 
   const handleReleaseNotesClick = async () => {
     if (startDate !== "" && endDate !== "") {
@@ -73,6 +117,12 @@ const ReleaseNotes: React.FC = () => {
         className="py-2 px-4 mt-2 ml-2 bg-gray-200 hover:bg-gray-400  text-slate-500 rounded-lg focus:outline-none"
       >
         Get Release Notes
+      </button>
+      <button
+        onClick={handleGetLatestCommits}
+        className="py-2 px-4 mt-2 ml-2 bg-gray-200 hover:bg-gray-400  text-slate-500 rounded-lg focus:outline-none"
+      >
+        Get Latest Commits
       </button>
       <div className="prose max-w-none mt-4">
         {sections.length > 0 ? sections.map((section, index) => (
