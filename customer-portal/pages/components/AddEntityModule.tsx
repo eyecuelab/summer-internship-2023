@@ -60,21 +60,31 @@ const companyNameStyle = {
     
 };
 
-const adminDashStyle = {
-    ...companyStyle,
-    fontSize: "48px",
-    fontWeight: "400"
-}
-
   return (
     <div>
-      <p style ={adminDashStyle}>Admin Dashboard</p>
-      <br />
-      <br />
       <Button
         shadow
         onPress={handler}
-        style={{
+        // style={{
+        //   position: "absolute",
+        //   bottom: "40px", // You can adjust this value as needed
+        //   left: "10%",
+        //   transform: "translateX(-50%)",
+        //   zIndex: 1,
+        //   boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)",
+        //   borderRadius: "999px",
+        //   padding: "8px 12px",
+        //   backgroundColor: "#E6E6E6",
+        //   fontFamily: "Rasa",
+        //   fontSize: "20px",
+        //   cursor: "pointer",
+        // }}
+        style={{ 
+            position: "absolute",
+            bottom: "40px",
+            left: "10%",
+            transform: "translateX(-50%)",
+            zIndex: 1,
             borderRadius: "999px",
             backgroundColor: "#E6E6E6",
             color: "#404040",

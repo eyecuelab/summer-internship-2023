@@ -111,6 +111,32 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Responses",
+                columns: table => new
+                {
+                    ResponseId = table.Column<string>(type: "text", nullable: false),
+                    ResponseText = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Responses", x => x.ResponseId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sprints",
+                columns: table => new
+                {
+                    TrelloSprintId = table.Column<string>(type: "text", nullable: false),
+                    Number = table.Column<string>(type: "text", nullable: true),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sprints", x => x.TrelloSprintId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -315,12 +341,12 @@ namespace WebApi.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "EntityId", "IsAdmin", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "1", 0, "d8c9b6c8-e86f-4719-8cc5-57aeb73e9d2e", "szook7@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "SZOOK7@GMAIL.COM", "SZOOK7@GMAIL.COM", "AQAAAAEAACcQAAAAEJg8KwZ49QYrOd9RAQDG1pu5kioRRos5OKJbxP1QXLSM6K5cyeS101DAYNX6ZRmVqA==", null, false, "", false, "szook7@gmail.com" },
-                    { "2", 0, "f8f35267-a989-43d3-bada-6f275c42a807", "lee.justin001126@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "LEE.JUSTIN001126@GMAIL.COM", "LEE.JUSTIN001126@GMAIL.COM", "AQAAAAEAACcQAAAAENRylRrlVMQkdMk1CNj0yOysYyF5MGr6kK+yke6KCtsOEVZiYhOdCYDRyTGVDKwCQQ==", null, false, "", false, "lee.justin001126@gmail.com" },
-                    { "3", 0, "20d3fc37-5deb-45d3-8b8f-3cd88705c056", "erintimlin@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "ERINTIMLIN@GMAIL.COM", "ERINTIMLIN@GMAIL.COM", "AQAAAAEAACcQAAAAEBhq1V8pqMhMtz5NA/lLaJipydfdhDHGuwBoVOeJI7Wd6ABLADMOG8tdpXZ3KdkLKA==", null, false, "", false, "erintimlin@gmail.com" },
-                    { "4", 0, "7d648209-bcf2-47fa-b135-f62f2df47c0c", "gronstal.larson@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAEL8g7VBqJNtT5btPqqkHC9Y1d67uprHxwOqV6lvvW7rNqa5Wwhxen1qGRU80FLSrCQ==", null, false, "", false, "Gronstal.Larson@gmail.com" },
-                    { "5", 0, "882b95a5-4564-4486-aec7-bc33a8eb0d01", "b.bakshev@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "B.BAKSHEV@GMAIL.COM", "B.BAKSHEV@GMAIL.COM", "AQAAAAEAACcQAAAAEPtxOJ0pBUsoaBt6hgaHMFdltitq7poPUaeKAmCbK9Vaf2vAcXjGSbshbd9wA2YYEA==", null, false, "", false, "b.bakshev@gmail.com" },
-                    { "6", 0, "2ffa75a1-83ad-4c7f-b9e7-f6fa4fdd97d9", "eliot.lauren@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "ELIOT.LAUREN@GMAIL.COM", "ELIOT.LAUREN@GMAIL.COM", "AQAAAAEAACcQAAAAELDAaUrvMbTgSe6KkYig+zZGJNzwTFMVykemB7I1gejZtpQd0FHakDYNdeKwEuIWPQ==", null, false, "", false, "eliot.lauren@gmail.com" }
+                    { "1", 0, "d3c37ae6-8bbd-406e-9593-e28646250b53", "szook7@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "SZOOK7@GMAIL.COM", "SZOOK7@GMAIL.COM", "AQAAAAEAACcQAAAAEG2oMNw79XiVPcsydb/r2uTWC8e6x6UVvf6ri2yL9yP00tIAWwh1kJefZo4peSzxKA==", null, false, "", false, "szook7@gmail.com" },
+                    { "2", 0, "e7805f27-5ae5-4317-9fe5-cff0cb9d2e1e", "lee.justin001126@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "LEE.JUSTIN001126@GMAIL.COM", "LEE.JUSTIN001126@GMAIL.COM", "AQAAAAEAACcQAAAAEJPXjB3+6mA2ehRKUnw6xW92SdLH3XGJYuCIPFO5NRFnWilxWGEjfp4LrYGGLy0SCQ==", null, false, "", false, "lee.justin001126@gmail.com" },
+                    { "3", 0, "7b608a77-f65d-4325-adb4-1b0382cb2043", "erintimlin@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "ERINTIMLIN@GMAIL.COM", "ERINTIMLIN@GMAIL.COM", "AQAAAAEAACcQAAAAEN03qDAYd6eWb7anICv4fYwSmTNROMt9QrorAJboXLvKYgljoMtW8/LewaEzsyr5HA==", null, false, "", false, "erintimlin@gmail.com" },
+                    { "4", 0, "f5d02e4c-b0bb-489f-834a-c221e013b7ec", "gronstal.larson@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "GRONSTAL.LARSON@GMAIL.COM", "GRONSTAL.LARSON@GMAIL.COM", "AQAAAAEAACcQAAAAECoPmj9/x318Rgfbql8oBExOG49Ap8lqGe7PgVtxvP1nHJ8Qig7CX6WZ8ovVhpLFrg==", null, false, "", false, "Gronstal.Larson@gmail.com" },
+                    { "5", 0, "60c7dde0-8768-4f09-b355-56c14e8e4184", "b.bakshev@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", true, false, null, "B.BAKSHEV@GMAIL.COM", "B.BAKSHEV@GMAIL.COM", "AQAAAAEAACcQAAAAEM3s8OKHBNvmtHQu9ePChn5FSnl+PSkYmdTYxqWuRn6ivdMwaxrPq7TrhJhZH/qmcA==", null, false, "", false, "b.bakshev@gmail.com" },
+                    { "6", 0, "e1f2900d-c1d9-4bd1-9dbf-1bf0b0d54b39", "eliot.lauren@gmail.com", true, "ca2e28bc-1bd8-4e72-898c-edc028676877", false, false, null, "ELIOT.LAUREN@GMAIL.COM", "ELIOT.LAUREN@GMAIL.COM", "AQAAAAEAACcQAAAAECvkxVWDb5fAfiixE9w809ieTYk8uuklVd+/7nWGSEIkRBXBiWIo/DgQUeRLSVeYZg==", null, false, "", false, "eliot.lauren@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -466,6 +492,12 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProjectAppUsers");
+
+            migrationBuilder.DropTable(
+                name: "Responses");
+
+            migrationBuilder.DropTable(
+                name: "Sprints");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -1,4 +1,4 @@
-# EyeCue Lab Summer 2023 Internship: Partner Dashboard (Name Pending)
+# EyeCue Lab Summer 2023 Internship: Partner Dashboard
 ## Authors 
 
 - [Brishna Bakshev](https://github.com/bbakshev)
@@ -25,7 +25,7 @@
 
 ## Description <a id="description"></a> 
 
-(Name Pending) is a web application built with React and Typescript while using (Tech stack pending for database, backend API's etc)... The app aims to allow partners to visualize scrum point systems in order to understand progress made by developers on their projects. This is done using Chat GPT to summarize git hub commit messages and translate those messages into release logs for the product. Furthermore, this project looks to add real-time communication libraries to enable users and admins to work at the same time as well as authorization for admins to only see projects that are they are assocaited with.
+Partner Dashboard is a web application built with React and Typescript while using (Tech stack pending for database, backend API's etc)... The app aims to allow partners to visualize scrum point systems in order to understand progress made by developers on their projects. This is done using Chat GPT to summarize git hub commit messages and translate those messages into release logs for the product. Furthermore, this project looks to add real-time communication libraries to enable users and admins to work at the same time as well as authorization for admins to only see projects that are they are associated with.
 
 ## Technologies Used <a id="technologies-used"></a>
 

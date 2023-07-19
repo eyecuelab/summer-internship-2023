@@ -17,8 +17,11 @@ namespace WebApi.DataAccess
         public DbSet<Author> Authors { get; set; }
         public DbSet<Committer> Committer { get; set; }
         public DbSet<Commit> Commits { get; set; }
-        public DbSet<EmailEntity> emailEntities{ get; set; }
+        public DbSet<EmailEntity> emailEntities { get; set; }
         public DbSet<ProjectAppUser> ProjectAppUsers { get; set; }
+        public DbSet<Sprint> Sprints { get; set; }
+        public DbSet<Response> Responses { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -39,7 +42,7 @@ namespace WebApi.DataAccess
                             PasswordHash = hasher.HashPassword(null, "Password1!"),
                             SecurityStamp = string.Empty,
                             EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
-                            IsAdmin = true
+                            IsAdmin = false
                         },
                         new AppUser
                         {
@@ -107,116 +110,116 @@ namespace WebApi.DataAccess
                             IsAdmin = false
                         }
                     );
-                    builder
-                    .Entity<Entity>()
+                builder
+                .Entity<Entity>()
+                .HasData(
+                    new Entity
+                    {
+                        EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
+                        CompanyName = "EyeCue Lab"
+                    },
+                    new Entity
+                    {
+                        EntityId = "98a29f8d-3129-4af1-831a-ff52c16a5c6d",
+                        CompanyName = "CocaCola"
+                    }
+                );
+                builder
+                    .Entity<EmailEntity>()
                     .HasData(
-                        new Entity
+                        new EmailEntity
                         {
-                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
-                            CompanyName = "EyeCue Lab"
+                            EmailEntityId = "1",
+                            Email = "szook7@gmail.com",
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                         },
-                        new Entity
+                        new EmailEntity
                         {
-                            EntityId = "98a29f8d-3129-4af1-831a-ff52c16a5c6d",
-                            CompanyName = "CocaCola"
+                            EmailEntityId = "2",
+                            Email = "lee.justin001126@gmail.com",
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                        },
+                        new EmailEntity
+                        {
+                            EmailEntityId = "3",
+                            Email = "erintimlin@gmail.com",
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                        },
+                        new EmailEntity
+                        {
+                            EmailEntityId = "4",
+                            Email = "Gronstal.Larson@gmail.com",
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                        },
+                        new EmailEntity
+                        {
+                            EmailEntityId = "5",
+                            Email = "b.bakshev@gmail.com",
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
+                        },
+                        new EmailEntity
+                        {
+                            EmailEntityId = "6",
+                            Email = "eliot.lauren@gmail.com",
+                            EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
                         }
                     );
-                    builder
-                        .Entity<EmailEntity>()
-                        .HasData(
-                            new EmailEntity
-                            {
-                                EmailEntityId = "1",
-                                Email = "szook7@gmail.com",
-                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
-                            },
-                            new EmailEntity
-                            {
-                                EmailEntityId = "2",
-                                Email = "lee.justin001126@gmail.com",
-                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
-                            },
-                            new EmailEntity
-                            {
-                                EmailEntityId = "3",
-                                Email = "erintimlin@gmail.com",
-                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
-                            },
-                            new EmailEntity
-                            {
-                                EmailEntityId = "4",
-                                Email = "Gronstal.Larson@gmail.com",
-                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
-                            },
-                            new EmailEntity
-                            {
-                                EmailEntityId = "5",
-                                Email = "b.bakshev@gmail.com",
-                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
-                            },
-                            new EmailEntity
-                            {
-                                EmailEntityId = "6",
-                                Email = "eliot.lauren@gmail.com",
-                                EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877"
-                            }
-                        );
-                    builder
-                    .Entity<Project>()
-                    .HasData(
-                        new Project
-                        {
-                            ProjectId= "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            EntityId= "ca2e28bc-1bd8-4e72-898c-edc028676877",
-                            ProjectName= "EyeCue Lab Project"
-                        },
-                        new Project
-                        {
-                            ProjectId= "0ed8fcad-f106-4717-b313-751a41e1077a",
-                            EntityId= "98a29f8d-3129-4af1-831a-ff52c16a5c6d",
-                            ProjectName= "CocaCola"
-                        }
-                    );
-                    builder
-                    .Entity<ProjectAppUser>()
-                    .HasData(            
-                        new ProjectAppUser
-                        {
-                            ProjectAppUserId="1",
-                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            Email = "szook7@gmail.com"
-                        },
-                        new ProjectAppUser
-                        {
-                            ProjectAppUserId="2",
-                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            Email = "lee.justin001126@gmail.com"
-                        },
-                        new ProjectAppUser
-                        {
-                            ProjectAppUserId="3",
-                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            Email = "erintimlin@gmail.com"
-                        },
-                        new ProjectAppUser
-                        {
-                            ProjectAppUserId="4",
-                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            Email = "Gronstal.Larson@gmail.com"
-                        },
-                        new ProjectAppUser
-                        {
-                            ProjectAppUserId="5",
-                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            Email = "b.bakshev@gmail.com"
-                        },
-                        new ProjectAppUser
-                        {
-                            ProjectAppUserId="6",
-                            ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
-                            Email = "eliot.lauren@gmail.com"
-                        }
-                    );
+                builder
+                .Entity<Project>()
+                .HasData(
+                    new Project
+                    {
+                        ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                        EntityId = "ca2e28bc-1bd8-4e72-898c-edc028676877",
+                        ProjectName = "EyeCue Lab Project"
+                    },
+                    new Project
+                    {
+                        ProjectId = "0ed8fcad-f106-4717-b313-751a41e1077a",
+                        EntityId = "98a29f8d-3129-4af1-831a-ff52c16a5c6d",
+                        ProjectName = "CocaCola"
+                    }
+                );
+                builder
+                .Entity<ProjectAppUser>()
+                .HasData(
+                    new ProjectAppUser
+                    {
+                        ProjectAppUserId = "1",
+                        ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                        Email = "szook7@gmail.com"
+                    },
+                    new ProjectAppUser
+                    {
+                        ProjectAppUserId = "2",
+                        ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                        Email = "lee.justin001126@gmail.com"
+                    },
+                    new ProjectAppUser
+                    {
+                        ProjectAppUserId = "3",
+                        ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                        Email = "erintimlin@gmail.com"
+                    },
+                    new ProjectAppUser
+                    {
+                        ProjectAppUserId = "4",
+                        ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                        Email = "Gronstal.Larson@gmail.com"
+                    },
+                    new ProjectAppUser
+                    {
+                        ProjectAppUserId = "5",
+                        ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                        Email = "b.bakshev@gmail.com"
+                    },
+                    new ProjectAppUser
+                    {
+                        ProjectAppUserId = "6",
+                        ProjectId = "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+                        Email = "eliot.lauren@gmail.com"
+                    }
+                );
             }
         }
 
