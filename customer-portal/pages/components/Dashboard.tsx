@@ -8,6 +8,7 @@ import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
 import SelectedUserContext from "../context/selectedUserContext";
 import ReleaseNotes from "./ReleaseNotes";
+import SprintDateDropdown from "./TrelloSprintDropDown";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -116,25 +117,7 @@ const Dashboard = () => {
     }, [isAdmin]);
 
 
-    //Should be the useeffect that gathers sprint data from DB, for some reason, setSprints(data) returns empty array, + its not sorted properly WIP. Doesn't break anything
     
-    useEffect(() => {
-        if (isAdmin === "false") {
-            fetchData();
-        }
-        async function fetchData() {
-          try {
-            const response = await fetch('https://localhost:7243/api/Trello/sprints');
-            const data = await response.json();
-            console.log(data);
-            setSprints(data);
-            console.log(sprints);
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
-        }
-
-      }, [isAdmin]);
 
     useEffect(() => {
         if (apiData.length > 0) {
@@ -185,6 +168,8 @@ const Dashboard = () => {
         return date.toLocaleDateString("en-US", options);
     };
 
+
+    //Styling 
     const dateStyle = {
         fontFamily: "Rasa",
         fontWeight: 600,
@@ -257,7 +242,7 @@ const Dashboard = () => {
             <Image alt="user picture" src={Graphs} width={890} height={147} />
             <br />
             <br />
-
+            <SprintDateDropdown options={sprints} />
             <select
                 value={selectedDate}
                 onChange={handleDateChange}
