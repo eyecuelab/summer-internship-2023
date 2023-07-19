@@ -54,8 +54,8 @@ const ReleaseNotes: React.FC = () => {
   };
 
   return (
-    <div className="font-sans text-gray-500">
-      <h2 className="font-semibold text-xl text-gray-800">Release Notes</h2>
+    <div className=" text-gray-500">
+      <h2 className="text-xl font-semibold text-gray-600" style={{ fontFamily: 'Rasa, sans-serif' }}>Release Notes</h2>
       <input
         type="date"
         value={startDate}
