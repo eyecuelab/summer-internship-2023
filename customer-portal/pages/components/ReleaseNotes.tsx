@@ -5,7 +5,7 @@ interface Commit {
     message: string;
     date: string;
     author: {
-      name: string;
+      name: any;
       email: string;
       date: string;
     };
@@ -39,16 +39,18 @@ interface Commit {
         throw new Error("HTTP error, status = " + response.status);
       }
       const json = await response.json();
+      console.log(json);
       const commits = json.map((commit: { message: any; date: any; author: { name: any; email: any; date: any; }; }) => ({
         message: commit.message,
         date: commit.date,
         releaseNotes: "",
         author: {
-          name: commit.author.name,
-          email: commit.author.email,
-          date: commit.author.date,
+            name: commit?.author?.name || "",
+            email: commit?.author?.email || "",
+            date: commit?.author?.date || "",
         },
       }));
+
       setLatestCommits(commits);
       // Pass the commits to the parent component
       if (setLatestCommits) {
