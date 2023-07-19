@@ -194,13 +194,15 @@ const Dashboard = () => {
 
   return isAdmin === "true" ? (
     <AdminDashboard></AdminDashboard>
-  ) : (
+) : (
     <Layout username={session?.user?.name}>
       <p style={userStyle}>{selectedUser.name || "Default User Name"}</p>
       <p style={titleStyle}>Project Contributor</p>
       <Image alt="user picture" src={Graphs} width={890} height={147} />
       <br />
       <br />
+
+      <ReleaseNotes /> {/* Add ReleaseNotes here */}
 
       <select
         value={selectedDate}
@@ -247,7 +249,7 @@ const Dashboard = () => {
           </div>
         ))}
     </Layout>
-  );
+);
 };
 
 export default Dashboard;
