@@ -7,7 +7,9 @@ const ReleaseNotes: React.FC = () => {
   const [endDate, setEndDate] = useState<string>("");
 
   // Functions to handle date input changes
-  const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStartDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setStartDate(event.target.value);
   };
 
@@ -19,13 +21,25 @@ const ReleaseNotes: React.FC = () => {
   const handleReleaseNotesClick = async () => {
     if (startDate !== "" && endDate !== "") {
       try {
-        const formattedStartDate = new Date(startDate).toISOString().split("T")[0];
+        const formattedStartDate = new Date(startDate)
+          .toISOString()
+          .split("T")[0];
         const formattedEndDate = new Date(endDate).toISOString().split("T")[0];
 
-        const response = await axios.get("https://localhost:7243/api/OpenAI/responses");
+        const response = await axios.get(
+          "https://localhost:7243/api/OpenAI/responses",
+          {
+            params: {
+              startDate: formattedStartDate,
+              endDate: formattedEndDate,
+            },
+          }
+        );
         if (response.data && Array.isArray(response.data)) {
           const filteredResponse = response.data.find(
-            (item: any) => item.startDate.startsWith(formattedStartDate) && item.endDate.startsWith(formattedEndDate)
+            (item: any) =>
+              item.startDate.startsWith(formattedStartDate) &&
+              item.endDate.startsWith(formattedEndDate)
           );
           if (filteredResponse) {
             setReleaseNotes(filteredResponse.responseText);
