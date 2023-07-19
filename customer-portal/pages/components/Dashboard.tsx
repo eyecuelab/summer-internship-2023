@@ -115,19 +115,26 @@ const Dashboard = () => {
         }
     }, [isAdmin]);
 
+
+    //Should be the useeffect that gathers sprint data from DB, for some reason, setSprints(data) returns empty array, + its not sorted properly WIP. Doesn't break anything
+    
     useEffect(() => {
+        if (isAdmin === "false") {
+            fetchData();
+        }
         async function fetchData() {
           try {
             const response = await fetch('https://localhost:7243/api/Trello/sprints');
             const data = await response.json();
             console.log(data);
             setSprints(data);
+            console.log(sprints);
           } catch (error) {
             console.error('Error fetching data:', error);
           }
         }
-        fetchData();
-      }, []);
+
+      }, [isAdmin]);
 
     useEffect(() => {
         if (apiData.length > 0) {
