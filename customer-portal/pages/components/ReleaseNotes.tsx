@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ReactMarkdown from 'react-markdown';
+import { formatDate } from "./TrelloSprint";
+
 
 interface Commit {
     message: string;
@@ -14,6 +17,8 @@ interface Commit {
   interface ReleaseNotesProps {
     latestCommits: Commit[];
     setLatestCommits: (commits: Commit[]) => void;
+    startDate: string;
+     endDate: string;
   }
 
   const ReleaseNotes = ({ latestCommits, setLatestCommits }: ReleaseNotesProps) => {
@@ -28,9 +33,9 @@ interface Commit {
     setStartDate(event.target.value);
   };
 
-  const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDate(event.target.value);
-  };
+const ReleaseNotes: React.FC<ReleaseNotesProps> = ({ startDate, endDate }) => {
+  const [sections, setSections] = useState<Array<string>>([]);
+
 
   const handleGetLatestCommits = async () => {
     try {
@@ -65,12 +70,13 @@ interface Commit {
 
   const handleReleaseNotesClick = async () => {
     if (startDate !== "" && endDate !== "") {
-      try {
-        const formattedStartDate = new Date(startDate)
-          .toISOString()
-          .split("T")[0];
-        const formattedEndDate = new Date(endDate).toISOString().split("T")[0];
+  useEffect(() => {
+    const handleReleaseNotesFetch = async () => {
 
+      try {
+        const formattedStartDate = startDate ? formatDate(new Date(startDate)) : '';
+        const formattedEndDate = endDate ? formatDate(new Date(endDate)) : '';
+    
         const response = await axios.get(
           "https://localhost:7243/api/OpenAI/responses",
           {
@@ -80,28 +86,37 @@ interface Commit {
             },
           }
         );
-        if (response.data && Array.isArray(response.data)) {
-          const filteredResponse = response.data.find(
-            (item: any) =>
-              item.startDate.startsWith(formattedStartDate) &&
-              item.endDate.startsWith(formattedEndDate)
-          );
+    
+        console.log("Fetched release notes: ", response.data);
+    
+        if (response.data && response.data.length > 0) {
+          const filteredResponse = response.data[0];
           if (filteredResponse) {
             const sections = filteredResponse.responseText.split('\n\n');
             setSections(sections);
           } else {
             setSections([]);
           }
+        } else {
+          setSections([]);
         }
       } catch (error) {
         console.log("Error fetching data:", error);
       }
+    };
+
+    if (startDate !== "" && endDate !== "") {
+      handleReleaseNotesFetch();
     }
-  };
+  }, [startDate, endDate]);
+
+  console.log("Sections: ", sections);
+  console.log("Sections length: ", sections.length);
 
   return (
-    <div className=" text-gray-500">
+    <div className="text-gray-500">
       <h2 className="text-xl font-semibold text-gray-600" style={{ fontFamily: 'Rasa, sans-serif' }}>Release Notes</h2>
+
       <input
         type="date"
         value={startDate}
@@ -126,11 +141,15 @@ interface Commit {
       >
         Get Latest Commits
       </button>
+
       <div className="prose max-w-none mt-4">
-        {sections.length > 0 ? sections.map((section, index) => (
-          <ReactMarkdown key={index} children={section} />
-        )) : <p></p>
-        }
+        {sections.length > 0 ? (
+          sections.map((section, index) => (
+            <ReactMarkdown key={index} children={section} />
+          ))
+        ) : (
+          <p>No release notes for the selected dates.</p>
+        )}
       </div>
     </div>
   );
