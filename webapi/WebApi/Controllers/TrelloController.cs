@@ -82,7 +82,7 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpGet("sprints")]
+        [HttpGet("dbsprints")]
         public async Task<IActionResult> GetSprints()
         {
             var sprints = await _context.Sprints.ToListAsync();

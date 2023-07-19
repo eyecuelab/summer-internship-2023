@@ -1,46 +1,85 @@
 import React, { useState } from "react";
 import axios from "axios";
+import ReactMarkdown from 'react-markdown';
 
 const ReleaseNotes: React.FC = () => {
-  const [releaseNotes, setReleaseNotes] = useState<string>("");
+  const [sections, setSections] = useState<Array<string>>([]);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
-  const [date, setDate] = useState<string>("");
 
-
-  // Functions to handle date input changes
-  const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleStartDateChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setStartDate(event.target.value);
   };
 
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEndDate(event.target.value);
-    console.log(event.target.value);
   };
 
-  // Function to handle button click
   const handleReleaseNotesClick = async () => {
-    console.log(startDate, endDate);
     if (startDate !== "" && endDate !== "") {
       try {
-        const response = await axios.get(`http://localhost:7243/api/OpenAI/SummarizeCommitsByDates`, { params: { startDate: startDate, endDate: endDate } });
-        setReleaseNotes(response.data);
+        const formattedStartDate = new Date(startDate)
+          .toISOString()
+          .split("T")[0];
+        const formattedEndDate = new Date(endDate).toISOString().split("T")[0];
+
+        const response = await axios.get(
+          "https://localhost:7243/api/OpenAI/responses",
+          {
+            params: {
+              startDate: formattedStartDate,
+              endDate: formattedEndDate,
+            },
+          }
+        );
+        if (response.data && Array.isArray(response.data)) {
+          const filteredResponse = response.data.find(
+            (item: any) =>
+              item.startDate.startsWith(formattedStartDate) &&
+              item.endDate.startsWith(formattedEndDate)
+          );
+          if (filteredResponse) {
+            const sections = filteredResponse.responseText.split('\n\n');
+            setSections(sections);
+          } else {
+            setSections([]);
+          }
+        }
       } catch (error) {
-        console.error("Failed to fetch release notes:", error);
+        console.log("Error fetching data:", error);
       }
-    } else {
-      console.error("Start date or end date is not set");
     }
   };
-  
 
   return (
-    <div>
-      <h2>Release Notes</h2>
-      <input type="date" value={startDate} onChange={handleStartDateChange} />
-      <input type="date" value={endDate} onChange={handleEndDateChange} />
-      <button onClick={handleReleaseNotesClick}>Get Release Notes</button>
-      <p>{releaseNotes}</p>
+    <div className=" text-gray-500">
+      <h2 className="text-xl font-semibold text-gray-600" style={{ fontFamily: 'Rasa, sans-serif' }}>Release Notes</h2>
+      <input
+        type="date"
+        value={startDate}
+        onChange={handleStartDateChange}
+        className="py-2 px-4 mt-2 rounded-lg border border-gray-200 focus:outline-none focus:border-blue-400"
+      />
+      <input
+        type="date"
+        value={endDate}
+        onChange={handleEndDateChange}
+        className="py-2 px-4 mt-2 ml-2 rounded-lg border border-gray-200 focus:outline-none focus:border-blue-400"
+      />
+      <button
+        onClick={handleReleaseNotesClick}
+        className="py-2 px-4 mt-2 ml-2 bg-gray-200 hover:bg-gray-400  text-slate-500 rounded-lg focus:outline-none"
+      >
+        Get Release Notes
+      </button>
+      <div className="prose max-w-none mt-4">
+        {sections.length > 0 ? sections.map((section, index) => (
+          <ReactMarkdown key={index} children={section} />
+        )) : <p></p>
+        }
+      </div>
     </div>
   );
 };
