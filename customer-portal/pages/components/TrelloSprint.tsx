@@ -86,27 +86,27 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
     color: "#404040",
 };
 
-  return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
-      <h2 style={{ ...title, marginRight: '10px' }}>Trello Sprints for Release Notes</h2>
-  <div style={{ marginLeft: 'auto' }}>
-    <select
-      onChange={handleSelectChange}
-      style={{
-        fontFamily: 'Open Sans',
-        fontWeight: 600,
-        fontSize: '16px',
-        lineHeight: '25.6px',
-        color: '#404040',
-        backgroundColor: '#F7F7F8',
-        padding: '5px 10px',
-        border: 'none',
-        outline: 'none',
-        boxShadow: 'none',
-        width: '275px',
-        height: '35px',
-      }}
-    >
+return (
+  <div style={{ display: 'flex', alignItems: 'center' }}>
+    <h2 style={{ ...title, marginRight: '10px' }}>Trello Sprints for Release Notes</h2>
+    <div style={{ marginLeft: 'auto' }}>
+      <select
+        onChange={handleSelectChange}
+        style={{
+          fontFamily: 'Open Sans',
+          fontWeight: 600,
+          fontSize: '16px',
+          lineHeight: '25.6px',
+          color: '#404040',
+          backgroundColor: '#F7F7F8',
+          padding: '5px 10px',
+          border: '1px solid black', // Add black border here
+          outline: 'none',
+          boxShadow: 'none',
+          width: '275px',
+          height: '35px',
+        }}
+      >
         <option>Select a Sprint</option>
         {sprints.map((sprint) => {
           const startDate = new Date(sprint.date);
@@ -115,14 +115,14 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
 
           return (
             <option key={sprint.trelloSprintId} value={sprint.trelloSprintId}>
-              Sprint-{sprint.number} ({formattedDateRange})
+              {sprint.number} ({formattedDateRange})
             </option>
           );
         })}
       </select>
     </div>
-    </div>
-  );
+  </div>
+);
 };
 
 export default TrelloSprint;
