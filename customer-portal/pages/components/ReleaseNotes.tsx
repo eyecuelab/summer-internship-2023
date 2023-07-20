@@ -162,6 +162,7 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
           )}
         </div>
         <SeparatorLine /> 
+        <br />
       </div>
     );
 };
