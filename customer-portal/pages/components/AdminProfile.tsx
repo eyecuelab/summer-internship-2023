@@ -120,7 +120,6 @@ const AdminProfile = ({ selectedUser: propSelectedUser }: ProfileProps) => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // <-- Add this
         setUser(data);
         setUsername(data.username);
         setLoading(false);

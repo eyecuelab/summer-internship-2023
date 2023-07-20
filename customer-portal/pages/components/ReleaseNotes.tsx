@@ -96,7 +96,6 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
                     }
                 );
         
-                console.log("Fetched release notes: ", response.data);
         
                 if (response.data && response.data.length > 0) {
                     const filteredResponses = response.data.filter(

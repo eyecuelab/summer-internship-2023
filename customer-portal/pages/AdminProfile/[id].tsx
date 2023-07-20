@@ -36,7 +36,6 @@ const AdminProfilePage = () => {
       fetch(`https://localhost:7243/api/ProjectAppUser/getprojs/${id}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log('Data received:', data);
           setUser(data);
           setSelectedUser(data);
         })

@@ -22,7 +22,6 @@ export default function AddProjectModal({
     const handleOpen = () => setVisible(true);
     const handleClose = () => setVisible(false);
 
-    console.log("current entity in projectmodal ", currentEntity);
 
     const handleAddProject = async () => {
         try {
@@ -34,8 +33,6 @@ export default function AddProjectModal({
 
             const response = await axios.post(url, payload);
 
-            // Handle the response data
-            console.log(response.data);
         } catch (error) {
             // Handle error
             console.error(error);

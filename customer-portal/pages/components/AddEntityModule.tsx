@@ -18,8 +18,6 @@ export default function AddEntityModule() {
   
       const response = await axios.post(url, payload);
   
-      // Handle the response data
-      console.log(response.data);
     } catch (error) {
       // Handle error
       console.error(error);

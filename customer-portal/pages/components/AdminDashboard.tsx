@@ -65,7 +65,6 @@ const AdminDashboard = () => {
   );
   const currentUser = session?.user?.email;
 
-  console.log("Intial Projects on page load ", intialProject);
 
   const handleClick = (email: any) => {
     // Fetching user role from server and update local storage
@@ -84,7 +83,6 @@ const AdminDashboard = () => {
     setCurrentEntity(selectedEntity);
   };
 
-  console.log("current entity in dashboard", currentEntity);
   useEffect(() => {
     const fetchCurrentRole = async () => {
       try {
@@ -129,7 +127,6 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (status === "authenticated") {
       register(session);
-      console.log("session:", session);
     }
   }, [status, session]);
 
@@ -167,12 +164,10 @@ const AdminDashboard = () => {
 
         if (projectData.length > 0) {
           setIntialProject(projectData);
-          console.log("default projects for intial entity", projectData);
         } else {
           return console.log("no projects for this entity");
         }
 
-        console.log("default projects for intial entity", projectData);
       } catch (error) {
         console.error("Failed to transmit user data:", error);
       }
@@ -273,7 +268,6 @@ const AdminDashboard = () => {
         );
 
         setUsersForProject(updatedUsersForProjects);
-        console.log("usersForProject data:", updatedUsersForProjects);
       } catch (error) {
         console.error("Failed to transmit user data:", error);
       }

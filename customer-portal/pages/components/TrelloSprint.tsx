@@ -36,7 +36,6 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
           return dateA - dateB;
         });
 
-        console.log('Fetched sprints: ', sortedSprints);
         setSprints(sortedSprints);
       } catch (err) {
         if (err instanceof Error) {
@@ -69,7 +68,6 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
       const endDate = new Date(startDate.getTime() + 6 * 24 * 60 * 60 * 1000); // 6 days later
 
       const formattedDateRange = formatDateRange(startDate, endDate);
-      console.log('Sprint:', selectedSprint.number, '(', formattedDateRange, ')');
 
       setSelectedSprint({
         startDate: formatDate(startDate),
