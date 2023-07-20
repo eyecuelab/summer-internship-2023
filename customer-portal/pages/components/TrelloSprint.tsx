@@ -103,7 +103,7 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
         border: 'none',
         outline: 'none',
         boxShadow: 'none',
-        width: '254px',
+        width: '275px',
         height: '35px',
       }}
     >

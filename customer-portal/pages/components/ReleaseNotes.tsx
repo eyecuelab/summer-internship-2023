@@ -133,25 +133,25 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
 
     return (
         <div className="text-gray-500">
-            <div className="prose max-w-none mt-4">
-                {sections.length > 0 ? (
-                    sections.map((section, index) => {
-                        // Split the release note into lines
-                        const lines = section.split("\n");
-
-                        return (
-                            <ul key={index}>
-                                {lines.map((line, lineIndex) => (
-                                    <li key={lineIndex}>{line}</li>
-                                ))}
-                            </ul>
-                        )
-                    })
-                ) : (
-                    <p>No release notes for the selected dates.</p>
-                )}
-            </div>
+        <div className="prose max-w-none mt-4">
+          {sections.length > 0 ? (
+            sections.map((section, index) => {
+              const lines = section.split("\n");
+              return (
+                <div key={index}>
+                  {lines.map((line, i) => (
+                    line.endsWith(":") ? 
+                    <h1 className="note-title" key={i}>{line}</h1> : 
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
+              );
+            })
+          ) : (
+            <p>No release notes for the selected dates.</p>
+          )}
         </div>
+      </div>
     );
 };
 
