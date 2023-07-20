@@ -88,7 +88,7 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
 
 return (
   <div style={{ display: 'flex', alignItems: 'center' }}>
-    <h2 style={{ ...title, marginRight: '10px' }}>Trello Sprints for Release Notes</h2>
+    <h2 style={{ ...title, marginRight: '10px' }}>OpenAI Release Notes</h2>
     <div style={{ marginLeft: 'auto' }}>
       <select
         onChange={handleSelectChange}
