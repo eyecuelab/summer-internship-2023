@@ -27,6 +27,16 @@ interface ReleaseNotesProps {
     endDate: string;
 }
 
+const SeparatorLine = () => (
+    <div
+      style={{
+        height: "2px",
+        backgroundColor: "black",
+        margin: "10px 0",
+      }}
+    />
+  );
+
 const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
     startDate,
     endDate,
@@ -133,7 +143,7 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
 
     return (
         <div className="text-gray-500">
-        <div className="prose max-w-none mt-4">
+        <div className="prose max-w-none mt-4 mb-5">
           {sections.length > 0 ? (
             sections.map((section, index) => {
               const lines = section.split("\n");
@@ -151,6 +161,7 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
             <p>No release notes for the selected dates.</p>
           )}
         </div>
+        <SeparatorLine /> 
       </div>
     );
 };
