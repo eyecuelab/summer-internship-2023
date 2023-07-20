@@ -215,9 +215,8 @@ const Dashboard = () => {
             <br />
             <br />
             <ReleaseNotes
-                latestCommits={latestCommits}
-                setLatestCommits={setLatestCommits}
-            />{" "}
+                    latestCommits={latestCommits}
+                    setLatestCommits={setLatestCommits} startDate={""} endDate={""}            />{" "}
             {/* Add ReleaseNotes here */}
             <select
                 value={selectedDate}
