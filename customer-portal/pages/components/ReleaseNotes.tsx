@@ -151,6 +151,7 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
             <p>No release notes for the selected dates.</p>
           )}
         </div>
+        <br />
       </div>
     );
 };
