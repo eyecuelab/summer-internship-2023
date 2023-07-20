@@ -8,6 +8,7 @@ import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
 import SelectedUserContext from "../context/selectedUserContext";
 import ReleaseNotes from "./ReleaseNotes";
+import SprintReleaseNotes from "./SprintReleaseNotes";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -214,10 +215,7 @@ const Dashboard = () => {
             <Image alt="user picture" src={Graphs} width={890} height={147} />
             <br />
             <br />
-            <ReleaseNotes
-                    latestCommits={latestCommits}
-                    setLatestCommits={setLatestCommits} startDate={""} endDate={""}            />{" "}
-            {/* Add ReleaseNotes here */}
+            <SprintReleaseNotes></SprintReleaseNotes>
             <select
                 value={selectedDate}
                 onChange={handleDateChange}

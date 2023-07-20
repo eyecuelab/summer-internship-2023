@@ -110,18 +110,11 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
 
     return (
         <div className="text-gray-500">
-            <button
-                onClick={handleGetLatestCommits}
-                className="py-2 px-4 mt-2 ml-2 bg-gray-200 hover:bg-gray-400 text-slate-500 rounded-lg focus:outline-none"
-            >
-                Get Latest Commits
-            </button>
-            ;
             <h2
                 className="text-xl font-semibold text-gray-600"
                 style={{ fontFamily: "Rasa, sans-serif" }}
             >
-                Release Notes
+                Release Notes: 
             </h2>
             <div className="prose max-w-none mt-4">
                 {sections.length > 0 ? (

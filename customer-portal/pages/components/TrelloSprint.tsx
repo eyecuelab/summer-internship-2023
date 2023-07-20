@@ -28,8 +28,16 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
     const fetchSprints = async () => {
       try {
         const response = await axios.get<Sprint[]>('https://localhost:7243/api/Trello/dbsprints');
-        console.log('Fetched sprints: ', response.data);
-        setSprints(response.data);
+
+        // Sort the sprints by date before setting the state
+        const sortedSprints = response.data.sort((a, b) => {
+          const dateA = new Date(a.date).getTime();
+          const dateB = new Date(b.date).getTime();
+          return dateA - dateB;
+        });
+
+        console.log('Fetched sprints: ', sortedSprints);
+        setSprints(sortedSprints);
       } catch (err) {
         if (err instanceof Error) {
           setError(err.message);
@@ -42,9 +50,14 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
     fetchSprints();
   }, []);
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const formatDateRange = (startDate: Date, endDate: Date): string => {
+    const startMonth = startDate.toLocaleString('default', { month: 'short' });
+    const startDay = startDate.getDate();
+    const endMonth = endDate.toLocaleString('default', { month: 'short' });
+    const endDay = endDate.getDate();
+
+    return `${startMonth} ${startDay} ~ ${endMonth} ${endDay}`;
+  };
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedSprint = sprints.find(
@@ -55,7 +68,9 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
       const startDate = new Date(selectedSprint.date);
       const endDate = new Date(startDate.getTime() + 6 * 24 * 60 * 60 * 1000); // 6 days later
 
-      console.log('Start date: ', formatDate(startDate), 'End date: ', formatDate(endDate));
+      const formattedDateRange = formatDateRange(startDate, endDate);
+      console.log('Sprint:', selectedSprint.number, '(', formattedDateRange, ')');
+
       setSelectedSprint({
         startDate: formatDate(startDate),
         endDate: formatDate(endDate),
@@ -68,11 +83,17 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
       <h2>Trello Sprints</h2>
       <select onChange={handleSelectChange}>
         <option>Select a Sprint</option>
-        {sprints.map((sprint) => (
-          <option key={sprint.trelloSprintId} value={sprint.trelloSprintId}>
-            {sprint.number}: {sprint.name} Date: {new Date(sprint.date).toLocaleDateString()}
-          </option>
-        ))}
+        {sprints.map((sprint) => {
+          const startDate = new Date(sprint.date);
+          const endDate = new Date(startDate.getTime() + 6 * 24 * 60 * 60 * 1000); // 6 days later
+          const formattedDateRange = formatDateRange(startDate, endDate);
+
+          return (
+            <option key={sprint.trelloSprintId} value={sprint.trelloSprintId}>
+              Sprint-{sprint.number} ({formattedDateRange})
+            </option>
+          );
+        })}
       </select>
     </div>
   );
