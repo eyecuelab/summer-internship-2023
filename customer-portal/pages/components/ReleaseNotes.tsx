@@ -70,6 +70,8 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
     useEffect(() => {
         const handleReleaseNotesFetch = async () => {
             try {
+                setSections([]); // Clear previous sections array
+        
                 const response = await axios.get<ReleaseNote[]>(
                     "https://localhost:7243/api/OpenAI/responses",
                     {
@@ -83,49 +85,73 @@ const ReleaseNotes: React.FC<ReleaseNotesProps> = ({
                         },
                     }
                 );
-
+        
                 console.log("Fetched release notes: ", response.data);
-
+        
                 if (response.data && response.data.length > 0) {
-                    const filteredResponse = response.data[0];
-                    if (filteredResponse) {
-                        const sections =
-                            filteredResponse.responseText.split("\n\n");
-                        setSections(sections);
-                    } else {
-                        setSections([]);
-                    }
-                } else {
-                    setSections([]);
-                }
+                    const filteredResponses = response.data.filter(
+                        (note) =>
+                            new Date(startDate) >= new Date(note.startDate) &&
+                            new Date(endDate) <= new Date(note.endDate)
+                    );
+        
+                    if (filteredResponses.length > 0) {
+                        const sections = filteredResponses.map((note) => {
+                            // Remove the unwanted text
+                            const noteText = note.responseText.replace("Release Notes:", "")
+                            .replace("Based on the commit messages provided, here is a categorized and summarized version of the release notes:", "");
+        
+                            // Remove double asterisks
+                            const removedAsterisks = noteText.replace(/\*\*/g, "");
+                            
+                            // Split the note text by "\n\n" and filter out the first element if it's empty
+                            const splitText = removedAsterisks.split("\n\n").filter((text) => text.trim() !== "");
+
+        
+                            // Remove leading dash from the titles
+                    const sanitizedText = splitText.map(text => {
+                        if (text.startsWith('- ')) {
+                            return text.replace('- ', '');
+                        }
+                        return text;
+                    });
+
+                    return sanitizedText.join("\n\n");
+                });
+                setSections(sections);
+            }
+        }
             } catch (error) {
                 console.log("Error fetching data:", error);
             }
         };
-
+      
         if (startDate !== "" && endDate !== "") {
-            handleReleaseNotesFetch();
+          handleReleaseNotesFetch();
         }
-    }, [startDate, endDate]);
+      }, [startDate, endDate]);
 
     return (
         <div className="text-gray-500">
-            <h2
-                className="text-xl font-semibold text-gray-600"
-                style={{ fontFamily: "Rasa, sans-serif" }}
-            >
-                Release Notes: 
-            </h2>
-            <div className="prose max-w-none mt-4">
-                {sections.length > 0 ? (
-                    sections.map((section, index) => (
-                        <ReactMarkdown key={index} children={section} />
-                    ))
-                ) : (
-                    <p>No release notes for the selected dates.</p>
-                )}
-            </div>
+        <div className="prose max-w-none mt-4">
+          {sections.length > 0 ? (
+            sections.map((section, index) => {
+              const lines = section.split("\n");
+              return (
+                <div key={index}>
+                  {lines.map((line, i) => (
+                    line.endsWith(":") ? 
+                    <h1 className="note-title" key={i}>{line}</h1> : 
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
+              );
+            })
+          ) : (
+            <p>No release notes for the selected dates.</p>
+          )}
         </div>
+      </div>
     );
 };
 

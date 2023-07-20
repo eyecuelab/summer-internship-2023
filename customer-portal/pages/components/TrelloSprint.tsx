@@ -78,10 +78,35 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
     }
   };
 
+  const title = {
+    fontFamily: "Rasa",
+    fontWeight: 600,
+    fontSize: "24px",
+    lineHeight: "40.8px",
+    color: "#404040",
+};
+
   return (
-    <div>
-      <h2>Trello Sprints</h2>
-      <select onChange={handleSelectChange}>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <h2 style={{ ...title, marginRight: '10px' }}>Trello Sprints for Release Notes</h2>
+  <div style={{ marginLeft: 'auto' }}>
+    <select
+      onChange={handleSelectChange}
+      style={{
+        fontFamily: 'Open Sans',
+        fontWeight: 600,
+        fontSize: '16px',
+        lineHeight: '25.6px',
+        color: '#404040',
+        backgroundColor: '#F7F7F8',
+        padding: '5px 10px',
+        border: 'none',
+        outline: 'none',
+        boxShadow: 'none',
+        width: '275px',
+        height: '35px',
+      }}
+    >
         <option>Select a Sprint</option>
         {sprints.map((sprint) => {
           const startDate = new Date(sprint.date);
@@ -95,6 +120,7 @@ const TrelloSprint: React.FC<TrelloSprintProps> = ({ setSelectedSprint }) => {
           );
         })}
       </select>
+    </div>
     </div>
   );
 };
