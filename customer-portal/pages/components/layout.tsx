@@ -64,14 +64,16 @@ const Layout: React.FC<LayoutProps & PropsWithChildren<{}>> = ({
 
         {/* content */}
         <div
-          className="row-start-1 col-start-2 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12 2xl:py-16"
-          style={{
-            backgroundColor: "#F7F7F8",
-            marginTop: "-24px",
-            zIndex: 100,
-            maxWidth: "1165px",
-          }}
-        >
+                className="row-start-1 col-start-2 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12 2xl:py-16"
+                    style={{
+                        backgroundColor: "#F7F7F8",
+                        marginTop: "-24px",
+                        zIndex: 100,
+                        width: "80%",
+                        maxWidth: "calc(100% - 300px)"
+                        
+                    }}
+                >
           {" "}
           {children}
         </div>
