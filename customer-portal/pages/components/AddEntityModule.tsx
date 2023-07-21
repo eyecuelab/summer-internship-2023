@@ -82,7 +82,7 @@ const companyNameStyle = {
         style={{ 
             position: "absolute",
             bottom: "40px",
-            left: "10%",
+            left: "6.5%",
             transform: "translateX(-50%)",
             zIndex: 1,
             borderRadius: "999px",

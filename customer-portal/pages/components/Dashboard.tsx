@@ -10,6 +10,8 @@ import SelectedUserContext from "../context/selectedUserContext";
 import ReleaseNotes from "./ReleaseNotes";
 import SprintReleaseNotes from "./SprintReleaseNotes";
 import classNames from "classnames";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -44,6 +46,7 @@ const Dashboard = () => {
     const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
     const [selectedAuthor, setSelectedAuthor] = useState<string>("");
     const [latestCommits, setLatestCommits] = useState<Commit[]>([]);
+    const [currentRegistration, setCurrentRegistration] = useState<string>("true")
 
     const updateLatestCommits = (commits: React.SetStateAction<Commit[]>) => {
         setLatestCommits(commits);
@@ -65,8 +68,10 @@ const Dashboard = () => {
 
                     if (roleResponse === "Not Registered") {
                         register(session);
+                        setCurrentRegistration("false")
                     } else {
                         setIsAdmin(roleResponse);
+                        setCurrentRegistration("true")
                     }
                 } catch (error) {
                     console.error(error);
@@ -209,7 +214,7 @@ const Dashboard = () => {
 
     return isAdmin === "true" ? (
         <AdminDashboard></AdminDashboard>
-    ) : (
+    ) : currentRegistration === "true" ? (
         <Layout username={session?.user?.name}>
             <p style={userStyle}>{selectedUser.name || "Default User Name"}</p>
             <p style={titleStyle}>Project Contributor</p>
@@ -264,6 +269,14 @@ const Dashboard = () => {
                     </div>
                 ))}
         </Layout>
+    ) : (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <div style={{ textAlign: 'center' }}>
+      <h1 className="text-3xl font-semibold">You are not registered</h1>
+      <p>Please contact your <button onClick={() => signOut()}><span className="text-red-700">administrator</span></button> for access.</p>
+    </div>
+</div>
+       
     );
 };
 
