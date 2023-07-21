@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSession, getSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import AdminLayout from "./adminLayout";
 import { Session } from "next-auth";
 import { GetServerSidePropsContext } from "next";
@@ -10,6 +9,8 @@ import AddProjectModal from "./AddProjectsModal";
 import AddUserModule from "./AddUserModule";
 import ResuableButton from "./ReusableButton";
 import Link from "next/link";
+import { useRouter } from "next/router";
+
 
 type User = {
   email: string;

@@ -24,3 +24,10 @@ text-transform: capitalize;
   text-transform: capitalize;
   }
   
+  .note-title {
+    font-family: Open Sans;
+    font-size: 18px;
+    font-weight: bold;
+    color: #2D3748; /* Corresponds to Tailwind's text-gray-800 */
+  }
+  

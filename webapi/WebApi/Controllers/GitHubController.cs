@@ -32,42 +32,62 @@ namespace WebApi.Controllers
         [HttpGet("commits/{owner}/{repo}")]
         public async Task<IActionResult> GetListOfCommits(string owner, string repo)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repo}/commits?per_page=100&page=2");
-            request.Headers.Add("Accept", "application/vnd.github.v3+json");
-            request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+            var commits = new List<ListOfCommits>();
 
-            var client = _clientFactory.CreateClient();
+            int page = 1;
+            bool hasMoreCommits = true;
 
-            var response = await client.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
+            while (hasMoreCommits)
             {
-                var json = await response.Content.ReadAsStringAsync();
-                var commits = JsonConvert.DeserializeObject<List<ListOfCommits>>(json);
+                var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.github.com/repos/{owner}/{repo}/commits?per_page=100&page={page}");
 
-                foreach (var commit in commits)
+                request.Headers.Add("Accept", "application/vnd.github.v3+json");
+                request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
+
+                var client = _clientFactory.CreateClient();
+
+                var response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    // Extract author information from the commit
-                    var author = commit.commit.author;
-                    var commitInfo = commit.commit;
-                    var commitSha = commit.sha;
+                    var json = await response.Content.ReadAsStringAsync();
+                    var commitsData = JsonConvert.DeserializeObject<List<ListOfCommits>>(json);
 
-                    commitInfo.commitSha = commitSha;
-                    commitInfo.Date = commit.commit.author.date; // Assign the date directly
-
-                    _dataAccessProvider.AddAuthor(author);
-                    _dataAccessProvider.AddCommit(commitInfo);
+                    if (commitsData.Count == 0)
+                    {
+                        hasMoreCommits = false; // No more commits to fetch
+                    }
+                    else
+                    {
+                        commits.AddRange(commitsData);
+                        page++; // Move to the next page
+                    }
                 }
+                else
+                {
+                    // Handle the case when the API request was not successful
+                    // You can return an appropriate response or error message
+                    return StatusCode((int)response.StatusCode);
+                }
+            }
 
-                return Ok(commits);
-            }
-            else
+            // Now you can process the `commits` list or save it to the database
+            foreach (var commit in commits)
             {
-                // Handle the case when the API request was not successful
-                // You can return an appropriate response or error message
-                return StatusCode((int)response.StatusCode);
+                var author = commit.commit.author;
+                var commitInfo = commit.commit;
+                var commitSha = commit.sha;
+
+                commitInfo.commitSha = commitSha;
+                commitInfo.Date = commit.commit.author.date; // Assign the date directly
+
+                _dataAccessProvider.AddAuthor(author);
+                _dataAccessProvider.AddCommit(commitInfo);
             }
+
+            return Ok(commits);
         }
+
 
         // GET ALL COMMITS IN COMMITS TABLE
         [HttpGet("dbcommits")]
