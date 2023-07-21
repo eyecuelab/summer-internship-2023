@@ -1,4 +1,5 @@
-# EyeCue Lab Summer 2023 Internship: Partner Dashboard
+# Client Connect
+## EyeCue Lab Summer 2023 Internship
 ## Authors 
 
 - [Brishna Bakshev](https://github.com/bbakshev)
@@ -29,7 +30,19 @@ Partner Dashboard is a web application built with React and Typescript while usi
 
 ## Technologies Used <a id="technologies-used"></a>
 
-TBD
+* Next.js/React
+* C#
+* ASP.NET Core
+* PostgresQL
+* Identity & Entity Frameworks
+* TypeScript
+* JavaScript
+* HTML/CSS
+* Material UI
+* Tailwind
+* GoogleAuth
+* Docker
+* Third-party integrations: GitHub, Trello, OpenAI
 
 ## Project Setup <a id="project-setup"></a>
 
