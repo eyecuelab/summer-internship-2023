@@ -8,6 +8,8 @@ import Graphs from "../../public/img/Mask group.png";
 import ProfileSidebar from "./ProfileSidebar";
 import SelectedUserContext from "../context/selectedUserContext";
 import ReleaseNotes from "./ReleaseNotes";
+import SprintReleaseNotes from "./SprintReleaseNotes";
+import classNames from "classnames";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -214,36 +216,34 @@ const Dashboard = () => {
             <Image alt="user picture" src={Graphs} width={890} height={147} />
             <br />
             <br />
-            <ReleaseNotes
-                latestCommits={latestCommits}
-                setLatestCommits={setLatestCommits}
-            />{" "}
-            {/* Add ReleaseNotes here */}
+            <div className="mt-5">
+                <SprintReleaseNotes></SprintReleaseNotes>
+            </div>
             <select
                 value={selectedDate}
                 onChange={handleDateChange}
                 style={{
-                    marginLeft: "auto",
-                    fontFamily: "Open Sans",
-                    float: "right",
-                    fontWeight: 600,
-                    fontSize: "16px",
-                    lineHeight: "25.6px",
-                    color: "#404040",
-                    backgroundColor: "#F7F7F8",
-                    padding: "5px 10px",
-                    border: "none",
-                    outline: "none",
-                    boxShadow: "none",
-                    width: "254px",
-                    height: "35px",
+                marginLeft: "auto",
+                fontFamily: "Open Sans",
+                float: "right",
+                fontWeight: 600,
+                fontSize: "16px",
+                lineHeight: "25.6px",
+                color: "#404040",
+                backgroundColor: "#F7F7F8",
+                padding: "5px 10px",
+                border: "1px solid black", // Add black border here
+                outline: "none",
+                boxShadow: "none",
+                width: "254px",
+                height: "35px",
                 }}
             >
                 <option value="">All Dates</option>
                 {uniqueDates.map((date, index) => (
-                    <option key={index} value={date}>
-                        {date}
-                    </option>
+                <option key={index} value={date}>
+                    {date}
+                </option>
                 ))}
             </select>
             {selectedDate && (
