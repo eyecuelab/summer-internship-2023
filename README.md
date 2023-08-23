@@ -1,4 +1,5 @@
-# EyeCue Lab Summer 2023 Internship: Client Connect
+# Client Connect
+## EyeCue Lab Summer 2023 Internship
 ## Authors 
 
 - [Brishna Bakshev](https://github.com/bbakshev)
@@ -7,6 +8,8 @@
 - [Eliot Gronstal](https://github.com/elgrons)
 - [Erin Timlin](https://github.com/erintimli01)
 - EyeCue Lab Mentors
+
+![ClientConnect](ClientConnect.png)
 
 ## 📂 Table Of Contents
 
@@ -19,20 +22,36 @@
 
 - [Known Issues](#known-issues)
 
-- [MVP](#mvp)
-
 - [Stretch Goals](#stretch-goals)
 
 ## Description <a id="description"></a> 
 
-Client Connect is a web application built with React and Typescript while using (Tech stack pending for database, backend API's etc)... The app aims to allow partners to visualize scrum point systems in order to understand progress made by developers on their projects. This is done using Chat GPT to summarize git hub commit messages and translate those messages into release logs for the product. Furthermore, this project looks to add real-time communication libraries to enable users and admins to work at the same time as well as authorization for admins to only see projects that are they are associated with.
+Client Connect is a web application that acts as a portal for customers and project management of a software development company. Client Connect aims to allow partners to visualize the contributions of the team and indvidiual developer on each project, sprint-by-sprint. The contributions are an organization of third-party integrations including Trello, GitHub, and OpenAI to provide summarizations of project Commits for stakeholders.
+
+Furthermore, this project looks to add real-time communication libraries to enable clients and administrators to work at the same time as well as authorization to allow Admin users full access and Client users to only see projects that are they are associated with.
 
 ## Technologies Used <a id="technologies-used"></a>
 
-TBD
+* _React_
+* _Next.js_
+* _ASP.NET Core 6_
+* _Entity Framework_
+* _C#_
+* _TypeScript_
+* _HTML/CSS_
+* _Material UI_
+* _NextUI_
+* _Tailwind_
+* _PostgresQL_
+* _OpenAI_
+* _GitHub_
+* _Trello_
+* _GoogleAuth/NextAuth_
+* _Figma_
+* _Docker_
+* _VS Code_
 
 ## Project Setup <a id="project-setup"></a>
-
 
 0. Create .env file in the `customer-portal` directory and add the following code:
  ```
@@ -78,46 +97,92 @@ To view the Swagger documentation for the WebApi, launch the project using `dotn
 
 - To utilize the POST request and generate a new POST request where applicable, the following information structure is required, while the actual information input can vary.
 
-Register a User with the following .json data:
-```
-  {
-    "Email": "user4@example.com",
-}
-```
-
-Entity .json examples:
+Register a User with the following .json data as a template:
 ```
 [
   {
-    "entityId": "1",
-    "companyName": "EyeCue"
-  },
+    "Id": "134",
+    "UserName": "exampleEmail@gmail.com",
+    "Email": "exampleEmail@gmail.com",
+    "EntityId": "ca2e28bc-1bd8-4e72-898c-edc028676877",
+  }
+]
+```
+
+Register an Entity (aka a "Client" company) with the following .json template:
+```
+[
   {
-    "entityId": "2",
-    "companyName": "Google"
-  },
+    "entityId": "ca2e28bc-1bd8-4e72-898c-edc028676877",
+    "companyName": "EyeCue Lab"
+  }
+]
+```
+
+Register an Entity Email (aka create a Client user) with the following .json template:
+```
+[
   {
-    "entityId": "3",
-    "companyName": "Amazon"
+    "EmailEntityId": "1",
+    "Email": "exampleEmail@gmail.com",
+    "EntityId": "ca2e28bc-1bd8-4e72-898c-edc028676877"
+  }
+]
+```
+Register an Entity Project with the following .json template:
+```
+[
+  {
+    "ProjectId": "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+    "EntityId": "ca2e28bc-1bd8-4e72-898c-edc028676877",
+    "ProjectName": "EyeCue Lab Project"
+  }
+]
+```
+
+Register an Project App User (the association between a Project and a Client or Admin User) with the following .json template:
+```
+[
+  {
+    "ProjectAppUserId": "1",
+    "ProjectId": "9bf535b3-cf39-4374-8fbe-51a96bcef683",
+    "Email": "exampleEmail@gmail.com"
   }
 ]
 ```
 
 ## Scripts <a id="scripts"></a>
 
-TBD
+To run the project locally you'll need to open two terminals in your Code Editor to differentiate between the projects in the monorepo.
+
+### Front End:
+Starting within the `summer-internship-2023` main folder enter `cd customer-portal` into the terminal. This will bring you into the primary folder for project's front end.
+
+From within the `customer-portal` directory type `npm i` if it's your first time setting up the project followed by `npm run dev` to run the project locally. 
+
+A local instance of the project can be viewed at `http://localhost:3000`.
+
+### Back End:
+
+From the `summer-internship-2023` main folder enter `cd webapi` followed by `cd WebApi` into the terminal. This will bring you into the primary folder for the backend web API.
+
+Enter the command `dotnet watch run` to run the API locally (this presumes you have already set up the database according to the earlier instructions in this document). 
+
+The Web API details can be viewed via Swagger at `localhost:7243`.
 
 ## Known Issues <a id="known-issues"></a>
 
-Application is still in the ideation phase and is a WIP. This is apart of EyeCue Labs 7 Week Summer Internship and is subject to change.
+* There is a bit of a latency issue, but everything *does* work - that's more a of a "lesson learned", if you will.
 
-## MVP <a id="mvp"></a>
-
-TBD
+* Please reach out with any questions or concerns to any or all of us, we'd love to hear from you: [b.bakshev@gmail.com](b.bakshev@gmail.com), [eliot.lauren@gmail.com](eliot.lauren@gmail.com), [lee.justin001126@gmail.com](lee.justin001126@gmail.com), [erintimlin@gmail.com](erintimlin@gmail.com), or [szook7@gmail.com](szook7@gmail.com)
 
 ## Stretch Goals <a id="stretch-goals"></a>
 
-TBD
+* Project deployment
+
+* Add more profile functionality
+
+* Add an option for an Admin user to upload an invoice for a client
 
 ## License
 Copyright (c) 2023 Brishna Bakshev, Stephen Zook, Justin Lee, Eliot Gronstal, and Erin Timlin _[MIT](https://choosealicense.com/licenses/mit/)_
