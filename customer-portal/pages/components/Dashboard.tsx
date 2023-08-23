@@ -10,6 +10,8 @@ import SelectedUserContext from "../context/selectedUserContext";
 import ReleaseNotes from "./ReleaseNotes";
 import SprintReleaseNotes from "./SprintReleaseNotes";
 import classNames from "classnames";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 // import { registerUser, verifyUser, getCommits } from '../../pages/api/apiService';
 
 interface Commit {
@@ -35,14 +37,14 @@ async function register(session: any) {
 }
 
 const Dashboard = () => {
-  const { data: session, status } = useSession({ required: true });
-  const [apiCommitData, setApiCommitData] = useState<Commit[]>([]);
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const currentUser: any = session?.user?.email;
-  const [isAdmin, setIsAdmin] = useState<string>("false");
-  const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
-  const [selectedAuthor, setSelectedAuthor] = useState<string>("");
-  const [latestCommits, setLatestCommits] = useState<Commit[]>([]);
+    const { data: session, status } = useSession({ required: true });
+    const [apiCommitData, setApiCommitData] = useState<Commit[]>([]);
+    const [selectedDate, setSelectedDate] = useState<string>("");
+    const currentUser: any = session?.user?.email;
+    const [isAdmin, setIsAdmin] = useState<string>("false");
+    const { selectedUser, setSelectedUser } = useContext(SelectedUserContext);
+    const [selectedAuthor, setSelectedAuthor] = useState<string>("");
+    const [latestCommits, setLatestCommits] = useState<Commit[]>([]);
 
   const updateLatestCommits = (commits: React.SetStateAction<Commit[]>) => {
     setLatestCommits(commits);
@@ -60,20 +62,20 @@ const Dashboard = () => {
           }
           const roleResponse = await response.text();
 
-          if (roleResponse === "Not Registered") {
-            register(session);
-          } else {
-            setIsAdmin(roleResponse);
-          }
-        } catch (error) {
-          console.error(error);
+                    if (roleResponse === "Not Registered") {
+                        register(session);
+                    } else {
+                        setIsAdmin(roleResponse);
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+            if (currentUser) {
+                fetchCurrentRole();
+            }
         }
-      };
-      if (currentUser) {
-        fetchCurrentRole();
-      }
-    }
-  }, [currentUser, status, session]);
+    }, [currentUser, status, session]);
 
   useEffect(() => {
     if (isAdmin) {
@@ -200,62 +202,64 @@ const Dashboard = () => {
     ));
   };
 
-  return isAdmin === "true" ? (
-    <AdminDashboard></AdminDashboard>
-  ) : (
-    <Layout username={session?.user?.name}>
-      <p style={userStyle}>{selectedUser.name || "Default User Name"}</p>
-      <p style={titleStyle}>Project Contributor</p>
-      <Image alt="user picture" src={Graphs} width={890} height={147} />
-      <br />
-      <br />
-      <div className="mt-5">
-        <SprintReleaseNotes></SprintReleaseNotes>
-      </div>
-      <select
-        value={selectedDate}
-        onChange={handleDateChange}
-        style={{
-          marginLeft: "auto",
-          fontFamily: "Open Sans",
-          float: "right",
-          fontWeight: 600,
-          fontSize: "16px",
-          lineHeight: "25.6px",
-          color: "#404040",
-          backgroundColor: "#F7F7F8",
-          padding: "5px 10px",
-          border: "1px solid black", // Add black border here
-          outline: "none",
-          boxShadow: "none",
-          width: "254px",
-          height: "35px",
-        }}
-      >
-        <option value="">All Dates</option>
-        {uniqueDates.map((date, index) => (
-          <option key={index} value={date}>
-            {date}
-          </option>
-        ))}
-      </select>
-      {selectedDate && (
-        <div>
-          <p style={dateStyle}>{formatDate(selectedDate)}</p>
-          {renderCommits(filteredData)}
-        </div>
-      )}
-      {!selectedDate &&
-        uniqueDates.map((date, index) => (
-          <div key={index}>
-            <p style={dateStyle}>{date}</p>
-            {renderCommits(
-              apiCommitData.filter((commit) => formatDate(commit.date) === date)
+    return isAdmin === "true" ? (
+        <AdminDashboard></AdminDashboard>
+    ) : (
+        <Layout username={session?.user?.name}>
+            <p style={userStyle}>{selectedUser.name || "Default User Name"}</p>
+            <p style={titleStyle}>Project Contributor</p>
+            <Image alt="user picture" src={Graphs} width={890} height={147} />
+            <br />
+            <br />
+            <div className="mt-5">
+                <SprintReleaseNotes></SprintReleaseNotes>
+            </div>
+            <select
+                value={selectedDate}
+                onChange={handleDateChange}
+                style={{
+                marginLeft: "auto",
+                fontFamily: "Open Sans",
+                float: "right",
+                fontWeight: 600,
+                fontSize: "16px",
+                lineHeight: "25.6px",
+                color: "#404040",
+                backgroundColor: "#F7F7F8",
+                padding: "5px 10px",
+                border: "1px solid black", // Add black border here
+                outline: "none",
+                boxShadow: "none",
+                width: "254px",
+                height: "35px",
+                }}
+            >
+                <option value="">All Dates</option>
+                {uniqueDates.map((date, index) => (
+                <option key={index} value={date}>
+                    {date}
+                </option>
+                ))}
+            </select>
+            {selectedDate && (
+                <div>
+                    <p style={dateStyle}>{formatDate(selectedDate)}</p>
+                    {renderCommits(filteredData)}
+                </div>
             )}
-          </div>
-        ))}
-    </Layout>
-  );
+            {!selectedDate &&
+                uniqueDates.map((date, index) => (
+                    <div key={index}>
+                        <p style={dateStyle}>{date}</p>
+                        {renderCommits(
+                            apiCommitData.filter(
+                                (commit) => formatDate(commit.date) === date
+                            )
+                        )}
+                    </div>
+                ))}
+        </Layout>
+    );
 };
 
 export default Dashboard;

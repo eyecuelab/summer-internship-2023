@@ -17,7 +17,7 @@ export default function Home() {
       <Navbar isCompact variant={"static"}>
         <Navbar.Brand>
           <Text b color="inherit">
-            Partner Dashboard
+            Client Connect
           </Text>
         </Navbar.Brand>
         <Navbar.Content>
@@ -31,7 +31,7 @@ export default function Home() {
         <Grid xs={12} sm={6} alignItems="center">
           <Col css={{ width: "100%" }}>
             <Text weight={"bold"} size={65} css={{ textAlign: "center" }}>
-              Partner Dashboard
+              Client Connect
             </Text>
             <Text weight={"bold"} size={30} css={{ textAlign: "center" }}>
               For your Current and Future Projects
