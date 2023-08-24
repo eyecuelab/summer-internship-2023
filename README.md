@@ -9,7 +9,7 @@
 - [Erin Timlin](https://github.com/erintimli01)
 - EyeCue Lab Mentors
 
-![ClientConnect](ClientConnect.png)
+![ClientConnection](ClientConnect.png)
 
 ## 📂 Table Of Contents
 
